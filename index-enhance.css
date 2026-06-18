@@ -1,6 +1,6 @@
 /* Enhanced homepage: research-profile layout */
 .home-page .hero { min-height:610px; padding:92px 0 86px; color:#fff; border:0; background:radial-gradient(circle at 79% 20%,rgba(105,171,210,.42),transparent 26%),radial-gradient(circle at 10% 105%,rgba(55,115,158,.45),transparent 34%),linear-gradient(125deg,#071a2c 0%,#0f314e 52%,#164766 100%); }
-.home-page .hero::before { content:''; position:absolute; inset:0; opacity:.32; background-image:linear-gradient(rgba(255,255,255,.13) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.13) 1px,transparent 1px); background-size:64px 64px; mask-image:linear-gradient(to bottom,black,transparent 78%); }
+.home-page .hero::before { content:''; position:absolute; inset:-80px; opacity:.32; background-image:linear-gradient(rgba(255,255,255,.13) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.13) 1px,transparent 1px); background-size:64px 64px; mask-image:linear-gradient(to bottom,black,transparent 78%); animation:heroFieldDrift 18s linear infinite; }
 .home-page .hero::after { display:none; }
 .home-page .hero-grid { position:relative; z-index:1; grid-template-columns:minmax(0,1fr) 310px; gap:90px; }
 .home-page .hero-copy { max-width:800px; }
@@ -14,8 +14,9 @@
 .home-page .hero .text-action:hover { background:#fff; color:#103451; border-color:#fff; }
 .home-page .hero .text-action:hover::after { color:#103451; }
 .home-page .headshot-frame { position:relative; width:310px; height:390px; padding:11px; background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.42); border-radius:13px; box-shadow:0 28px 48px rgba(0,0,0,.28); }
-.home-page .headshot-frame::after { content:'Applied Mathematics'; position:absolute; left:-22px; bottom:25px; padding:8px 12px; color:#fff; background:#2d79a8; border:1px solid rgba(255,255,255,.45); font:600 .69rem var(--mono); letter-spacing:.10em; text-transform:uppercase; }
+.home-page .headshot-frame::after { content:'Assistant Professor · Applied Mathematics'; position:absolute; left:-22px; bottom:25px; padding:10px 14px; color:#fff; background:#0f2740; border:1px solid rgba(255,255,255,.65); box-shadow:0 14px 24px rgba(0,0,0,.25); font:700 .7rem var(--mono); letter-spacing:.08em; text-transform:uppercase; }
 .home-page .headshot-frame img { border-radius:7px; }
+@keyframes heroFieldDrift { to { transform:translate3d(-64px,-64px,0); } }
 
 .affiliations { padding:0; border-bottom:1px solid var(--line); background:#fff; }
 .affiliation-intro { padding:30px 0 20px; color:var(--muted); font:600 .72rem var(--mono); letter-spacing:.11em; text-transform:uppercase; }
@@ -27,8 +28,8 @@
 .affiliation-logo-box img { max-width:100%; max-height:125px; object-fit:contain; }
 .affiliation-logo-box.esu img { max-width:138px; max-height:128px; }
 .affiliation-logo-box.utoledo img { max-width:122px; max-height:128px; }
-.affiliation-logo-box.jhu { padding:15px; background:#002d72; border-radius:7px; }
-.affiliation-logo-box.jhu img { width:100%; max-height:92px; object-fit:contain; }
+.affiliation-logo-box.jhu { padding:12px; background:#002d72; border-radius:7px; }
+.affiliation-logo-box.jhu img { width:128%; max-width:none; max-height:110px; object-fit:contain; }
 .affiliation-card h3 { margin:0 0 5px; color:var(--navy); font:600 1.18rem/1.16 var(--serif); }
 .affiliation-card p { margin:0; color:var(--muted); font-size:.91rem; line-height:1.48; }
 .affiliation-card small { display:block; margin-bottom:8px; color:var(--blue); font:600 .67rem var(--mono); letter-spacing:.075em; text-transform:uppercase; }
@@ -56,6 +57,11 @@
 .home-page .office-home-emails span { color:var(--muted); font-size:.8rem; white-space:nowrap; }
 .home-page .office-home-map { overflow:hidden; min-height:405px; border:1px solid var(--line); border-radius:11px; box-shadow:0 17px 35px rgba(15,39,64,.12); }
 .home-page .office-home-map iframe { display:block; width:100%; height:405px; border:0; }
+.home-page .office-home-card { min-height:310px; padding:42px; border:1px solid #d3e0e8; border-radius:11px; background:linear-gradient(135deg,#071a2c,#103a59); color:#fff; box-shadow:0 17px 35px rgba(15,39,64,.16); display:flex; flex-direction:column; justify-content:center; }
+.home-page .office-home-card small { color:#a8d2eb; font:700 .7rem var(--mono); letter-spacing:.1em; text-transform:uppercase; }
+.home-page .office-home-card strong { margin:14px 0 3px; font:600 clamp(2.1rem,4vw,3.6rem)/1 var(--serif); letter-spacing:-.035em; }
+.home-page .office-home-card span { color:#dcecf5; font-weight:700; }
+.home-page .office-home-card p { margin:20px 0 0; color:#bcd6e6; }
 
 .home-page .home-profiles { padding:88px 0; background:linear-gradient(180deg,#f5f9fc,#edf4f8); }
 .home-page .profile-links { display:grid; grid-template-columns:repeat(3,1fr); gap:15px; }
@@ -68,4 +74,4 @@
 .home-page .profile-links em { color:var(--blue); font-style:normal; font-size:1.15rem; }
 
 @media(max-width:970px){.home-page .hero-grid{grid-template-columns:minmax(0,1fr) 240px;gap:42px}.home-page .headshot-frame{width:240px;height:308px}.affiliation-card{grid-template-columns:105px minmax(0,1fr);gap:18px;padding:24px 19px}.affiliation-logo-box{height:110px}.affiliation-logo-box img{max-height:102px}.home-page .highlight-links,.home-page .profile-links{grid-template-columns:1fr 1fr}.home-page .office-home-grid{grid-template-columns:1fr;gap:38px}.home-page .office-home-map{max-width:760px}}
-@media(max-width:680px){.home-page .hero-grid{grid-template-columns:1fr}.home-page .headshot-frame{width:220px;height:280px}.home-page .affiliation-grid{grid-template-columns:1fr}.home-page .affiliation-card{min-height:164px;border-right:0;border-bottom:1px solid var(--line)}.home-page .affiliation-card:last-child{border-bottom:0}.home-page .home-highlights,.home-page .home-office,.home-page .home-profiles{padding:62px 0}.home-page .highlight-links,.home-page .profile-links{grid-template-columns:1fr}.home-page .office-home-map,.home-page .office-home-map iframe{min-height:320px;height:320px}.home-page .office-home-emails a{display:block}.home-page .office-home-emails span{display:block;margin-top:2px}}
+@media(max-width:680px){.home-page .hero-grid{grid-template-columns:1fr}.home-page .headshot-frame{width:220px;height:280px}.home-page .headshot-frame::after{left:10px;right:10px;bottom:12px;text-align:center}.home-page .affiliation-grid{grid-template-columns:1fr}.home-page .affiliation-card{min-height:164px;border-right:0;border-bottom:1px solid var(--line)}.home-page .affiliation-card:last-child{border-bottom:0}.home-page .home-highlights,.home-page .home-office,.home-page .home-profiles{padding:62px 0}.home-page .highlight-links,.home-page .profile-links{grid-template-columns:1fr}.home-page .office-home-map,.home-page .office-home-map iframe{min-height:320px;height:320px}.home-page .office-home-card{min-height:260px;padding:30px}.home-page .office-home-emails a{display:block}.home-page .office-home-emails span{display:block;margin-top:2px}}
