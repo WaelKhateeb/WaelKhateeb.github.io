@@ -11,5 +11,13 @@ document.addEventListener('DOMContentLoaded', () => {
       menu.setAttribute('aria-expanded', 'false');
     }));
   }
-  document.querySelectorAll('#year').forEach((year) => { year.textContent = new Date().getFullYear(); });
+
+  document.querySelectorAll('a[href="office.html"]').forEach((link) => {
+    link.href = 'index.html#office';
+    if (link.closest('.primary-nav')) link.textContent = 'Office & Contact';
+  });
+
+  document.querySelectorAll('#year').forEach((year) => {
+    year.textContent = new Date().getFullYear();
+  });
 });
