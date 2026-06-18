@@ -1,0 +1,93 @@
+/* Enhanced homepage: research-profile layout */
+.home-page .hero {
+  min-height: 610px;
+  padding: 92px 0 86px;
+  color: #fff;
+  border: 0;
+  background:
+    radial-gradient(circle at 79% 20%, rgba(105,171,210,.42), transparent 26%),
+    radial-gradient(circle at 10% 105%, rgba(55,115,158,.45), transparent 34%),
+    linear-gradient(125deg, #071a2c 0%, #0f314e 52%, #164766 100%);
+}
+.home-page .hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: .32;
+  background-image: linear-gradient(rgba(255,255,255,.13) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.13) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: linear-gradient(to bottom, black, transparent 78%);
+}
+.home-page .hero::after { display: none; }
+.home-page .hero-grid { grid-template-columns: minmax(0, 1fr) 310px; gap: 90px; }
+.home-page .hero-copy { max-width: 800px; }
+.home-page .hero .eyebrow { color: #a8d2eb; }
+.home-page .hero h1 { color: #fff; font-size: clamp(3.7rem, 7vw, 6.7rem); }
+.home-page .hero-role { color: #b7d9eb; font-size: clamp(1.35rem, 2.1vw, 1.88rem); }
+.home-page .hero-intro { color: #e2edf4; font-size: 1.15rem; max-width: 735px; }
+.home-page .hero-links { margin-top: 31px; }
+.home-page .hero .text-action { border-color: rgba(255,255,255,.30); color: #fff; background: rgba(255,255,255,.08); backdrop-filter: blur(5px); }
+.home-page .hero .text-action::after { color: #9ed3f3; }
+.home-page .hero .text-action:hover { background: #fff; color: #103451; border-color: #fff; }
+.home-page .hero .text-action:hover::after { color: #103451; }
+.home-page .headshot-frame {
+  position: relative;
+  width: 310px;
+  height: 390px;
+  padding: 11px;
+  background: rgba(255,255,255,.15);
+  border: 1px solid rgba(255,255,255,.42);
+  border-radius: 13px;
+  box-shadow: 0 28px 48px rgba(0,0,0,.28);
+}
+.home-page .headshot-frame::after {
+  content: 'Applied Mathematics';
+  position: absolute;
+  left: -22px;
+  bottom: 25px;
+  padding: 8px 12px;
+  color: #fff;
+  background: #2d79a8;
+  border: 1px solid rgba(255,255,255,.45);
+  font: 600 .69rem var(--mono);
+  letter-spacing: .10em;
+  text-transform: uppercase;
+}
+.home-page .headshot-frame img { border-radius: 7px; }
+
+.affiliations { padding: 0; border-bottom: 1px solid var(--line); background: #fff; }
+.affiliation-intro { padding: 28px 0 20px; color: var(--muted); font: 600 .72rem var(--mono); letter-spacing: .11em; text-transform: uppercase; }
+.affiliation-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); }
+.affiliation-card { min-height: 172px; padding: 28px 27px 26px; border-right: 1px solid var(--line); display: grid; grid-template-columns: 92px minmax(0,1fr); gap: 22px; align-items: center; text-decoration: none; background: #fff; transition: .2s ease; }
+.affiliation-card:last-child { border-right: 0; }
+.affiliation-card:hover { background: #f5f9fc; transform: translateY(-3px); box-shadow: 0 12px 25px rgba(15,39,64,.10); }
+.affiliation-logo-box { height: 75px; display: grid; place-items: center; overflow: hidden; }
+.affiliation-logo-box img { max-width: 100%; max-height: 66px; object-fit: contain; }
+.affiliation-logo-box.esu img { max-height: 66px; }
+.affiliation-logo-box.utoledo img { max-width: 64px; max-height: 70px; }
+.affiliation-logo-box.jhu { padding: 12px; background: #002d72; border-radius: 6px; }
+.affiliation-logo-box.jhu img { width: 100%; max-height: 51px; object-fit: contain; }
+.affiliation-card h3 { margin: 0 0 4px; color: var(--navy); font: 600 1.08rem/1.15 var(--serif); }
+.affiliation-card p { margin: 0; color: var(--muted); font-size: .88rem; line-height: 1.45; }
+.affiliation-card small { display: block; margin-bottom: 7px; color: var(--blue); font: 600 .67rem var(--mono); letter-spacing: .075em; text-transform: uppercase; }
+
+.home-page .section-title { max-width: 900px; }
+.home-page .section-header { margin-bottom: 55px; }
+.home-page .research-list li { padding: 27px 0; }
+.home-page .research-list strong { font-size: 1.3rem; }
+.home-page .section-alt { background: linear-gradient(180deg,#f3f8fb,#edf5f9); }
+.home-page .callout { border-top-color: var(--blue); padding-top: 31px; }
+.home-page .section-dark { background: linear-gradient(128deg,#071a2c,#0f314e); }
+
+@media (max-width: 900px) {
+  .home-page .hero-grid { grid-template-columns: minmax(0,1fr) 240px; gap: 42px; }
+  .home-page .headshot-frame { width: 240px; height: 308px; }
+  .affiliation-card { grid-template-columns: 78px minmax(0,1fr); gap: 16px; padding: 22px 18px; }
+}
+@media (max-width: 680px) {
+  .home-page .hero-grid { grid-template-columns: 1fr; }
+  .home-page .headshot-frame { width: 220px; height: 280px; }
+  .home-page .affiliation-grid { grid-template-columns: 1fr; }
+  .home-page .affiliation-card { min-height: 130px; border-right: 0; border-bottom: 1px solid var(--line); }
+  .home-page .affiliation-card:last-child { border-bottom: 0; }
+}
