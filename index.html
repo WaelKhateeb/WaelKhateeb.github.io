@@ -4,24 +4,20 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Wael El Khateeb - Applied Mathematics at Emporia State University. Nonlinear dynamics, mathematical biology, scientific computing, and machine learning.">
-  <meta name="theme-color" content="#171717">
+  <meta name="theme-color" content="#0f2740">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="index-enhance.css">
   <title>Wael El Khateeb | Applied Mathematics</title>
   <script src="script.js" defer></script>
 </head>
-<body>
+<body class="home-page">
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
     <div class="shell nav-shell">
       <a class="brand" href="index.html" aria-label="Wael El Khateeb home"><span class="brand-mark">W</span><span class="brand-text">Wael El Khateeb</span></a>
       <button class="menu-button" aria-expanded="false" aria-controls="primary-nav"><span></span><span></span><span></span><span class="sr-only">Open menu</span></button>
       <nav id="primary-nav" class="primary-nav" aria-label="Primary navigation">
-        <a href="#research">Research</a>
-        <a href="research.html">Publications</a>
-        <a href="presentations.html">Presentations</a>
-        <a href="#teaching">Teaching</a>
-        <a href="#contact">Contact</a>
-        <a href="cv.html" class="nav-cv">Curriculum Vitae</a>
+        <a href="#research">Research</a><a href="research.html">Publications</a><a href="presentations.html">Presentations</a><a href="#teaching">Teaching</a><a href="#contact">Contact</a><a href="cv.html" class="nav-cv">Curriculum Vitae</a>
       </nav>
     </div>
   </header>
@@ -29,103 +25,57 @@
   <main id="main">
     <section class="hero">
       <div class="shell hero-grid">
-        <div class="headshot-frame"><img src="https://avatars.githubusercontent.com/u/87930461?v=4" alt="Wael El Khateeb"></div>
         <div class="hero-copy">
           <p class="eyebrow">Applied Mathematics · Emporia State University</p>
           <h1>Wael El Khateeb</h1>
           <p class="hero-role">Nonlinear Dynamics · Mathematical Biology · Scientific Computing</p>
-          <p class="hero-intro">I study qualitative changes in nonlinear systems, with particular interest in bifurcation theory, ecological and epidemiological models, delay equations, and computational methods for dynamical systems.</p>
-          <div class="hero-links">
-            <a class="text-action" href="research.html">Research record</a>
-            <a class="text-action" href="presentations.html">Talks and presentations</a>
-            <a class="text-action" href="cv.html">Curriculum vitae</a>
-          </div>
+          <p class="hero-intro">I study qualitative change in nonlinear systems, with particular interest in bifurcation theory, ecological and epidemiological models, delay equations, and computational methods for dynamical systems.</p>
+          <div class="hero-links"><a class="text-action" href="research.html">Research record</a><a class="text-action" href="presentations.html">Talks and presentations</a><a class="text-action" href="cv.html">Curriculum vitae</a></div>
+        </div>
+        <div class="headshot-frame"><img src="https://avatars.githubusercontent.com/u/87930461?v=4" alt="Wael El Khateeb"></div>
+      </div>
+    </section>
+
+    <section class="affiliations" aria-labelledby="affiliations-heading">
+      <div class="shell">
+        <p class="affiliation-intro" id="affiliations-heading">Academic affiliations and appointments</p>
+        <div class="affiliation-grid">
+          <a class="affiliation-card" href="https://www.emporia.edu/" target="_blank" rel="noreferrer">
+            <div class="affiliation-logo-box esu"><img src="https://en.wikipedia.org/wiki/Special:Redirect/file/Emporia_State_University_wordmark.svg" alt="Emporia State University logo"></div>
+            <div><small>Current affiliation</small><h3>Emporia State University</h3><p>Applied Mathematics · Emporia, Kansas</p></div>
+          </a>
+          <a class="affiliation-card" href="https://www.utoledo.edu/" target="_blank" rel="noreferrer">
+            <div class="affiliation-logo-box utoledo"><img src="https://www.utoledo.edu/images/UT_shield.svg" alt="The University of Toledo shield logo"></div>
+            <div><small>Education and research</small><h3>The University of Toledo</h3><p>Ph.D. and M.A. in Applied Mathematics · 2021-2026</p></div>
+          </a>
+          <a class="affiliation-card" href="https://cty.jhu.edu/" target="_blank" rel="noreferrer">
+            <div class="affiliation-logo-box jhu"><img src="https://www.jhu.edu/assets/themes/machado/src/assets/images/logos/university-logo-small-horizontal-white.svg" alt="Johns Hopkins University logo"></div>
+            <div><small>Teaching appointment</small><h3>Johns Hopkins University</h3><p>Center for Talented Youth Instructor · 2024-2025</p></div>
+          </a>
         </div>
       </div>
     </section>
 
     <section class="section section-alt" id="research">
       <div class="shell">
-        <div class="section-header">
-          <div class="section-number">01 / RESEARCH</div>
-          <div>
-            <h2 class="section-title">Research areas</h2>
-            <p class="section-subtitle">My work combines mathematical analysis with computational experiments to understand systems that exhibit nonlinear feedback, delay, spatial structure, or data-informed dynamics.</p>
-          </div>
-        </div>
-        <div class="two-column">
-          <div class="side-label">Current themes</div>
-          <ul class="research-list">
-            <li><strong>Bifurcation theory and nonlinear dynamics</strong><span>High-codimension bifurcations, Bogdanov-Takens and nilpotent singularities, Hopf bifurcation, heteroclinic loops, and delay differential equations.</span></li>
-            <li><strong>Mathematical biology</strong><span>Predator-prey dynamics, epidemic models, density-dependent incidence, infection-dependent recovery, Allee effects, and reaction-diffusion systems.</span></li>
-            <li><strong>Scientific computing and machine learning</strong><span>Physics-informed neural networks, inverse problems for gene regulatory networks, feature maps, topological tools, and reproducible numerical workflows.</span></li>
-          </ul>
-        </div>
+        <div class="section-header"><div class="section-number">01 / RESEARCH</div><div><h2 class="section-title">Mathematical analysis for systems that change.</h2><p class="section-subtitle">My work joins rigorous nonlinear analysis with computation to examine feedback, instability, delay, spatial structure, and data-informed dynamics.</p></div></div>
+        <div class="two-column"><div class="side-label">Current themes</div><ul class="research-list"><li><strong>Bifurcation theory and nonlinear dynamics</strong><span>High-codimension bifurcations, Bogdanov-Takens and nilpotent singularities, Hopf bifurcation, heteroclinic loops, and delay differential equations.</span></li><li><strong>Mathematical biology</strong><span>Predator-prey dynamics, epidemic models, density-dependent incidence, infection-dependent recovery, Allee effects, and reaction-diffusion systems.</span></li><li><strong>Scientific computing and machine learning</strong><span>Physics-informed neural networks, inverse problems for gene regulatory networks, feature maps, topological tools, and reproducible numerical workflows.</span></li></ul></div>
       </div>
     </section>
 
     <section class="section">
       <div class="shell">
-        <div class="section-header">
-          <div class="section-number">02 / SELECTED PUBLICATIONS</div>
-          <div><h2 class="section-title">Recent research</h2><p class="section-subtitle">Selected peer-reviewed and in-press work. The full research record includes submitted work, manuscripts in preparation, doctoral research, and project descriptions.</p></div>
-        </div>
-        <ol class="bibliography">
-          <li><span class="pub-title">Complex dynamics and pattern formation in a diffusive epidemic model with an infection-dependent recovery rate.</span>Wael El Khateeb, Chanaka Kottegoda, and Chunhua Shan. <span class="pub-meta"><em>Mathematical Biosciences</em>.</span> <a href="https://doi.org/10.1016/j.mbs.2025.109602" target="_blank" rel="noreferrer">doi:10.1016/j.mbs.2025.109602</a></li>
-          <li><span class="pub-title">Global Hopf bifurcation and connected components in a delayed predator-prey model.</span>Wael El Khateeb, Guihong Fan, Chunhua Shan, and Hao Wang. <span class="pub-meta"><em>European Journal of Applied Mathematics</em>.</span> <a href="https://doi.org/10.1017/S0956792526100370" target="_blank" rel="noreferrer">doi:10.1017/S0956792526100370</a></li>
-          <li><span class="pub-title">Mentoring through predator-prey: realizing hopes through Polymath Junior.</span>Wael El Khateeb and Steven J. Miller. <span class="pub-meta">COMAP, in press.</span></li>
-        </ol>
+        <div class="section-header"><div class="section-number">02 / SELECTED PUBLICATIONS</div><div><h2 class="section-title">Recent research</h2><p class="section-subtitle">Selected peer-reviewed and in-press work. The full research record includes submitted work, manuscripts in preparation, doctoral research, and project descriptions.</p></div></div>
+        <ol class="bibliography"><li><span class="pub-title">Complex dynamics and pattern formation in a diffusive epidemic model with an infection-dependent recovery rate.</span>Wael El Khateeb, Chanaka Kottegoda, and Chunhua Shan. <span class="pub-meta"><em>Mathematical Biosciences</em>.</span> <a href="https://doi.org/10.1016/j.mbs.2025.109602" target="_blank" rel="noreferrer">doi:10.1016/j.mbs.2025.109602</a></li><li><span class="pub-title">Global Hopf bifurcation and connected components in a delayed predator-prey model.</span>Wael El Khateeb, Guihong Fan, Chunhua Shan, and Hao Wang. <span class="pub-meta"><em>European Journal of Applied Mathematics</em>.</span> <a href="https://doi.org/10.1017/S0956792526100370" target="_blank" rel="noreferrer">doi:10.1017/S0956792526100370</a></li><li><span class="pub-title">Mentoring through predator-prey: realizing hopes through Polymath Junior.</span>Wael El Khateeb and Steven J. Miller. <span class="pub-meta">COMAP, in press.</span></li></ol>
         <p style="margin:28px 0 0"><a class="text-action" href="research.html">View all research and publications</a></p>
       </div>
     </section>
 
-    <section class="section section-alt">
-      <div class="shell split-feature">
-        <div>
-          <p class="side-label">Selected presentations</p>
-          <h2 class="feature-heading">Recent talks and invited presentations</h2>
-          <ul class="clean-list">
-            <li><strong>Predators and Policies: Teaching ODEs by Modeling Florida's Alligator Ecosystem</strong><span>Invited presentation, SIAM ED26, Cleveland, July 2026.</span></li>
-            <li><strong>Applications of topology to gene regulatory networks</strong><span>Invited talk, Buckeye Geometry Conference, Toledo, May 2026.</span></li>
-            <li><strong>SIR models with spatial components and limited beds</strong><span>Joint Mathematics Meetings 2026.</span></li>
-          </ul>
-          <p style="margin:28px 0 0"><a class="text-action" href="presentations.html">Complete presentation record</a></p>
-        </div>
-        <div>
-          <p class="side-label">Doctoral research</p>
-          <div class="callout"><p>My dissertation, <em>High Codimension Bifurcations in Predator-Prey Models</em>, develops a unified codimension-3 theory for nonlinear biological systems and analyzes mechanisms including Hopf bifurcations and saddle-node-to-saddle heteroclinic loops.</p></div>
-        </div>
-      </div>
-    </section>
+    <section class="section section-alt"><div class="shell split-feature"><div><p class="side-label">Selected presentations</p><h2 class="feature-heading">Recent talks and invited presentations</h2><ul class="clean-list"><li><strong>Predators and Policies: Teaching ODEs by Modeling Florida's Alligator Ecosystem</strong><span>Invited presentation, SIAM ED26, Cleveland, July 2026.</span></li><li><strong>Applications of topology to gene regulatory networks</strong><span>Invited talk, Buckeye Geometry Conference, Toledo, May 2026.</span></li><li><strong>SIR models with spatial components and limited beds</strong><span>Joint Mathematics Meetings 2026.</span></li></ul><p style="margin:28px 0 0"><a class="text-action" href="presentations.html">Complete presentation record</a></p></div><div><p class="side-label">Doctoral research</p><div class="callout"><p>My dissertation, <em>High Codimension Bifurcations in Predator-Prey Models</em>, develops a unified codimension-3 theory for nonlinear biological systems and analyzes mechanisms including Hopf bifurcations and saddle-node-to-saddle heteroclinic loops.</p></div></div></div></section>
 
-    <section class="section section-dark" id="teaching">
-      <div class="shell">
-        <div class="section-header">
-          <div class="section-number">03 / TEACHING</div>
-          <div><h2 class="section-title">Teaching experience</h2><p class="section-subtitle">Courses and instructional work in mathematics, programming, algorithms, and enrichment mathematics.</p></div>
-        </div>
-        <div class="two-column">
-          <div class="side-label">Appointments</div>
-          <ul class="clean-list">
-            <li><strong>Instructor, Johns Hopkins Center for Talented Youth</strong><span>2024-2025 · Data Structures and Algorithms, Introduction to Programming, and Number Theory.</span></li>
-            <li><strong>Graduate Teaching Assistant, University of Toledo</strong><span>2021-2025 · Instructor of record for College Algebra; recitation leader for Calculus I; mathematics tutoring at the Learning Enhancement Center.</span></li>
-            <li><strong>Mathematics Lecturer, Math Corps</strong><span>2022 · Enrichment mathematics for middle- and high-school students in Toledo.</span></li>
-          </ul>
-        </div>
-      </div>
-    </section>
+    <section class="section section-dark" id="teaching"><div class="shell"><div class="section-header"><div class="section-number">03 / TEACHING</div><div><h2 class="section-title">Teaching experience</h2><p class="section-subtitle">Courses and instructional work in mathematics, programming, algorithms, and enrichment mathematics.</p></div></div><div class="two-column"><div class="side-label">Appointments</div><ul class="clean-list"><li><strong>Instructor, Johns Hopkins Center for Talented Youth</strong><span>2024-2025 · Data Structures and Algorithms, Introduction to Programming, and Number Theory.</span></li><li><strong>Graduate Teaching Assistant, University of Toledo</strong><span>2021-2025 · Instructor of record for College Algebra; recitation leader for Calculus I; mathematics tutoring at the Learning Enhancement Center.</span></li><li><strong>Mathematics Lecturer, Math Corps</strong><span>2022 · Enrichment mathematics for middle- and high-school students in Toledo.</span></li></ul></div></div></section>
 
-    <section class="section" id="contact">
-      <div class="shell contact-block">
-        <div class="side-label">Contact</div>
-        <div>
-          <h2 class="section-title">Research and academic inquiries</h2>
-          <p class="section-subtitle">For research collaboration, invited talks, or academic correspondence:</p>
-          <a class="contact-email" href="mailto:wael.elkhateeb@rockets.utoledo.edu">wael.elkhateeb@rockets.utoledo.edu</a>
-          <div class="contact-links"><a href="https://github.com/WaelKhateeb" target="_blank" rel="noreferrer">GitHub</a><a href="https://www.linkedin.com/in/wael-el-khateeb-210794218" target="_blank" rel="noreferrer">LinkedIn</a><a href="cv.html">Curriculum vitae</a></div>
-        </div>
-      </div>
-    </section>
+    <section class="section" id="contact"><div class="shell contact-block"><div class="side-label">Contact</div><div><h2 class="section-title">Research and academic inquiries</h2><p class="section-subtitle">For research collaboration, invited talks, or academic correspondence:</p><a class="contact-email" href="mailto:wael.elkhateeb@rockets.utoledo.edu">wael.elkhateeb@rockets.utoledo.edu</a><div class="contact-links"><a href="https://github.com/WaelKhateeb" target="_blank" rel="noreferrer">GitHub</a><a href="https://www.linkedin.com/in/wael-el-khateeb-210794218" target="_blank" rel="noreferrer">LinkedIn</a><a href="cv.html">Curriculum vitae</a></div></div></div></section>
   </main>
 
   <footer class="site-footer"><div class="shell footer-shell"><p>© <span id="year"></span> Wael El Khateeb · Applied Mathematics, Emporia State University</p><a href="privacy.html">Privacy and analytics</a></div></footer>
