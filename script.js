@@ -232,11 +232,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const fields = [];
     const randGlyph = () => GLYPHS[(Math.random() * GLYPHS.length) | 0];
 
-    /* --- Neural-network motif: a forward pass cascading layer by layer (ML) --- */
+    // small glowing dot helper (shared by the ML motifs)
+    const dot = (ctx, x, y, r, fill, blur) => {
+      ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2);
+      if (blur) { ctx.shadowColor = 'rgba(255,214,100,0.95)'; ctx.shadowBlur = blur; }
+      ctx.fillStyle = fill; ctx.fill(); ctx.shadowBlur = 0;
+    };
+
+    /* --- Neural network: forward pass + back-propagation wave, weighted synapses (ML) --- */
     const makeNet = (w, h) => {
       const layouts = [[3, 5, 4, 2], [4, 5, 3], [3, 4, 5, 3], [2, 4, 4, 3], [4, 6, 4, 2]];
       const layers = layouts[(Math.random() * layouts.length) | 0];
-      const lw = 62, lh = 24;
+      const lw = 64, lh = 23;
       const width = (layers.length - 1) * lw, height = (Math.max.apply(null, layers) - 1) * lh;
       const ox = 20 + Math.random() * Math.max(1, w - width - 40);
       const oy = 26 + Math.random() * Math.max(1, h - height - 52);
@@ -247,46 +254,96 @@ document.addEventListener('DOMContentLoaded', () => {
       const seg = [];                       // edges grouped by the layer-to-layer segment they cross
       for (let li = 0; li < nodes.length - 1; li++) {
         const list = [];
-        nodes[li].forEach((a) => nodes[li + 1].forEach((b) => list.push({ a, b, pos: Math.random() < 0.62 })));
+        nodes[li].forEach((a) => nodes[li + 1].forEach((b) => list.push({ a, b, wt: Math.random() * 2 - 1 })));
         seg.push(list);
       }
-      // staggered "activation fronts" sweeping input -> output, like a forward pass
-      const fronts = [
-        { p: Math.random(), speed: 0.0023 + Math.random() * 0.0013 },
-        { p: Math.random(), speed: 0.0023 + Math.random() * 0.0013 }
+      const fwd = [                          // two staggered forward-pass fronts (input -> output)
+        { p: Math.random(), speed: 0.0021 + Math.random() * 0.0012 },
+        { p: Math.random(), speed: 0.0021 + Math.random() * 0.0012 }
       ];
-      return { nodes, seg, fronts, segCount: nodes.length - 1 };
+      const back = { p: Math.random(), speed: 0.0016 + Math.random() * 0.0009 };  // back-prop wave
+      return { nodes, seg, fwd, back, segCount: nodes.length - 1 };
     };
     const stepNet = (net) => {
-      net.fronts.forEach((f) => { f.p += f.speed; if (f.p > 1) f.p -= 1; });
+      net.fwd.forEach((f) => { f.p += f.speed; if (f.p > 1) f.p -= 1; });
+      net.back.p -= net.back.speed; if (net.back.p < 0) net.back.p += 1;
     };
     const drawNet = (ctx, net) => {
       const total = net.segCount;
-      ctx.lineWidth = 0.7; ctx.strokeStyle = 'rgba(187,141,10,0.07)';   // resting synapses
-      net.seg.forEach((list) => list.forEach((e) => { ctx.beginPath(); ctx.moveTo(e.a.x, e.a.y); ctx.lineTo(e.b.x, e.b.y); ctx.stroke(); }));
-      net.fronts.forEach((f) => {
-        const s = Math.min(total - 1, Math.floor(f.p * total));
-        const lt = f.p * total - s;                                     // progress through the active segment
-        net.seg[s].forEach((e) => {                                     // light the synapses the front is crossing
-          ctx.strokeStyle = e.pos ? 'rgba(244,197,66,0.32)' : 'rgba(187,141,10,0.16)';
-          ctx.lineWidth = e.pos ? 1.1 : 0.9;
+      net.seg.forEach((list) => list.forEach((e) => {            // resting synapses — thickness & opacity by |weight|
+        const a = Math.abs(e.wt);
+        ctx.strokeStyle = `rgba(187,141,10,${0.04 + a * 0.07})`; ctx.lineWidth = 0.4 + a * 0.8;
+        ctx.beginPath(); ctx.moveTo(e.a.x, e.a.y); ctx.lineTo(e.b.x, e.b.y); ctx.stroke();
+      }));
+      net.fwd.forEach((f) => {                                   // forward pass: comet pulses a -> b with trails
+        const s = Math.min(total - 1, Math.floor(f.p * total)), lt = f.p * total - s;
+        net.seg[s].forEach((e) => {
+          ctx.strokeStyle = e.wt >= 0 ? 'rgba(244,197,66,0.34)' : 'rgba(150,120,40,0.22)';
+          ctx.lineWidth = 0.8 + Math.abs(e.wt) * 1.1;
           ctx.beginPath(); ctx.moveTo(e.a.x, e.a.y); ctx.lineTo(e.b.x, e.b.y); ctx.stroke();
-          const x = e.a.x + (e.b.x - e.a.x) * lt, y = e.a.y + (e.b.y - e.a.y) * lt;
-          ctx.beginPath(); ctx.arc(x, y, 1.7, 0, Math.PI * 2); ctx.fillStyle = 'rgba(255,231,150,0.92)'; ctx.fill();
+          for (let k = 0; k < 4; k++) {
+            const tt = lt - k * 0.07; if (tt < 0) continue;
+            const x = e.a.x + (e.b.x - e.a.x) * tt, y = e.a.y + (e.b.y - e.a.y) * tt;
+            dot(ctx, x, y, 1.8 - k * 0.35, `rgba(255,231,150,${0.85 - k * 0.2})`, k === 0 ? 8 : 0);
+          }
         });
       });
-      net.nodes.forEach((col, L) => {                                   // neurons fire as a front reaches their layer
+      {                                                          // back-propagation: a pale update wave b -> a
+        const bs = Math.min(total - 1, Math.floor(net.back.p * total)), blt = net.back.p * total - bs;
+        net.seg[bs].forEach((e) => {
+          ctx.strokeStyle = 'rgba(255,236,180,0.14)'; ctx.lineWidth = 0.9;
+          ctx.beginPath(); ctx.moveTo(e.a.x, e.a.y); ctx.lineTo(e.b.x, e.b.y); ctx.stroke();
+          const tt = 1 - blt, x = e.a.x + (e.b.x - e.a.x) * tt, y = e.a.y + (e.b.y - e.a.y) * tt;
+          dot(ctx, x, y, 1.3, 'rgba(255,248,225,0.75)', 0);
+        });
+      }
+      net.nodes.forEach((col, L) => {                            // neurons bloom as a front reaches their layer
         const lf = total ? L / total : 0;
         col.forEach((n) => {
           let glow = 0;
-          net.fronts.forEach((f) => { const d = (f.p - lf) / 0.06; const g = Math.exp(-d * d); if (g > glow) glow = g; });
-          const r = 2.2 + glow * 3;
-          ctx.beginPath(); ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(244,197,66,${0.2 + glow * 0.7})`;
-          if (glow > 0.06) { ctx.shadowColor = 'rgba(255,210,90,0.95)'; ctx.shadowBlur = 14 * glow; }
-          ctx.fill(); ctx.shadowBlur = 0;
+          net.fwd.forEach((f) => { const d = (f.p - lf) / 0.06; const g = Math.exp(-d * d); if (g > glow) glow = g; });
+          const bd = (net.back.p - lf) / 0.06, bg = Math.exp(-bd * bd) * 0.5; if (bg > glow) glow = bg;
+          dot(ctx, n.x, n.y, 2.1 + glow * 3.1, `rgba(244,197,66,${0.2 + glow * 0.72})`, glow > 0.06 ? 15 * glow : 0);
         });
       });
+    };
+
+    /* --- Gradient descent on a loss landscape: an optimizer rolling into the basin (ML) --- */
+    const makeDescent = (w, h) => {
+      const rx = 58 + Math.random() * 70, ry = rx * (0.6 + Math.random() * 0.45);
+      const cx = rx + 18 + Math.random() * Math.max(1, w - 2 * rx - 36);
+      const cy = ry + 18 + Math.random() * Math.max(1, h - 2 * ry - 36);
+      const d = { cx, cy, rx, ry, x: 0, y: 0, vx: 0, vy: 0, trail: [], lr: 0.05, mom: 0.9, t: 0 };
+      d.reset = () => {
+        const ang = Math.random() * Math.PI * 2, rad = 0.85 + Math.random() * 0.35;
+        d.x = cx + Math.cos(ang) * rx * rad; d.y = cy + Math.sin(ang) * ry * rad;
+        d.vx = d.vy = 0; d.trail = []; d.t = 0;
+      };
+      d.reset();
+      return d;
+    };
+    const stepDescent = (d) => {                                 // momentum SGD on an elliptical bowl + a little noise
+      const gx = (d.x - d.cx) / (d.rx * d.rx), gy = (d.y - d.cy) / (d.ry * d.ry), scale = d.rx * d.ry;
+      d.vx = d.mom * d.vx - d.lr * gx * scale + (Math.random() - 0.5) * 0.6;
+      d.vy = d.mom * d.vy - d.lr * gy * scale + (Math.random() - 0.5) * 0.6;
+      d.x += d.vx * 0.12; d.y += d.vy * 0.12;
+      d.trail.push({ x: d.x, y: d.y }); if (d.trail.length > 48) d.trail.shift();
+      d.t++;
+      const near = Math.hypot((d.x - d.cx) / d.rx, (d.y - d.cy) / d.ry);
+      if ((near < 0.06 && Math.hypot(d.vx, d.vy) < 0.6) || d.t > 1500) d.reset();
+    };
+    const drawDescent = (ctx, d) => {
+      for (let i = 5; i >= 1; i--) {                             // concentric contour rings of the loss basin
+        const f = i / 5;
+        ctx.strokeStyle = `rgba(187,141,10,${0.05 + (1 - f) * 0.06})`; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.ellipse(d.cx, d.cy, d.rx * f, d.ry * f, 0, 0, Math.PI * 2); ctx.stroke();
+      }
+      ctx.lineWidth = 1.4; ctx.strokeStyle = 'rgba(244,197,66,0.33)'; ctx.beginPath();
+      d.trail.forEach((p, i) => { i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y); });
+      ctx.stroke();
+      for (let i = 0; i < d.trail.length; i += 4) dot(ctx, d.trail[i].x, d.trail[i].y, 1.1, `rgba(244,197,66,${(i / d.trail.length) * 0.4})`, 0);
+      dot(ctx, d.cx, d.cy, 1.6 + Math.sin(d.t / 12) * 0.5, 'rgba(255,231,150,0.5)', 6);   // the minimum
+      dot(ctx, d.x, d.y, 2.6, 'rgba(255,236,170,0.96)', 12);                              // the optimizer
     };
 
     /* --- DNA double-helix motif drifting upward (biology) --- */
@@ -341,15 +398,28 @@ document.addEventListener('DOMContentLoaded', () => {
           size: 12 + Math.random() * 13, a: 0.05 + Math.random() * 0.07, text: randGlyph()
         });
       }
-      const netCount = (f.w > 640 && f.h > 240) ? Math.max(1, Math.round(f.w / 1000)) : (f.h > 320 ? 1 : 0);
-      f.nets = []; for (let i = 0; i < netCount; i++) f.nets.push(makeNet(f.w, f.h));
-      const helixCount = (f.h > 280) ? Math.max(1, Math.round(f.w / 1200)) : 0;
-      f.helices = []; for (let i = 0; i < helixCount; i++) f.helices.push(makeHelix(f.w, f.h));
+      // each dark surface gets a primary ML scene so different sections feel distinct
+      f.nets = []; f.descents = []; f.helices = [];
+      const big = f.w > 620 && f.h > 220, wide = f.w > 1000;
+      if (f.theme === undefined) f.theme = Math.random() < 0.5 ? 'net' : 'descent';
+      if (big) {
+        if (f.theme === 'net') {
+          for (let i = 0; i < (wide ? 2 : 1); i++) f.nets.push(makeNet(f.w, f.h));
+          if (wide) f.descents.push(makeDescent(f.w, f.h));
+        } else {
+          for (let i = 0; i < (wide ? 2 : 1); i++) f.descents.push(makeDescent(f.w, f.h));
+          if (wide) f.nets.push(makeNet(f.w, f.h));
+        }
+      } else if (f.h > 300) {
+        (f.theme === 'descent' ? f.descents : f.nets).push((f.theme === 'descent' ? makeDescent : makeNet)(f.w, f.h));
+      }
+      if (f.h > 300 && Math.random() < 0.6) f.helices.push(makeHelix(f.w, f.h));
     };
 
     const drawField = (f) => {
       const { ctx, w, h, pts } = f;
       ctx.clearRect(0, 0, w, h);
+      f.descents.forEach((d) => drawDescent(ctx, d));
       f.helices.forEach((he) => drawHelix(ctx, he));
       f.nets.forEach((net) => drawNet(ctx, net));
       for (let i = 0; i < pts.length; i++) {
@@ -386,6 +456,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (g.y < -24) { g.y = f.h + 24; g.x = Math.random() * f.w; g.text = randGlyph(); }
       }
       f.nets.forEach(stepNet);
+      f.descents.forEach(stepDescent);
       f.helices.forEach((he) => stepHelix(he, f.h));
     };
 
@@ -397,9 +468,8 @@ document.addEventListener('DOMContentLoaded', () => {
       sizeField(f); fields.push(f);
     });
 
-    if (reduceMotion) {
-      fields.forEach(drawField);
-    } else {
+    fields.forEach(drawField);            // paint an initial frame at once (also covers throttled/paused rAF)
+    if (!reduceMotion) {
       const loop = () => {
         for (const f of fields) { if (f.visible) { stepField(f); drawField(f); } }
         requestAnimationFrame(loop);
