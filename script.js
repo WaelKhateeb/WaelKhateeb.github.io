@@ -232,54 +232,61 @@ document.addEventListener('DOMContentLoaded', () => {
     const fields = [];
     const randGlyph = () => GLYPHS[(Math.random() * GLYPHS.length) | 0];
 
-    /* --- Neural-network motif: layered nodes with signals firing along edges (ML) --- */
+    /* --- Neural-network motif: a forward pass cascading layer by layer (ML) --- */
     const makeNet = (w, h) => {
-      const layouts = [[3, 4, 3], [2, 4, 3], [3, 3, 3], [2, 3, 4, 2]];
+      const layouts = [[3, 5, 4, 2], [4, 5, 3], [3, 4, 5, 3], [2, 4, 4, 3], [4, 6, 4, 2]];
       const layers = layouts[(Math.random() * layouts.length) | 0];
-      const lw = 52, lh = 30;
+      const lw = 62, lh = 24;
       const width = (layers.length - 1) * lw, height = (Math.max.apply(null, layers) - 1) * lh;
-      const ox = 24 + Math.random() * Math.max(1, w - width - 48);
-      const oy = 24 + Math.random() * Math.max(1, h - height - 48);
+      const ox = 20 + Math.random() * Math.max(1, w - width - 40);
+      const oy = 26 + Math.random() * Math.max(1, h - height - 52);
       const nodes = layers.map((n, li) => {
         const top = oy + (height - (n - 1) * lh) / 2;
-        return Array.from({ length: n }, (_, i) => ({ x: ox + li * lw, y: top + i * lh, glow: 0 }));
+        return Array.from({ length: n }, (_, i) => ({ x: ox + li * lw, y: top + i * lh }));
       });
-      const edges = [];
-      for (let li = 0; li < nodes.length - 1; li++)
-        nodes[li].forEach((a) => nodes[li + 1].forEach((b) => edges.push({ a, b })));
-      const net = { nodes, edges, pulses: [] };
-      net.spawn = () => net.pulses.push({ e: edges[(Math.random() * edges.length) | 0], t: 0, speed: 0.012 + Math.random() * 0.02 });
-      for (let i = 0; i < 4; i++) net.spawn();
-      return net;
+      const seg = [];                       // edges grouped by the layer-to-layer segment they cross
+      for (let li = 0; li < nodes.length - 1; li++) {
+        const list = [];
+        nodes[li].forEach((a) => nodes[li + 1].forEach((b) => list.push({ a, b, pos: Math.random() < 0.62 })));
+        seg.push(list);
+      }
+      // staggered "activation fronts" sweeping input -> output, like a forward pass
+      const fronts = [
+        { p: Math.random(), speed: 0.0023 + Math.random() * 0.0013 },
+        { p: Math.random(), speed: 0.0023 + Math.random() * 0.0013 }
+      ];
+      return { nodes, seg, fronts, segCount: nodes.length - 1 };
     };
     const stepNet = (net) => {
-      net.nodes.forEach((col) => col.forEach((n) => { n.glow *= 0.92; }));
-      for (let i = net.pulses.length - 1; i >= 0; i--) {
-        const p = net.pulses[i]; p.t += p.speed;
-        if (p.t >= 1) {
-          p.e.b.glow = 1;
-          const nxt = net.edges.filter((e) => e.a === p.e.b);
-          if (nxt.length) { p.e = nxt[(Math.random() * nxt.length) | 0]; p.t = 0; }
-          else { net.pulses.splice(i, 1); net.spawn(); }
-        }
-      }
+      net.fronts.forEach((f) => { f.p += f.speed; if (f.p > 1) f.p -= 1; });
     };
     const drawNet = (ctx, net) => {
-      ctx.lineWidth = 0.8; ctx.strokeStyle = 'rgba(187,141,10,0.10)';
-      net.edges.forEach((e) => { ctx.beginPath(); ctx.moveTo(e.a.x, e.a.y); ctx.lineTo(e.b.x, e.b.y); ctx.stroke(); });
-      net.pulses.forEach((p) => {
-        const x = p.e.a.x + (p.e.b.x - p.e.a.x) * p.t, y = p.e.a.y + (p.e.b.y - p.e.a.y) * p.t;
-        ctx.strokeStyle = 'rgba(244,197,66,0.45)'; ctx.lineWidth = 1.1;
-        ctx.beginPath(); ctx.moveTo(p.e.a.x, p.e.a.y); ctx.lineTo(x, y); ctx.stroke();
-        ctx.beginPath(); ctx.arc(x, y, 1.8, 0, Math.PI * 2); ctx.fillStyle = 'rgba(255,231,150,0.85)'; ctx.fill();
+      const total = net.segCount;
+      ctx.lineWidth = 0.7; ctx.strokeStyle = 'rgba(187,141,10,0.07)';   // resting synapses
+      net.seg.forEach((list) => list.forEach((e) => { ctx.beginPath(); ctx.moveTo(e.a.x, e.a.y); ctx.lineTo(e.b.x, e.b.y); ctx.stroke(); }));
+      net.fronts.forEach((f) => {
+        const s = Math.min(total - 1, Math.floor(f.p * total));
+        const lt = f.p * total - s;                                     // progress through the active segment
+        net.seg[s].forEach((e) => {                                     // light the synapses the front is crossing
+          ctx.strokeStyle = e.pos ? 'rgba(244,197,66,0.32)' : 'rgba(187,141,10,0.16)';
+          ctx.lineWidth = e.pos ? 1.1 : 0.9;
+          ctx.beginPath(); ctx.moveTo(e.a.x, e.a.y); ctx.lineTo(e.b.x, e.b.y); ctx.stroke();
+          const x = e.a.x + (e.b.x - e.a.x) * lt, y = e.a.y + (e.b.y - e.a.y) * lt;
+          ctx.beginPath(); ctx.arc(x, y, 1.7, 0, Math.PI * 2); ctx.fillStyle = 'rgba(255,231,150,0.92)'; ctx.fill();
+        });
       });
-      net.nodes.forEach((col) => col.forEach((n) => {
-        const r = 2.5 + n.glow * 2.4;
-        ctx.beginPath(); ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(244,197,66,${0.26 + n.glow * 0.6})`;
-        if (n.glow > 0.05) { ctx.shadowColor = 'rgba(244,197,66,0.85)'; ctx.shadowBlur = 11 * n.glow; }
-        ctx.fill(); ctx.shadowBlur = 0;
-      }));
+      net.nodes.forEach((col, L) => {                                   // neurons fire as a front reaches their layer
+        const lf = total ? L / total : 0;
+        col.forEach((n) => {
+          let glow = 0;
+          net.fronts.forEach((f) => { const d = (f.p - lf) / 0.06; const g = Math.exp(-d * d); if (g > glow) glow = g; });
+          const r = 2.2 + glow * 3;
+          ctx.beginPath(); ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(244,197,66,${0.2 + glow * 0.7})`;
+          if (glow > 0.06) { ctx.shadowColor = 'rgba(255,210,90,0.95)'; ctx.shadowBlur = 14 * glow; }
+          ctx.fill(); ctx.shadowBlur = 0;
+        });
+      });
     };
 
     /* --- DNA double-helix motif drifting upward (biology) --- */

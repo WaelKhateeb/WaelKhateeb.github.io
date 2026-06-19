@@ -122,10 +122,10 @@ img { max-width: 100%; }
 .text-action:hover::after { color: #1a1200; transform: translateX(2px); }
 
 /* ===========================  GENERIC SECTIONS  =========================== */
-.section { position: relative; padding: 94px 0; border-bottom: 1px solid var(--line); }
+.section { position: relative; padding: 70px 0; border-bottom: 1px solid var(--line); }
 .section-alt { background: var(--cream-2); }
 .section-dark { background: radial-gradient(circle at 80% 0%, rgba(187,141,10,.18), transparent 45%), linear-gradient(160deg, var(--black) 0%, var(--black-2) 60%, var(--black-3) 100%); color: #f4eddc; border-color: rgba(187,141,10,.25); }
-.section-header { display: grid; grid-template-columns: 180px minmax(0,1fr); gap: 42px; margin-bottom: 50px; }
+.section-header { display: grid; grid-template-columns: 180px minmax(0,1fr); gap: 42px; margin-bottom: 32px; }
 .section-number, .side-label { color: var(--gold-deep); font: 600 .72rem var(--mono); letter-spacing: .12em; text-transform: uppercase; position: relative; padding-left: 18px; }
 .section-number::before, .side-label::before { content:''; position:absolute; left:0; top:.35em; width:9px; height:9px; border-radius:50%; background: var(--gold); box-shadow: 0 0 0 4px rgba(187,141,10,.18); }
 .section-dark .section-number, .section-dark .side-label { color: var(--gold-bright); }
@@ -144,7 +144,7 @@ img { max-width: 100%; }
 
 /* ---- Bibliography ---- */
 .bibliography { counter-reset: bib; border-top: 1px solid var(--line); }
-.bibliography li { position: relative; padding: 26px 0 26px 58px; border-bottom: 1px solid var(--line); transition: background .25s; }
+.bibliography li { position: relative; padding: 18px 0 18px 58px; border-bottom: 1px solid var(--line); transition: background .25s; }
 .bibliography li::before { counter-increment: bib; content: '[' counter(bib) ']'; position: absolute; top: 27px; left: 0; color: #1a1200; font: 600 .72rem var(--mono); background: linear-gradient(140deg,var(--gold-bright),var(--gold)); padding: 4px 7px; border-radius: 6px; box-shadow: 0 5px 14px -5px rgba(187,141,10,.7); }
 .bibliography li:hover { background: linear-gradient(90deg, rgba(187,141,10,.06), transparent); }
 .pub-title { display: block; margin-bottom: 6px; color: var(--ink); font-weight: 700; font-size: 1.04rem; }
@@ -184,22 +184,22 @@ img { max-width: 100%; }
 .page-banner p:last-child { max-width: 800px; margin: 0; color: #d6ccb5; font-size: 1.08rem; }
 @keyframes gridDrift { to { transform: translate3d(-54px,-54px,0); } }
 
-.record-section { position: relative; padding: 82px 0; border-bottom: 1px solid var(--line); }
+.record-section { position: relative; padding: 52px 0; border-bottom: 1px solid var(--line); }
 .record-section:nth-of-type(even) { background: var(--cream-2); }
-.record-layout { display: grid; grid-template-columns: 230px minmax(0,1fr); gap: 58px; }
+.record-layout { display: grid; grid-template-columns: 230px minmax(0,1fr); gap: 42px; }
 .record-label { padding-top: 4px; color: var(--gold-deep); font: 600 .9rem var(--mono); letter-spacing: .04em; }
 .record-label { position: relative; padding-left: 18px; }
 .record-label::before { content:''; position:absolute; left:0; top:.4em; width:9px; height:9px; border-radius:50%; background:var(--gold); box-shadow:0 0 0 4px rgba(187,141,10,.18); }
 .record-note { margin-top: 12px; color: var(--muted); font-size: .94rem; padding-left: 18px; }
 .record-main h2 { margin: 0 0 18px; color: var(--ink); font: 600 2rem/1.18 var(--display); }
 .project-list { border-top: 1px solid var(--line); }
-.project-list li { padding: 22px 0; border-bottom: 1px solid var(--line); transition: padding-left .25s var(--ease); border-left: 2px solid transparent; padding-left: 0; }
+.project-list li { padding: 15px 0; border-bottom: 1px solid var(--line); transition: padding-left .25s var(--ease); border-left: 2px solid transparent; padding-left: 0; }
 .project-list li:hover { padding-left: 16px; border-left-color: var(--gold); }
 .project-list h3 { margin: 0 0 6px; color: var(--ink); font: 600 1.3rem/1.22 var(--serif); }
 .project-list p { margin: 0; color: var(--ink-soft); }
 .status { display: inline-block; margin-bottom: 8px; color: var(--gold-deep); font: 600 .66rem var(--mono); letter-spacing: .08em; text-transform: uppercase; background: rgba(187,141,10,.12); padding: 4px 9px; border-radius: 20px; }
 .timeline { border-top: 1px solid var(--line); }
-.timeline li { display: grid; grid-template-columns: 200px minmax(0,1fr); gap: 42px; padding: 26px 0; border-bottom: 1px solid var(--line); position: relative; }
+.timeline li { display: grid; grid-template-columns: 200px minmax(0,1fr); gap: 42px; padding: 18px 0; border-bottom: 1px solid var(--line); position: relative; }
 .timeline-date { color: var(--gold-deep); font: 600 .73rem/1.5 var(--mono); letter-spacing: .03em; text-transform: uppercase; }
 .timeline h2 { margin: 0 0 6px; color: var(--ink); font: 600 1.38rem/1.2 var(--serif); }
 .timeline p { margin: 0; color: var(--ink-soft); }
