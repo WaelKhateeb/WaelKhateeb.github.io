@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
      analytics stays dormant but the page works normally. Once set, the site
      records page views automatically plus: PDF downloads, outbound link
      clicks, and contact-form submissions. */
-  const GA_MEASUREMENT_ID = 'G-XXXXXXXXXX';
+  const GA_MEASUREMENT_ID = 'G-V5EVW5VW9Y';
   (function analytics() {
     window.dataLayer = window.dataLayer || [];
     window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };

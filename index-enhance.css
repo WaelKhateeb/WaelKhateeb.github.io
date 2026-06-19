@@ -77,7 +77,7 @@
 .affiliation-logo-box.utoledo img { max-width:90px; max-height:92px; }
 .affiliation-logo-box.jhu { padding:12px; background:#002d72; border-radius:8px; max-width:200px; margin:0 auto; }
 .affiliation-logo-box.jhu img { width:100%; max-width:none; max-height:74px; object-fit:contain; }
-.affiliation-logo-box.williams img { max-height:96px; }
+.affiliation-logo-box.williams img { max-width:100%; max-height:50px; }
 .affiliation-body { display:flex; flex-direction:column; }
 .affiliation-card h3 { margin:0 0 5px; color:var(--ink); font:600 1.16rem/1.16 var(--display); }
 .affiliation-card p { margin:0; color:var(--muted); font-size:.86rem; line-height:1.45; }
