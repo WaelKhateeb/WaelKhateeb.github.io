@@ -1,6 +1,41 @@
 document.addEventListener('DOMContentLoaded', () => {
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* ---------- Analytics (Google Analytics 4) + event tracking ----------
+     Paste your GA4 Measurement ID below (looks like G-ABCD1234). Until then
+     analytics stays dormant but the page works normally. Once set, the site
+     records page views automatically plus: PDF downloads, outbound link
+     clicks, and contact-form submissions. */
+  const GA_MEASUREMENT_ID = 'G-XXXXXXXXXX';
+  (function analytics() {
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+    const live = /^G-[A-Z0-9]{6,}$/.test(GA_MEASUREMENT_ID);
+    if (live) {
+      const s = document.createElement('script');
+      s.async = true; s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_MEASUREMENT_ID;
+      document.head.appendChild(s);
+      gtag('js', new Date());
+      gtag('config', GA_MEASUREMENT_ID, { anonymize_ip: true });
+    }
+    const track = (name, params) => {
+      try { gtag('event', name, params || {}); } catch (e) {}
+      if (!live) console.debug('[analytics]', name, params || {});
+    };
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest('a[href]');
+      if (!a) return;
+      let url; try { url = new URL(a.href, location.href); } catch (_) { return; }
+      if (/\.pdf(\?|$)/i.test(url.pathname)) {
+        track('file_download', { file_name: decodeURIComponent(url.pathname.split('/').pop()), file_extension: 'pdf', link_url: url.href });
+      } else if (url.host && url.host !== location.host) {
+        track('outbound_click', { link_url: url.href, link_domain: url.host, link_text: (a.textContent || '').trim().slice(0, 80) });
+      }
+    }, true);
+    const cf = document.querySelector('.contact-form');
+    if (cf) cf.addEventListener('submit', () => track('contact_submit', { method: 'formsubmit' }));
+  })();
+
   /* ---------- Mobile menu ---------- */
   const menu = document.querySelector('.menu-button');
   const nav = document.querySelector('.primary-nav');
@@ -185,24 +220,103 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-  /* ---------- Ambient gold constellation behind dark surfaces ---------- */
+  /* ---------- Ambient field: neural nets + DNA helices + data constellation ---------- */
   (function ambientField() {
     const hosts = document.querySelectorAll('.page-banner, .section-dark, .site-footer');
     if (!hosts.length) return;
     const LINK2 = 17000; // squared link distance (~130px)
-    // Machine-learning / data-science tokens that drift through the background
-    const GLYPHS = ['∇L', 'Σ wᵢxᵢ', 'σ(z)', 'ŷ = Wx + b', '∂L/∂w', 'softmax', 'ReLU', 'P(y|x)',
-      'argmax', 'μ, σ²', 'θ', 'λ', 'SVD', 'k-NN', 'βᵀx', 'f(x; θ)', '[ A | b ]', '∇·F', 'tanh',
-      'gradient', 'tensor', 'loss ↓', '01001010', 'E[X]', 'KL(p‖q)'];
+    // Machine-learning + mathematical-biology tokens that drift through the background
+    const GLYPHS = ['∇L', 'σ(z)', 'ŷ = Wx + b', '∂L/∂w', 'softmax', 'ReLU', 'P(y|x)',
+      'argmax', 'θ', 'λ', 'SVD', 'tanh', 'loss ↓', '01001010', 'KL(p‖q)',
+      "x' = αx − βxy", 'dS/dt', 'R₀', 'A·C·G·T', 'Δu = f(u)', 'Hopf', 'τ-delay'];
     const fields = [];
     const randGlyph = () => GLYPHS[(Math.random() * GLYPHS.length) | 0];
+
+    /* --- Neural-network motif: layered nodes with signals firing along edges (ML) --- */
+    const makeNet = (w, h) => {
+      const layouts = [[3, 4, 3], [2, 4, 3], [3, 3, 3], [2, 3, 4, 2]];
+      const layers = layouts[(Math.random() * layouts.length) | 0];
+      const lw = 52, lh = 30;
+      const width = (layers.length - 1) * lw, height = (Math.max.apply(null, layers) - 1) * lh;
+      const ox = 24 + Math.random() * Math.max(1, w - width - 48);
+      const oy = 24 + Math.random() * Math.max(1, h - height - 48);
+      const nodes = layers.map((n, li) => {
+        const top = oy + (height - (n - 1) * lh) / 2;
+        return Array.from({ length: n }, (_, i) => ({ x: ox + li * lw, y: top + i * lh, glow: 0 }));
+      });
+      const edges = [];
+      for (let li = 0; li < nodes.length - 1; li++)
+        nodes[li].forEach((a) => nodes[li + 1].forEach((b) => edges.push({ a, b })));
+      const net = { nodes, edges, pulses: [] };
+      net.spawn = () => net.pulses.push({ e: edges[(Math.random() * edges.length) | 0], t: 0, speed: 0.012 + Math.random() * 0.02 });
+      for (let i = 0; i < 4; i++) net.spawn();
+      return net;
+    };
+    const stepNet = (net) => {
+      net.nodes.forEach((col) => col.forEach((n) => { n.glow *= 0.92; }));
+      for (let i = net.pulses.length - 1; i >= 0; i--) {
+        const p = net.pulses[i]; p.t += p.speed;
+        if (p.t >= 1) {
+          p.e.b.glow = 1;
+          const nxt = net.edges.filter((e) => e.a === p.e.b);
+          if (nxt.length) { p.e = nxt[(Math.random() * nxt.length) | 0]; p.t = 0; }
+          else { net.pulses.splice(i, 1); net.spawn(); }
+        }
+      }
+    };
+    const drawNet = (ctx, net) => {
+      ctx.lineWidth = 0.8; ctx.strokeStyle = 'rgba(187,141,10,0.10)';
+      net.edges.forEach((e) => { ctx.beginPath(); ctx.moveTo(e.a.x, e.a.y); ctx.lineTo(e.b.x, e.b.y); ctx.stroke(); });
+      net.pulses.forEach((p) => {
+        const x = p.e.a.x + (p.e.b.x - p.e.a.x) * p.t, y = p.e.a.y + (p.e.b.y - p.e.a.y) * p.t;
+        ctx.strokeStyle = 'rgba(244,197,66,0.45)'; ctx.lineWidth = 1.1;
+        ctx.beginPath(); ctx.moveTo(p.e.a.x, p.e.a.y); ctx.lineTo(x, y); ctx.stroke();
+        ctx.beginPath(); ctx.arc(x, y, 1.8, 0, Math.PI * 2); ctx.fillStyle = 'rgba(255,231,150,0.85)'; ctx.fill();
+      });
+      net.nodes.forEach((col) => col.forEach((n) => {
+        const r = 2.5 + n.glow * 2.4;
+        ctx.beginPath(); ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(244,197,66,${0.26 + n.glow * 0.6})`;
+        if (n.glow > 0.05) { ctx.shadowColor = 'rgba(244,197,66,0.85)'; ctx.shadowBlur = 11 * n.glow; }
+        ctx.fill(); ctx.shadowBlur = 0;
+      }));
+    };
+
+    /* --- DNA double-helix motif drifting upward (biology) --- */
+    const makeHelix = (w, h) => ({
+      x: 24 + Math.random() * (w - 48), y: Math.random() * h,
+      len: 110 + Math.random() * 120, amp: 8 + Math.random() * 6,
+      freq: 0.13 + Math.random() * 0.05, phase: Math.random() * Math.PI * 2,
+      speed: 0.12 + Math.random() * 0.18, rot: 0.012 + Math.random() * 0.01
+    });
+    const stepHelix = (he, h) => { he.y -= he.speed; he.phase += he.rot; if (he.y + he.len < -10) he.y = h + 10; };
+    const drawHelix = (ctx, he) => {
+      const pts = [];
+      for (let s = 0; s <= he.len; s += 7) {
+        const ang = s * he.freq + he.phase;
+        pts.push({ ax: he.x + Math.sin(ang) * he.amp, bx: he.x + Math.sin(ang + Math.PI) * he.amp, y: he.y + s, c: Math.cos(ang) });
+      }
+      ctx.lineWidth = 1.2;
+      for (let i = 1; i < pts.length; i++) {
+        ctx.strokeStyle = 'rgba(196,150,28,0.20)'; ctx.beginPath(); ctx.moveTo(pts[i - 1].ax, pts[i - 1].y); ctx.lineTo(pts[i].ax, pts[i].y); ctx.stroke();
+        ctx.strokeStyle = 'rgba(244,197,66,0.15)'; ctx.beginPath(); ctx.moveTo(pts[i - 1].bx, pts[i - 1].y); ctx.lineTo(pts[i].bx, pts[i].y); ctx.stroke();
+      }
+      for (let i = 0; i < pts.length; i += 2) {
+        const p = pts[i];
+        ctx.strokeStyle = `rgba(187,141,10,${0.05 + Math.abs(p.c) * 0.12})`; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(p.ax, p.y); ctx.lineTo(p.bx, p.y); ctx.stroke();
+        ctx.fillStyle = 'rgba(244,197,66,0.4)';
+        ctx.beginPath(); ctx.arc(p.ax, p.y, 1.4, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(p.bx, p.y, 1.4, 0, Math.PI * 2); ctx.fill();
+      }
+    };
 
     const sizeField = (f) => {
       const r = f.host.getBoundingClientRect();
       f.w = r.width; f.h = r.height;
       f.c.width = f.w * f.dpr; f.c.height = f.h * f.dpr;
       f.ctx.setTransform(f.dpr, 0, 0, f.dpr, 0, 0);
-      const count = Math.max(12, Math.min(60, Math.round((f.w * f.h) / 18000)));
+      const count = Math.max(10, Math.min(52, Math.round((f.w * f.h) / 20000)));
       f.pts = [];
       for (let i = 0; i < count; i++) {
         f.pts.push({
@@ -211,26 +325,32 @@ document.addEventListener('DOMContentLoaded', () => {
           r: 0.8 + Math.random() * 1.6
         });
       }
-      const gcount = Math.max(2, Math.min(8, Math.round((f.w * f.h) / 95000)));
+      const gcount = Math.max(2, Math.min(6, Math.round((f.w * f.h) / 130000)));
       f.glyphs = [];
       for (let i = 0; i < gcount; i++) {
         f.glyphs.push({
           x: Math.random() * f.w, y: Math.random() * f.h,
           vy: -(0.07 + Math.random() * 0.12), sway: Math.random() * Math.PI * 2,
-          size: 12 + Math.random() * 14, a: 0.05 + Math.random() * 0.07, text: randGlyph()
+          size: 12 + Math.random() * 13, a: 0.05 + Math.random() * 0.07, text: randGlyph()
         });
       }
+      const netCount = (f.w > 640 && f.h > 240) ? Math.max(1, Math.round(f.w / 1000)) : (f.h > 320 ? 1 : 0);
+      f.nets = []; for (let i = 0; i < netCount; i++) f.nets.push(makeNet(f.w, f.h));
+      const helixCount = (f.h > 280) ? Math.max(1, Math.round(f.w / 1200)) : 0;
+      f.helices = []; for (let i = 0; i < helixCount; i++) f.helices.push(makeHelix(f.w, f.h));
     };
 
     const drawField = (f) => {
       const { ctx, w, h, pts } = f;
       ctx.clearRect(0, 0, w, h);
+      f.helices.forEach((he) => drawHelix(ctx, he));
+      f.nets.forEach((net) => drawNet(ctx, net));
       for (let i = 0; i < pts.length; i++) {
         for (let j = i + 1; j < pts.length; j++) {
           const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
           const d2 = dx * dx + dy * dy;
           if (d2 < LINK2) {
-            ctx.strokeStyle = `rgba(196,150,28,${(1 - d2 / LINK2) * 0.26})`;
+            ctx.strokeStyle = `rgba(196,150,28,${(1 - d2 / LINK2) * 0.24})`;
             ctx.lineWidth = 1;
             ctx.beginPath(); ctx.moveTo(pts[i].x, pts[i].y); ctx.lineTo(pts[j].x, pts[j].y); ctx.stroke();
           }
@@ -238,7 +358,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       for (const p of pts) {
         ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(244,197,66,0.55)'; ctx.fill();
+        ctx.fillStyle = 'rgba(244,197,66,0.5)'; ctx.fill();
       }
       ctx.textBaseline = 'middle';
       for (const g of f.glyphs) {
@@ -258,6 +378,8 @@ document.addEventListener('DOMContentLoaded', () => {
         g.y += g.vy; g.sway += 0.008;
         if (g.y < -24) { g.y = f.h + 24; g.x = Math.random() * f.w; g.text = randGlyph(); }
       }
+      f.nets.forEach(stepNet);
+      f.helices.forEach((he) => stepHelix(he, f.h));
     };
 
     hosts.forEach((host) => {
@@ -324,4 +446,31 @@ document.addEventListener('DOMContentLoaded', () => {
       el.addEventListener('pointerleave', () => { el.style.transform = ''; });
     });
   }
+
+  /* ---------- News & updates rail: arrows + drag-to-scroll ---------- */
+  (function newsRail() {
+    const rail = document.querySelector('.news-rail');
+    if (!rail) return;
+    const prev = document.querySelector('.news-arrow.prev');
+    const next = document.querySelector('.news-arrow.next');
+    const step = () => { const c = rail.querySelector('.news-card'); return (c ? c.offsetWidth + 22 : 360); };
+    const update = () => {
+      const max = rail.scrollWidth - rail.clientWidth - 4;
+      if (prev) prev.hidden = rail.scrollLeft < 8;
+      if (next) next.hidden = rail.scrollLeft > max;
+    };
+    if (prev) prev.addEventListener('click', () => rail.scrollBy({ left: -step(), behavior: 'smooth' }));
+    if (next) next.addEventListener('click', () => rail.scrollBy({ left: step(), behavior: 'smooth' }));
+    rail.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update, { passive: true });
+    update();
+    // drag-to-scroll (desktop), without breaking link clicks
+    if (finePointer) {
+      let down = false, moved = false, sx = 0, sl = 0;
+      rail.addEventListener('pointerdown', (e) => { if (e.button !== 0) return; down = true; moved = false; sx = e.clientX; sl = rail.scrollLeft; rail.classList.add('grabbing'); });
+      document.addEventListener('pointermove', (e) => { if (!down) return; const dx = e.clientX - sx; if (Math.abs(dx) > 6) moved = true; rail.scrollLeft = sl - dx; });
+      document.addEventListener('pointerup', () => { down = false; rail.classList.remove('grabbing'); });
+      rail.addEventListener('click', (e) => { if (moved) { e.preventDefault(); e.stopPropagation(); } }, true);
+    }
+  })();
 });
