@@ -222,6 +222,8 @@
   .affiliation-grid{grid-template-columns:1fr}
   .affiliation-card{min-height:auto;border-right:0;border-bottom:1px solid var(--line);flex-direction:row;text-align:left;gap:20px}
   .affiliation-card .affiliation-logo-box{width:96px;flex:none}
+  .affiliation-card .affiliation-logo-box.jhu{width:clamp(118px,38vw,144px);min-height:74px;margin:0;padding:10px}
+  .affiliation-card .affiliation-logo-box.jhu img{max-height:54px}
   .affiliation-card:last-child{border-bottom:0}
   .focus-section,.home-profiles,.news-section,.home-contact{padding:62px 0}
   .focus-grid,.profile-links{grid-template-columns:1fr}
