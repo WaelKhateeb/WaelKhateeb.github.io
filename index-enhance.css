@@ -221,11 +221,33 @@
   .affiliation-grid{grid-template-columns:1fr}
   .affiliation-card{min-height:auto;border-right:0;border-bottom:1px solid var(--line);flex-direction:row;text-align:left;gap:20px}
   .affiliation-card .affiliation-logo-box{width:96px;flex:none}
-  .affiliation-card .affiliation-logo-box.jhu{width:clamp(118px,38vw,144px);min-height:74px;margin:0;padding:10px}
-  .affiliation-card .affiliation-logo-box.jhu img{max-height:54px}
+  .affiliation-card .affiliation-logo-box.jhu{width:96px;min-height:0;margin:0;padding:0}
+  .affiliation-card .affiliation-logo-box.jhu img{max-height:64px}
   .affiliation-card:last-child{border-bottom:0}
   .focus-section,.home-profiles,.news-section,.home-contact{padding:62px 0}
   .focus-grid,.profile-links{grid-template-columns:1fr}
   .news-card{flex-basis:84vw;max-width:84vw}
   .news-arrow{display:none}
+}
+/* ---------- PHONES: home hero made readable, lighter, easy to tap ---------- */
+@media (max-width: 640px) {
+  .home-page .hero {
+    min-height: auto; padding: 80px 0 52px;
+    background: radial-gradient(circle at 82% 14%, rgba(187,141,10,.26), transparent 48%),
+                linear-gradient(160deg, #221f18 0%, #2e2920 58%, #3a331f 100%);
+  }
+  .home-page .hero::before { opacity: .2; }
+  #phase-canvas { opacity: .5; }
+  .home-page .hero-orbs span { opacity: .3; }
+  /* the name fits the screen now */
+  .home-page .hero h1 { font-size: clamp(2.05rem, 9vw, 3rem); line-height: 1.04; letter-spacing: -.02em; text-shadow: 0 2px 16px rgba(0,0,0,.35); }
+  .home-page .hero-role { font-size: 1.1rem; }
+  .home-page .hero-intro { font-size: 1.02rem; }
+  /* full-width, comfortable tap targets */
+  .home-page .hero-links { flex-direction: column; gap: 10px; margin-top: 24px; }
+  .home-page .hero-links .text-action { width: 100%; justify-content: center; min-height: 50px; font-size: .95rem; }
+  .hero-social { gap: 8px; }
+  .hero-social a { flex: 1 1 0; justify-content: center; min-height: 42px; }
+  .btn-gold { width: 100%; justify-content: center; min-height: 52px; }
+  .home-contact .office-map iframe { height: 220px; }
 }

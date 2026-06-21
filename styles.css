@@ -272,11 +272,18 @@ img { max-width: 100%; }
   .hero-grid { grid-template-columns: 1fr; gap: 30px; }
   .headshot-frame { order: 1; width: 180px; height: 220px; }
   .hero-copy { order: 2; }
-  .hero h1, .page-banner h1 { font-size: 3rem; }
-  .section, .record-section { padding: 62px 0; }
-  .page-banner { padding: 64px 0; }
+  .hero h1 { font-size: 3rem; }
+  .page-banner h1 { font-size: clamp(2rem, 8vw, 2.6rem); }
+  .section, .record-section { padding: 56px 0; }
+  .page-banner { padding: 58px 0; }
   .bibliography li { padding-left: 46px; }
   .footer-shell { flex-direction: column; align-items: flex-start; }
+  /* phones: lift the dark surfaces so the theme reads lighter, and calm the moving background */
+  .bg-canvas { opacity: .5; }
+  .page-banner::before { opacity: .28; }
+  .section-dark { background: radial-gradient(circle at 80% 0%, rgba(187,141,10,.16), transparent 50%), linear-gradient(160deg, #221f18 0%, #2e2920 60%, #39321f 100%); }
+  .page-banner { background: radial-gradient(circle at 85% 8%, rgba(187,141,10,.22), transparent 46%), linear-gradient(150deg, #221f18 0%, #2e2920 55%, #39321f 100%); }
+  .site-footer { background: linear-gradient(160deg, #221f18, #39321f); }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
