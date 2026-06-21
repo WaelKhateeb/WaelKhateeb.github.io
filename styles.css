@@ -4,13 +4,15 @@
    Emporia State University palette — Black (#000) & Gold (#bb8d0a)
    =========================================================== */
 :root {
-  --black: #0b0a08;
-  --black-2: #14120d;
-  --black-3: #1e1a12;
+  --black: #141310;          /* deep graphite (lifted from near-black) */
+  --black-2: #1d1b15;
+  --black-3: #27231a;
   --gold: #bb8d0a;            /* official ESU gold, PMS 132 */
   --gold-bright: #f4c542;     /* luminous accent for glows + highlights */
   --gold-soft: #e3b53a;
   --gold-deep: #8a6708;
+  --accent: #5fb3c9;          /* restrained scientific accent — muted cyan */
+  --accent-deep: #3a8aa0;
   --cream: #faf6ec;
   --cream-2: #f3ecd9;
   --paper: #ffffff;
@@ -41,6 +43,7 @@ body {
 a { color: inherit; }
 h1, h2, h3, p { margin-top: 0; }
 ::selection { background: var(--gold); color: #000; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
 img { max-width: 100%; }
 
 .shell { width: min(1180px, calc(100% - 48px)); margin: 0 auto; }

@@ -224,155 +224,37 @@ document.addEventListener('DOMContentLoaded', () => {
   (function ambientField() {
     const hosts = document.querySelectorAll('.page-banner, .section-dark, .site-footer');
     if (!hosts.length) return;
-    const LINK2 = 17000; // squared link distance (~130px)
-    // Machine-learning + mathematical-biology tokens that drift through the background
-    const GLYPHS = ['∇L', 'σ(z)', 'ŷ = Wx + b', '∂L/∂w', 'softmax', 'ReLU', 'P(y|x)',
-      'argmax', 'θ', 'λ', 'SVD', 'tanh', 'loss ↓', '01001010', 'KL(p‖q)',
-      "x' = αx − βxy", 'dS/dt', 'R₀', 'A·C·G·T', 'Δu = f(u)', 'Hopf', 'τ-delay'];
+    const TAU = Math.PI * 2;
     const fields = [];
-    const randGlyph = () => GLYPHS[(Math.random() * GLYPHS.length) | 0];
+    // deterministic per-page seed so each page carries its own coherent vector field
+    let seed = 0; for (const ch of (location.pathname || '/')) seed = (seed * 31 + ch.charCodeAt(0)) >>> 0;
+    const sd = (seed % 1000) / 1000;
+    const K1 = 0.0017 + sd * 0.0013, K2 = 0.0012 + (1 - sd) * 0.0013, K3 = 0.0007 + sd * 0.0006, PH = sd * TAU;
+    let T = 0;                                  // slow global time → the field gently "breathes"
+    const angleAt = (x, y) => Math.sin(x * K1 + PH + T) + Math.cos(y * K2 - T * 0.7) + 0.6 * Math.sin((x + y) * K3 + T * 0.5);
+    const vel = (x, y) => { const a = angleAt(x, y) * Math.PI; return [Math.cos(a), Math.sin(a)]; };
+    const GOLD = '187,141,10', GOLD_HI = '244,197,66', CYAN = '120,196,214';
 
-    // small glowing dot helper (shared by the ML motifs)
-    const dot = (ctx, x, y, r, fill, blur) => {
-      ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2);
-      if (blur) { ctx.shadowColor = 'rgba(255,214,100,0.95)'; ctx.shadowBlur = blur; }
-      ctx.fillStyle = fill; ctx.fill(); ctx.shadowBlur = 0;
-    };
+    // (legacy ML motifs removed — the background is now the vector-field system below)
 
-    /* --- Neural network: forward pass + back-propagation wave, weighted synapses (ML) --- */
-    const makeNet = (w, h) => {
-      const layouts = [[3, 5, 4, 2], [4, 5, 3], [3, 4, 5, 3], [2, 4, 4, 3], [4, 6, 4, 2]];
-      const layers = layouts[(Math.random() * layouts.length) | 0];
-      const lw = 64, lh = 23;
-      const width = (layers.length - 1) * lw, height = (Math.max.apply(null, layers) - 1) * lh;
-      const ox = 20 + Math.random() * Math.max(1, w - width - 40);
-      const oy = 26 + Math.random() * Math.max(1, h - height - 52);
-      const nodes = layers.map((n, li) => {
-        const top = oy + (height - (n - 1) * lh) / 2;
-        return Array.from({ length: n }, (_, i) => ({ x: ox + li * lw, y: top + i * lh }));
-      });
-      const seg = [];                       // edges grouped by the layer-to-layer segment they cross
-      for (let li = 0; li < nodes.length - 1; li++) {
-        const list = [];
-        nodes[li].forEach((a) => nodes[li + 1].forEach((b) => list.push({ a, b, wt: Math.random() * 2 - 1 })));
-        seg.push(list);
-      }
-      const fwd = [                          // two staggered forward-pass fronts (input -> output)
-        { p: Math.random(), speed: 0.0021 + Math.random() * 0.0012 },
-        { p: Math.random(), speed: 0.0021 + Math.random() * 0.0012 }
-      ];
-      const back = { p: Math.random(), speed: 0.0016 + Math.random() * 0.0009 };  // back-prop wave
-      return { nodes, seg, fwd, back, segCount: nodes.length - 1 };
-    };
-    const stepNet = (net) => {
-      net.fwd.forEach((f) => { f.p += f.speed; if (f.p > 1) f.p -= 1; });
-      net.back.p -= net.back.speed; if (net.back.p < 0) net.back.p += 1;
-    };
-    const drawNet = (ctx, net) => {
-      const total = net.segCount;
-      net.seg.forEach((list) => list.forEach((e) => {            // resting synapses — thickness & opacity by |weight|
-        const a = Math.abs(e.wt);
-        ctx.strokeStyle = `rgba(187,141,10,${0.04 + a * 0.07})`; ctx.lineWidth = 0.4 + a * 0.8;
-        ctx.beginPath(); ctx.moveTo(e.a.x, e.a.y); ctx.lineTo(e.b.x, e.b.y); ctx.stroke();
-      }));
-      net.fwd.forEach((f) => {                                   // forward pass: comet pulses a -> b with trails
-        const s = Math.min(total - 1, Math.floor(f.p * total)), lt = f.p * total - s;
-        net.seg[s].forEach((e) => {
-          ctx.strokeStyle = e.wt >= 0 ? 'rgba(244,197,66,0.34)' : 'rgba(150,120,40,0.22)';
-          ctx.lineWidth = 0.8 + Math.abs(e.wt) * 1.1;
-          ctx.beginPath(); ctx.moveTo(e.a.x, e.a.y); ctx.lineTo(e.b.x, e.b.y); ctx.stroke();
-          for (let k = 0; k < 4; k++) {
-            const tt = lt - k * 0.07; if (tt < 0) continue;
-            const x = e.a.x + (e.b.x - e.a.x) * tt, y = e.a.y + (e.b.y - e.a.y) * tt;
-            dot(ctx, x, y, 1.8 - k * 0.35, `rgba(255,231,150,${0.85 - k * 0.2})`, k === 0 ? 8 : 0);
-          }
-        });
-      });
-      {                                                          // back-propagation: a pale update wave b -> a
-        const bs = Math.min(total - 1, Math.floor(net.back.p * total)), blt = net.back.p * total - bs;
-        net.seg[bs].forEach((e) => {
-          ctx.strokeStyle = 'rgba(255,236,180,0.14)'; ctx.lineWidth = 0.9;
-          ctx.beginPath(); ctx.moveTo(e.a.x, e.a.y); ctx.lineTo(e.b.x, e.b.y); ctx.stroke();
-          const tt = 1 - blt, x = e.a.x + (e.b.x - e.a.x) * tt, y = e.a.y + (e.b.y - e.a.y) * tt;
-          dot(ctx, x, y, 1.3, 'rgba(255,248,225,0.75)', 0);
-        });
-      }
-      net.nodes.forEach((col, L) => {                            // neurons bloom as a front reaches their layer
-        const lf = total ? L / total : 0;
-        col.forEach((n) => {
-          let glow = 0;
-          net.fwd.forEach((f) => { const d = (f.p - lf) / 0.06; const g = Math.exp(-d * d); if (g > glow) glow = g; });
-          const bd = (net.back.p - lf) / 0.06, bg = Math.exp(-bd * bd) * 0.5; if (bg > glow) glow = bg;
-          dot(ctx, n.x, n.y, 2.1 + glow * 3.1, `rgba(244,197,66,${0.2 + glow * 0.72})`, glow > 0.06 ? 15 * glow : 0);
-        });
-      });
-    };
-
-    /* --- Gradient descent on a loss landscape: an optimizer rolling into the basin (ML) --- */
-    const makeDescent = (w, h) => {
-      const rx = 58 + Math.random() * 70, ry = rx * (0.6 + Math.random() * 0.45);
-      const cx = rx + 18 + Math.random() * Math.max(1, w - 2 * rx - 36);
-      const cy = ry + 18 + Math.random() * Math.max(1, h - 2 * ry - 36);
-      const d = { cx, cy, rx, ry, x: 0, y: 0, vx: 0, vy: 0, trail: [], lr: 0.05, mom: 0.9, t: 0 };
-      d.reset = () => {
-        const ang = Math.random() * Math.PI * 2, rad = 0.85 + Math.random() * 0.35;
-        d.x = cx + Math.cos(ang) * rx * rad; d.y = cy + Math.sin(ang) * ry * rad;
-        d.vx = d.vy = 0; d.trail = []; d.t = 0;
-      };
-      d.reset();
-      return d;
-    };
-    const stepDescent = (d) => {                                 // momentum SGD on an elliptical bowl + a little noise
-      const gx = (d.x - d.cx) / (d.rx * d.rx), gy = (d.y - d.cy) / (d.ry * d.ry), scale = d.rx * d.ry;
-      d.vx = d.mom * d.vx - d.lr * gx * scale + (Math.random() - 0.5) * 0.6;
-      d.vy = d.mom * d.vy - d.lr * gy * scale + (Math.random() - 0.5) * 0.6;
-      d.x += d.vx * 0.12; d.y += d.vy * 0.12;
-      d.trail.push({ x: d.x, y: d.y }); if (d.trail.length > 48) d.trail.shift();
-      d.t++;
-      const near = Math.hypot((d.x - d.cx) / d.rx, (d.y - d.cy) / d.ry);
-      if ((near < 0.06 && Math.hypot(d.vx, d.vy) < 0.6) || d.t > 1500) d.reset();
-    };
-    const drawDescent = (ctx, d) => {
-      for (let i = 5; i >= 1; i--) {                             // concentric contour rings of the loss basin
-        const f = i / 5;
-        ctx.strokeStyle = `rgba(187,141,10,${0.05 + (1 - f) * 0.06})`; ctx.lineWidth = 1;
-        ctx.beginPath(); ctx.ellipse(d.cx, d.cy, d.rx * f, d.ry * f, 0, 0, Math.PI * 2); ctx.stroke();
-      }
-      ctx.lineWidth = 1.4; ctx.strokeStyle = 'rgba(244,197,66,0.33)'; ctx.beginPath();
-      d.trail.forEach((p, i) => { i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y); });
-      ctx.stroke();
-      for (let i = 0; i < d.trail.length; i += 4) dot(ctx, d.trail[i].x, d.trail[i].y, 1.1, `rgba(244,197,66,${(i / d.trail.length) * 0.4})`, 0);
-      dot(ctx, d.cx, d.cy, 1.6 + Math.sin(d.t / 12) * 0.5, 'rgba(255,231,150,0.5)', 6);   // the minimum
-      dot(ctx, d.x, d.y, 2.6, 'rgba(255,236,170,0.96)', 12);                              // the optimizer
-    };
-
-    /* --- DNA double-helix motif drifting upward (biology) --- */
-    const makeHelix = (w, h) => ({
-      x: 24 + Math.random() * (w - 48), y: Math.random() * h,
-      len: 110 + Math.random() * 120, amp: 8 + Math.random() * 6,
-      freq: 0.13 + Math.random() * 0.05, phase: Math.random() * Math.PI * 2,
-      speed: 0.12 + Math.random() * 0.18, rot: 0.012 + Math.random() * 0.01
+    const spawn = (f, anywhere) => ({
+      x: Math.random() * f.w,
+      y: anywhere ? Math.random() * f.h : (Math.random() < 0.5 ? -8 : f.h + 8),
+      trail: [], life: 0, max: 120 + Math.random() * 170,
+      accent: Math.random() < 0.12, lw: 0.7 + Math.random() * 1.1, sp: 0.7 + Math.random() * 0.7
     });
-    const stepHelix = (he, h) => { he.y -= he.speed; he.phase += he.rot; if (he.y + he.len < -10) he.y = h + 10; };
-    const drawHelix = (ctx, he) => {
-      const pts = [];
-      for (let s = 0; s <= he.len; s += 7) {
-        const ang = s * he.freq + he.phase;
-        pts.push({ ax: he.x + Math.sin(ang) * he.amp, bx: he.x + Math.sin(ang + Math.PI) * he.amp, y: he.y + s, c: Math.cos(ang) });
-      }
-      ctx.lineWidth = 1.2;
-      for (let i = 1; i < pts.length; i++) {
-        ctx.strokeStyle = 'rgba(196,150,28,0.20)'; ctx.beginPath(); ctx.moveTo(pts[i - 1].ax, pts[i - 1].y); ctx.lineTo(pts[i].ax, pts[i].y); ctx.stroke();
-        ctx.strokeStyle = 'rgba(244,197,66,0.15)'; ctx.beginPath(); ctx.moveTo(pts[i - 1].bx, pts[i - 1].y); ctx.lineTo(pts[i].bx, pts[i].y); ctx.stroke();
-      }
-      for (let i = 0; i < pts.length; i += 2) {
-        const p = pts[i];
-        ctx.strokeStyle = `rgba(187,141,10,${0.05 + Math.abs(p.c) * 0.12})`; ctx.lineWidth = 1;
-        ctx.beginPath(); ctx.moveTo(p.ax, p.y); ctx.lineTo(p.bx, p.y); ctx.stroke();
-        ctx.fillStyle = 'rgba(244,197,66,0.4)';
-        ctx.beginPath(); ctx.arc(p.ax, p.y, 1.4, 0, Math.PI * 2); ctx.fill();
-        ctx.beginPath(); ctx.arc(p.bx, p.y, 1.4, 0, Math.PI * 2); ctx.fill();
-      }
+
+    const drawDirField = (f) => {              // a slope / direction field — quintessential ODE imagery
+      const { ctx, grid } = f, L = grid * 0.42;
+      ctx.lineWidth = 1; ctx.lineCap = 'round'; ctx.strokeStyle = `rgba(${GOLD},0.10)`;
+      for (let gx = grid * 0.5; gx < f.w; gx += grid)
+        for (let gy = grid * 0.5; gy < f.h; gy += grid) {
+          const [vx, vy] = vel(gx, gy);
+          ctx.beginPath();
+          ctx.moveTo(gx - vx * L * 0.5, gy - vy * L * 0.5);
+          ctx.lineTo(gx + vx * L * 0.5, gy + vy * L * 0.5);
+          ctx.stroke();
+        }
     };
 
     const sizeField = (f) => {
@@ -380,84 +262,43 @@ document.addEventListener('DOMContentLoaded', () => {
       f.w = r.width; f.h = r.height;
       f.c.width = f.w * f.dpr; f.c.height = f.h * f.dpr;
       f.ctx.setTransform(f.dpr, 0, 0, f.dpr, 0, 0);
-      const count = Math.max(10, Math.min(52, Math.round((f.w * f.h) / 20000)));
-      f.pts = [];
-      for (let i = 0; i < count; i++) {
-        f.pts.push({
-          x: Math.random() * f.w, y: Math.random() * f.h,
-          vx: (Math.random() - 0.5) * 0.22, vy: (Math.random() - 0.5) * 0.22,
-          r: 0.8 + Math.random() * 1.6
-        });
-      }
-      const gcount = Math.max(2, Math.min(6, Math.round((f.w * f.h) / 130000)));
-      f.glyphs = [];
-      for (let i = 0; i < gcount; i++) {
-        f.glyphs.push({
-          x: Math.random() * f.w, y: Math.random() * f.h,
-          vy: -(0.07 + Math.random() * 0.12), sway: Math.random() * Math.PI * 2,
-          size: 12 + Math.random() * 13, a: 0.05 + Math.random() * 0.07, text: randGlyph()
-        });
-      }
-      // each dark surface gets a primary ML scene so different sections feel distinct
-      f.nets = []; f.descents = []; f.helices = [];
-      const big = f.w > 620 && f.h > 220, wide = f.w > 1000;
-      if (f.theme === undefined) f.theme = Math.random() < 0.5 ? 'net' : 'descent';
-      if (big) {
-        if (f.theme === 'net') {
-          for (let i = 0; i < (wide ? 2 : 1); i++) f.nets.push(makeNet(f.w, f.h));
-          if (wide) f.descents.push(makeDescent(f.w, f.h));
-        } else {
-          for (let i = 0; i < (wide ? 2 : 1); i++) f.descents.push(makeDescent(f.w, f.h));
-          if (wide) f.nets.push(makeNet(f.w, f.h));
-        }
-      } else if (f.h > 300) {
-        (f.theme === 'descent' ? f.descents : f.nets).push((f.theme === 'descent' ? makeDescent : makeNet)(f.w, f.h));
-      }
-      if (f.h > 300 && Math.random() < 0.6) f.helices.push(makeHelix(f.w, f.h));
+      f.grid = Math.max(42, Math.min(72, Math.round(Math.min(f.w, f.h) / 8)));
+      const n = Math.max(12, Math.min(120, Math.round((f.w * f.h) / 8000)));
+      f.parts = []; for (let i = 0; i < n; i++) f.parts.push(spawn(f, true));
     };
 
     const drawField = (f) => {
-      const { ctx, w, h, pts } = f;
+      const { ctx, w, h } = f;
       ctx.clearRect(0, 0, w, h);
-      f.descents.forEach((d) => drawDescent(ctx, d));
-      f.helices.forEach((he) => drawHelix(ctx, he));
-      f.nets.forEach((net) => drawNet(ctx, net));
-      for (let i = 0; i < pts.length; i++) {
-        for (let j = i + 1; j < pts.length; j++) {
-          const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
-          const d2 = dx * dx + dy * dy;
-          if (d2 < LINK2) {
-            ctx.strokeStyle = `rgba(196,150,28,${(1 - d2 / LINK2) * 0.24})`;
-            ctx.lineWidth = 1;
-            ctx.beginPath(); ctx.moveTo(pts[i].x, pts[i].y); ctx.lineTo(pts[j].x, pts[j].y); ctx.stroke();
-          }
+      drawDirField(f);
+      ctx.lineCap = 'round';
+      for (const p of f.parts) {
+        const t = p.trail, fade = 1 - p.life / p.max;
+        for (let i = 1; i < t.length; i++) {
+          const a = (i / t.length) * fade * 0.55;
+          ctx.strokeStyle = p.accent ? `rgba(${CYAN},${a})` : `rgba(${GOLD_HI},${a})`;
+          ctx.lineWidth = p.lw * (i / t.length) + 0.2;
+          ctx.beginPath(); ctx.moveTo(t[i - 1].x, t[i - 1].y); ctx.lineTo(t[i].x, t[i].y); ctx.stroke();
         }
-      }
-      for (const p of pts) {
-        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(244,197,66,0.5)'; ctx.fill();
-      }
-      ctx.textBaseline = 'middle';
-      for (const g of f.glyphs) {
-        ctx.font = `600 ${g.size}px "IBM Plex Mono", ui-monospace, monospace`;
-        ctx.fillStyle = `rgba(196,150,28,${g.a})`;
-        ctx.fillText(g.text, g.x + Math.sin(g.sway) * 9, g.y);
+        if (t.length) {
+          const head = t[t.length - 1];
+          ctx.beginPath(); ctx.arc(head.x, head.y, p.lw + 0.6, 0, TAU);
+          ctx.fillStyle = p.accent ? `rgba(190,228,240,${fade * 0.9})` : `rgba(255,231,150,${fade * 0.9})`;
+          ctx.shadowColor = p.accent ? `rgba(${CYAN},0.85)` : `rgba(${GOLD_HI},0.85)`;
+          ctx.shadowBlur = 7 * fade; ctx.fill(); ctx.shadowBlur = 0;
+        }
       }
     };
 
     const stepField = (f) => {
-      for (const p of f.pts) {
-        p.x += p.vx; p.y += p.vy;
-        if (p.x < -10) p.x = f.w + 10; else if (p.x > f.w + 10) p.x = -10;
-        if (p.y < -10) p.y = f.h + 10; else if (p.y > f.h + 10) p.y = -10;
+      for (let i = 0; i < f.parts.length; i++) {
+        const p = f.parts[i];
+        const [vx, vy] = vel(p.x, p.y);
+        p.x += vx * p.sp; p.y += vy * p.sp; p.life++;
+        p.trail.push({ x: p.x, y: p.y }); if (p.trail.length > 18) p.trail.shift();
+        if (p.life > p.max || p.x < -14 || p.x > f.w + 14 || p.y < -14 || p.y > f.h + 14) f.parts[i] = spawn(f, false);
       }
-      for (const g of f.glyphs) {
-        g.y += g.vy; g.sway += 0.008;
-        if (g.y < -24) { g.y = f.h + 24; g.x = Math.random() * f.w; g.text = randGlyph(); }
-      }
-      f.nets.forEach(stepNet);
-      f.descents.forEach(stepDescent);
-      f.helices.forEach((he) => stepHelix(he, f.h));
+      T += 0.0008;
     };
 
     hosts.forEach((host) => {

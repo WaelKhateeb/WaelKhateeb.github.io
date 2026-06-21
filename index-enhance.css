@@ -7,7 +7,7 @@
   min-height: 640px; padding: 104px 0 96px; color: #f6efe0; border: 0;
   background: radial-gradient(circle at 82% 16%, rgba(187,141,10,.34), transparent 40%),
               radial-gradient(circle at 6% 100%, rgba(187,141,10,.22), transparent 38%),
-              linear-gradient(150deg, #0b0a08 0%, #14120d 55%, #1e1a12 100%);
+              linear-gradient(150deg, #141310 0%, #1d1b15 55%, #27231a 100%);
 }
 .home-page .hero::before {
   content:''; position:absolute; inset:-80px; opacity:.4; pointer-events:none;
@@ -75,8 +75,7 @@
 .affiliation-logo-box img { max-width:100%; max-height:88px; object-fit:contain; }
 .affiliation-logo-box.esu img { max-width:150px; max-height:92px; }
 .affiliation-logo-box.utoledo img { max-width:90px; max-height:92px; }
-.affiliation-logo-box.jhu { padding:12px; background:#002d72; border-radius:8px; max-width:200px; margin:0 auto; }
-.affiliation-logo-box.jhu img { width:100%; max-width:none; max-height:74px; object-fit:contain; }
+.affiliation-logo-box.jhu img { max-width:100%; max-height:92px; }
 .affiliation-logo-box.williams img { max-width:100%; max-height:50px; }
 .affiliation-body { display:flex; flex-direction:column; }
 .affiliation-card h3 { margin:0 0 5px; color:var(--ink); font:600 1.16rem/1.16 var(--display); }
