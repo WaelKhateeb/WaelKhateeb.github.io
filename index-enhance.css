@@ -124,6 +124,9 @@
 .hero-social a::before { content:''; width:7px; height:7px; border-radius:50%; background:var(--gold-bright); box-shadow:0 0 8px var(--gold-bright); }
 .hero-social a:hover { color:#1a1200; background:linear-gradient(120deg,var(--gold),var(--gold-bright)); border-color:var(--gold-bright); transform:translateY(-2px); }
 .hero-social a:hover::before { background:#1a1200; box-shadow:none; }
+.hero-email { display:inline-flex; align-items:center; gap:9px; margin-top:14px; color:var(--gold-bright); font:600 .92rem var(--mono); letter-spacing:.01em; text-decoration:none; border-bottom:1px solid var(--gold-line); padding-bottom:2px; width:max-content; max-width:100%; transition:.2s var(--ease); }
+.hero-email .he-ico { font-size:1rem; opacity:.9; }
+.hero-email:hover { color:#fff; border-color:var(--gold-bright); }
 
 /* ---------- RESEARCH FOCUS (restructured) ---------- */
 .focus-layout { display:grid; grid-template-columns: 0.92fr 1.08fr; gap:54px; align-items:center; }
@@ -173,8 +176,8 @@
 
 /* ---------- CONTACT ---------- */
 .home-contact { padding:92px 0; }
-.contact-grid { display:grid; grid-template-columns:1.05fr .95fr; gap:54px; align-items:start; }
-.contact-form { display:grid; gap:16px; }
+.contact-grid { display:grid; grid-template-columns:1.05fr .95fr; gap:66px; align-items:start; }
+.contact-form { display:grid; gap:18px; }
 .contact-form .hp { position:absolute; left:-9999px; width:1px; height:1px; opacity:0; }
 .contact-form .field { display:grid; gap:7px; }
 .contact-form label { color:var(--gold-bright); font:600 .72rem var(--mono); letter-spacing:.08em; text-transform:uppercase; }
@@ -195,8 +198,8 @@
 .contact-aside .text-action::after { color:var(--gold-bright); }
 .contact-aside .text-action:hover { color:#1a1200; border-color:var(--gold-bright); }
 .contact-aside .text-action:hover::after { color:#1a1200; }
-.contact-aside .office-map { position:relative; margin-top:8px; border-radius:16px; overflow:hidden; border:1px solid rgba(244,197,66,.4); box-shadow:0 30px 60px -24px rgba(0,0,0,.7); }
-.contact-aside .office-map iframe { display:block; width:100%; height:260px; border:0; filter:grayscale(.18) contrast(1.04) saturate(1.05); }
+.contact-map { position:relative; margin-top:42px; border-radius:16px; overflow:hidden; border:1px solid rgba(244,197,66,.4); box-shadow:0 30px 60px -24px rgba(0,0,0,.7); }
+.contact-map iframe { display:block; width:100%; height:300px; border:0; filter:grayscale(.18) contrast(1.04) saturate(1.05); }
 
 /* ---------- FOOTER LINKS ---------- */
 .footer-links { display:flex; gap:18px; flex-wrap:wrap; }
@@ -249,5 +252,6 @@
   .hero-social { gap: 8px; }
   .hero-social a { flex: 1 1 0; justify-content: center; min-height: 42px; }
   .btn-gold { width: 100%; justify-content: center; min-height: 52px; }
-  .home-contact .office-map iframe { height: 220px; }
+  .hero-email { font-size: .82rem; word-break: break-all; }
+  .contact-map iframe { height: 220px; }
 }

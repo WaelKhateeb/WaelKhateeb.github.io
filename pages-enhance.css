@@ -40,3 +40,19 @@
 .talk-dl::before { content:'⤓'; font-size:.95rem; }
 .talk-dl:hover { background:linear-gradient(120deg,var(--gold),var(--gold-bright)); color:#1a1200; border-color:var(--gold-bright); transform:translateY(-2px); box-shadow:0 12px 24px -10px rgba(187,141,10,.6); }
 .talk-dl.poster::before { content:'▤'; }
+
+/* Place the download(s) to the right of the talk wording (entries that have them) */
+.timeline li:has(.talk-actions) > div:last-child {
+  display:grid; grid-template-columns:minmax(0,1fr) auto; grid-template-rows:auto auto auto;
+  column-gap:28px; align-items:center;
+}
+.timeline li:has(.talk-actions) > div:last-child > .talk-format { grid-area:1 / 1; justify-self:start; }
+.timeline li:has(.talk-actions) > div:last-child > h2 { grid-area:2 / 1; }
+.timeline li:has(.talk-actions) > div:last-child > p  { grid-area:3 / 1; }
+.timeline li:has(.talk-actions) > div:last-child > .talk-actions {
+  grid-row:1 / -1; grid-column:2; margin:0; flex-direction:column; align-items:flex-end; justify-self:end;
+}
+@media (max-width:680px){
+  .timeline li:has(.talk-actions) > div:last-child { display:block; }
+  .timeline li .talk-actions { margin-top:10px; flex-direction:row; align-items:center; }
+}
