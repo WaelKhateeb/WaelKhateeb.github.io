@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://waelkhateeb.github.io/esu/sitemap.xml
