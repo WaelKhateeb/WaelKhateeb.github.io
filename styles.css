@@ -4,6 +4,8 @@
    Toledo-inspired palette — Midnight Blue (#15397f) & Rocket Gold (#ffda00)
    =========================================================== */
 :root {
+  color-scheme: only light;
+  supported-color-schemes: light;
   --black: #071b35;          /* deep graphite (lifted from near-black) */
   --black-2: #0b2c58;
   --black-3: #15397f;
@@ -31,7 +33,11 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  background-color: #f7f9fc;
+  color-scheme: only light;
+}
 body {
   margin: 0;
   background: var(--cream);
