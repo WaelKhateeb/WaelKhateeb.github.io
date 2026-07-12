@@ -1,89 +1,56 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
-  <style>html{color-scheme:only light !important;background-color:#faf6ec !important}body{background-color:#faf6ec !important}</style>
-  <meta name="description" content="Wael El Khateeb - Assistant Professor of Applied Mathematics at Emporia State University. Scientific machine learning, mathematical biology, nonlinear dynamics, teaching, and academic links.">
-  <meta name="theme-color" content="#0b0a08">
-  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml"><link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png"><link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
-  <meta name="author" content="Wael El Khateeb"><meta name="robots" content="index, follow"><link rel="canonical" href="https://waelkhateeb.github.io/">
-  <meta property="og:type" content="website"><meta property="og:site_name" content="Wael El Khateeb"><meta property="og:title" content="Wael El Khateeb | Machine Learning and Mathematical Biology"><meta property="og:description" content="Assistant Professor of Applied Mathematics at Emporia State University — scientific machine learning, mathematical biology, and nonlinear dynamics."><meta property="og:url" content="https://waelkhateeb.github.io/"><meta property="og:image" content="https://avatars.githubusercontent.com/u/87930461?v=4">
-  <meta name="twitter:card" content="summary"><meta name="twitter:title" content="Wael El Khateeb"><meta name="twitter:description" content="Scientific machine learning, mathematical biology, and nonlinear dynamics."><meta name="twitter:image" content="https://avatars.githubusercontent.com/u/87930461?v=4">
-  <link rel="stylesheet" href="styles.css?v=light-lock-1"><link rel="stylesheet" href="index-enhance.css?v=light-lock-1"><title>Wael El Khateeb | Machine Learning and Mathematical Biology</title>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Wael El Khateeb","jobTitle":"Assistant Professor of Applied Mathematics","worksFor":{"@type":"CollegeOrUniversity","name":"Emporia State University"},"alumniOf":[{"@type":"CollegeOrUniversity","name":"The University of Toledo"}],"url":"https://waelkhateeb.github.io/","image":"https://avatars.githubusercontent.com/u/87930461?v=4","knowsAbout":["Scientific Machine Learning","Mathematical Biology","Nonlinear Dynamics","Bifurcation Theory","Physics-Informed Neural Networks"],"sameAs":["https://scholar.google.com/citations?user=QOWTwIsAAAAJ","https://www.linkedin.com/in/wael-el-khateeb-210794218","https://github.com/WaelKhateeb"]}</script>
-  <script src="script.js" defer></script>
+  <meta name="description" content="Choose an edition of Wael El Khateeb's academic website.">
+  <meta name="theme-color" content="#102a4c">
+  <link rel="canonical" href="https://waelkhateeb.github.io/">
+  <title>Wael El Khateeb | Website Editions</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+    :root { color-scheme: only light; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #eef2f6; color: #142033; font-family: Poppins, Arial, sans-serif; }
+    main { width: min(1040px, calc(100% - 40px)); padding: 64px 0; }
+    header { max-width: 760px; margin-bottom: 34px; }
+    .eyebrow { margin: 0 0 12px; color: #526172; font-size: .74rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
+    h1 { margin: 0; font-size: clamp(2.5rem, 7vw, 5.2rem); line-height: .98; letter-spacing: -.045em; }
+    header p:last-child { margin: 22px 0 0; max-width: 650px; color: #526172; font-size: 1.05rem; }
+    .editions { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+    .edition { position: relative; min-height: 330px; display: flex; flex-direction: column; justify-content: space-between; padding: 34px; border-radius: 18px; overflow: hidden; color: #fff; text-decoration: none; box-shadow: 0 24px 54px -34px rgba(10, 25, 45, .65); transition: transform .25s ease, box-shadow .25s ease; }
+    .edition::after { content: ''; position: absolute; width: 310px; height: 310px; right: -195px; bottom: -205px; border: 42px solid rgba(255,255,255,.1); border-radius: 50%; }
+    .edition:hover { transform: translateY(-6px); box-shadow: 0 32px 62px -32px rgba(10, 25, 45, .8); }
+    .esu { background: linear-gradient(145deg, #090909, #27231a); border-top: 5px solid #bb8d0a; }
+    .toledo { background: linear-gradient(145deg, #071b35, #15397f); border-top: 5px solid #ffda00; }
+    .edition small { color: rgba(255,255,255,.72); font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
+    .edition h2 { margin: 16px 0 10px; font-size: clamp(1.8rem, 4vw, 2.8rem); line-height: 1.05; }
+    .edition p { max-width: 420px; margin: 0; color: rgba(255,255,255,.78); }
+    .edition strong { position: relative; z-index: 1; color: #fff; }
+    .esu strong { color: #f4c542; }
+    .toledo strong { color: #ffda00; }
+    @media (max-width: 720px) { .editions { grid-template-columns: 1fr; } .edition { min-height: 260px; } main { padding: 42px 0; } }
+    @media (prefers-reduced-motion: reduce) { .edition { transition: none; } }
+  </style>
 </head>
-<body class="home-page">
-<div class="scroll-progress" aria-hidden="true"></div>
-<a class="skip-link" href="#main">Skip to content</a>
-<header class="site-header"><div class="shell nav-shell"><a class="brand" href="index.html" aria-label="Wael El Khateeb home"><img class="brand-logo" src="assets/img/esu-logo.svg" alt="Emporia State University" width="46" height="33"><span class="brand-text">Wael El Khateeb</span></a><button class="menu-button" aria-expanded="false" aria-controls="primary-nav"><span></span><span></span><span></span><span class="sr-only">Open menu</span></button><nav id="primary-nav" class="primary-nav" aria-label="Primary navigation"><a href="index.html" aria-current="page">Home</a><a href="research.html">Research</a><a href="teaching.html">Teaching</a><a href="presentations.html">Presentations</a><a href="service.html">Service</a><a href="#contact">Contact</a></nav></div></header>
-<main id="main">
-  <section class="hero">
-    <canvas id="phase-canvas" aria-hidden="true"></canvas>
-    <div class="hero-orbs" aria-hidden="true"><span></span><span></span><span></span></div>
-    <div class="shell hero-grid">
-      <div class="hero-copy">
-        <p class="eyebrow reveal">Assistant Professor · Applied Mathematics · Emporia State University</p>
-        <h1 class="reveal reveal-d1">Wael <span class="gold-text">El Khateeb</span></h1>
-        <p class="hero-role reveal reveal-d2">Scientific Machine Learning · Mathematical Biology · Nonlinear Dynamics</p>
-        <p class="hero-intro reveal reveal-d2">Assistant Professor of Applied Mathematics at Emporia State University, working at the intersection of scientific machine learning, mathematical biology, inverse problems, and data-driven modeling of nonlinear systems.</p>
-        <div class="hero-links reveal reveal-d3"><a class="text-action" href="research.html">Research</a><a class="text-action" href="presentations.html">Presentations</a><a class="text-action" href="#contact">Get in touch</a></div>
-        <div class="hero-social reveal reveal-d3" aria-label="Profiles">
-          <a href="https://scholar.google.com/citations?user=QOWTwIsAAAAJ" target="_blank" rel="noreferrer" aria-label="Google Scholar"><span>Scholar</span></a>
-          <a href="https://www.linkedin.com/in/wael-el-khateeb-210794218" target="_blank" rel="noreferrer" aria-label="LinkedIn"><span>LinkedIn</span></a>
-          <a href="https://github.com/WaelKhateeb" target="_blank" rel="noreferrer" aria-label="GitHub"><span>GitHub</span></a>
-        </div>
-        <a class="hero-email reveal reveal-d3" href="mailto:welkhate@emporia.edu"><span class="he-ico" aria-hidden="true">✉</span>welkhate@emporia.edu</a>
-      </div>
-      <div class="headshot-frame reveal reveal-d2"><img src="https://avatars.githubusercontent.com/u/87930461?v=4" alt="Wael El Khateeb"></div>
+<body>
+  <main>
+    <header>
+      <p class="eyebrow">Wael El Khateeb · Academic Website</p>
+      <h1>Choose an edition</h1>
+      <p>The original professional profile is preserved, with a separate University of Toledo graduate scenario available alongside it.</p>
+    </header>
+    <div class="editions">
+      <a class="edition esu" href="esu/">
+        <div><small>Original profile</small><h2>Emporia State edition</h2><p>The existing appointment-based site, preserved with its black and gold identity.</p></div>
+        <strong>Open edition →</strong>
+      </a>
+      <a class="edition toledo" href="toledo/">
+        <div><small>Alternate scenario</small><h2>University of Toledo edition</h2><p>A graduate-centered profile with no Emporia appointment or institutional connection.</p></div>
+        <strong>Open edition →</strong>
+      </a>
     </div>
-  </section>
-
-  <div class="keyword-marquee" aria-hidden="true"><div class="marquee-track"><span>Physics-Informed Neural Networks</span><span>Mathematical Biology</span><span>Bifurcation Theory</span><span>Predator–Prey Dynamics</span><span>Reaction–Diffusion Systems</span><span>Inverse Problems</span><span>Epidemic Modeling</span><span>Gene Regulatory Networks</span><span>Physics-Informed Neural Networks</span><span>Mathematical Biology</span><span>Bifurcation Theory</span><span>Predator–Prey Dynamics</span><span>Reaction–Diffusion Systems</span><span>Inverse Problems</span><span>Epidemic Modeling</span><span>Gene Regulatory Networks</span></div></div>
-
-<section class="affiliations" aria-labelledby="affiliations-heading"><div class="shell"><p class="affiliation-intro reveal" id="affiliations-heading">Academic affiliations and appointments</p><div class="affiliation-grid"><a class="affiliation-card reveal" href="https://www.emporia.edu/" target="_blank" rel="noreferrer"><div class="affiliation-logo-box esu"><img src="https://en.wikipedia.org/wiki/Special:Redirect/file/Emporia_State_University_wordmark.svg" alt="Emporia State University logo" onerror="this.onerror=null;this.src='assets/img/esu-logo.svg'"></div><div class="affiliation-body"><small>Current appointment</small><h3>Emporia State University</h3><p>Assistant Professor · Applied Mathematics · Emporia, Kansas</p></div></a><a class="affiliation-card reveal reveal-d1" href="https://www.utoledo.edu/" target="_blank" rel="noreferrer"><div class="affiliation-logo-box utoledo"><img src="https://www.utoledo.edu/images/UT_shield.svg" alt="The University of Toledo shield logo"></div><div class="affiliation-body"><small>Education and research</small><h3>The University of Toledo</h3><p>Ph.D. and M.A. in Applied Mathematics · 2021–2026</p></div></a><a class="affiliation-card reveal reveal-d2" href="https://cty.jhu.edu/" target="_blank" rel="noreferrer"><div class="affiliation-logo-box jhu"><img src="assets/img/jhu-cty-logo.png" alt="Johns Hopkins University Center for Talented Youth logo" loading="lazy"></div><div class="affiliation-body"><small>Teaching appointment</small><h3>Johns Hopkins University</h3><p>Center for Talented Youth Instructor · 2023–2025</p></div></a><a class="affiliation-card reveal reveal-d3" href="https://www.williams.edu/" target="_blank" rel="noreferrer"><div class="affiliation-logo-box williams"><img src="assets/img/williams-logo.svg" alt="Williams College logo"></div><div class="affiliation-body"><small>Research mentoring</small><h3>Williams College</h3><p>Polymath Jr. REU · Predator–prey mentoring with Steven J. Miller</p></div></a></div></div></section>
-
-  <section class="news-section" id="news"><div class="shell"><header class="news-head"><h2 class="section-title reveal">News &amp; updates</h2></header>
-    <div class="news-rail-wrap reveal reveal-d2">
-      <button class="news-arrow prev" type="button" aria-label="Previous updates">‹</button>
-      <ul class="news-rail">
-        <li class="news-card"><div class="news-card-top"><span class="news-source li">in</span><span class="news-tag">Repost</span></div><time>May 2026</time><h3>Buckeye Metric Geometry Workshop II</h3><p>Great opportunity to take part in the Buckeye Metric Geometry Workshop II at The University of Toledo — with thanks to Funda Gultepe and the NSF-supported Buckeye Geometry program.</p><a class="news-link" href="https://www.linkedin.com/in/wael-el-khateeb-210794218/recent-activity/all/" target="_blank" rel="noreferrer">View on LinkedIn ↗</a></li>
-        <li class="news-card"><div class="news-card-top"><span class="news-source li">in</span><span class="news-tag">Repost</span></div><time>2026</time><h3>“Calculus Made Easy”</h3><p>How a book written in 1910 still teaches calculus better than many modern texts — a favorite on demystifying the “preliminary terrors” of <em>dx</em>, integrals, and infinitesimals. PDF available online.</p><a class="news-link" href="https://www.linkedin.com/in/wael-el-khateeb-210794218/recent-activity/all/" target="_blank" rel="noreferrer">View on LinkedIn ↗</a></li>
-        <li class="news-card highlight"><div class="news-card-top"><span class="news-source dot">★</span><span class="news-tag gold">Milestone</span></div><time>2025</time><h3>New paper in <em>Mathematical Biosciences</em></h3><p>“Complex dynamics and pattern formation in a diffusive epidemic model with an infection-dependent recovery rate” published in Elsevier’s <em>Mathematical Biosciences</em>.</p><a class="news-link" href="https://doi.org/10.1016/j.mbs.2025.109602" target="_blank" rel="noreferrer">Read the article ↗</a></li>
-        <li class="news-card"><div class="news-card-top"><span class="news-source dot">★</span><span class="news-tag gold">Appointment</span></div><time>2026</time><h3>Joining Emporia State University</h3><p>Beginning as Assistant Professor of Applied Mathematics in the Department of Mathematics at Emporia State University.</p><a class="news-link" href="https://www.emporia.edu/" target="_blank" rel="noreferrer">Department ↗</a></li>
-        <li class="news-card"><div class="news-card-top"><span class="news-source dot">★</span><span class="news-tag gold">Upcoming talk</span></div><time>July 2026</time><h3>Invited talk · SIAM ED26, Cleveland</h3><p>“Predators and Policies: Teaching ODEs by Modeling Florida’s Alligator Ecosystem” in the minisymposium <em>Modeling Makes Mathematics More Meaningful</em>.</p><a class="news-link" href="presentations.html">See presentations →</a></li>
-        <li class="news-card"><div class="news-card-top"><span class="news-source dot">★</span><span class="news-tag gold">Milestone</span></div><time>2025</time><h3>Global Hopf bifurcation paper</h3><p>“Global Hopf bifurcation and connected components in a delayed predator–prey model” in the <em>European Journal of Applied Mathematics</em>.</p><a class="news-link" href="https://doi.org/10.1017/S0956792526100370" target="_blank" rel="noreferrer">Read the article ↗</a></li>
-      </ul>
-      <button class="news-arrow next" type="button" aria-label="More updates">›</button>
-    </div>
-  </div></section>
-
-  <section class="home-profiles"><div class="shell"><div class="section-header"><div class="section-number reveal">Profiles and links</div><div><h2 class="section-title reveal reveal-d1">Find my academic work online</h2><p class="section-subtitle reveal reveal-d2">Direct links to professional profiles and the main pages of this website.</p></div></div><div class="profile-links"><a class="reveal" href="https://scholar.google.com/citations?user=QOWTwIsAAAAJ" target="_blank" rel="noreferrer"><span class="profile-icon">GS</span><div><strong>Google Scholar</strong><small>Publications and citations</small></div><em>↗</em></a><a class="reveal reveal-d1" href="https://www.linkedin.com/in/wael-el-khateeb-210794218" target="_blank" rel="noreferrer"><span class="profile-icon">in</span><div><strong>LinkedIn</strong><small>Professional profile</small></div><em>↗</em></a><a class="reveal reveal-d2" href="https://github.com/WaelKhateeb" target="_blank" rel="noreferrer"><span class="profile-icon">GH</span><div><strong>GitHub</strong><small>Code and technical projects</small></div><em>↗</em></a><a class="reveal" href="research.html"><span class="profile-icon">R</span><div><strong>Research</strong><small>Publications, manuscripts, and dissertation</small></div><em>→</em></a><a class="reveal reveal-d1" href="teaching.html"><span class="profile-icon">T</span><div><strong>Teaching</strong><small>Courses and instructional experience</small></div><em>→</em></a><a class="reveal reveal-d2" href="presentations.html"><span class="profile-icon">P</span><div><strong>Presentations</strong><small>Talks, posters, and downloadable slides</small></div><em>→</em></a></div></div></section>
-
-  <section class="home-contact section-dark" id="contact"><div class="shell"><div class="section-header"><div class="section-number reveal">Contact</div><div><h2 class="section-title reveal reveal-d1">Get in touch</h2><p class="section-subtitle reveal reveal-d2">Invitations, collaboration, mentoring, or a quick question — your note reaches my inbox.</p></div></div>
-    <div class="contact-grid">
-      <form class="contact-form reveal" action="https://formsubmit.co/welkhate@emporia.edu" method="POST">
-        <input type="hidden" name="_subject" value="New message from waelkhateeb.github.io">
-        <input type="hidden" name="_captcha" value="true">
-        <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_next" value="https://waelkhateeb.github.io/index.html#contact">
-        <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
-        <div class="field"><label for="cf-name">Name</label><input id="cf-name" name="name" type="text" autocomplete="name" required></div>
-        <div class="field"><label for="cf-email">Email</label><input id="cf-email" name="email" type="email" autocomplete="email" required></div>
-        <div class="field"><label for="cf-message">Message</label><textarea id="cf-message" name="message" rows="5" required></textarea></div>
-        <button type="submit" class="btn-gold" data-analytics="contact_submit">Send message</button>
-        <p class="form-note">Delivered straight to my inbox — no account needed.</p>
-      </form>
-      <aside class="contact-aside reveal reveal-d1">
-        <p class="contact-label">Direct email</p>
-        <a class="contact-email" href="mailto:welkhate@emporia.edu">welkhate@emporia.edu</a>
-        <div class="office-address"><strong>Emporia State University</strong><span>Department of Mathematics</span><span>1 Kellogg Circle · Emporia, Kansas 66801</span></div>
-        <a class="text-action" href="https://www.google.com/maps/search/?api=1&amp;query=Emporia+State+University+Emporia+KS" target="_blank" rel="noreferrer">Open in Google Maps</a>
-      </aside>
-    </div>
-    <div class="contact-map reveal reveal-d2"><iframe title="Map of Emporia State University, Emporia, Kansas" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=Emporia%20State%20University%2C%201%20Kellogg%20Circle%2C%20Emporia%2C%20KS%2066801&amp;output=embed"></iframe></div>
-  </div></section>
-</main>
-<footer class="site-footer"><div class="shell footer-shell"><p>© <span id="year"></span> Wael El Khateeb · Applied Mathematics, Emporia State University</p><div class="footer-links"><a href="https://scholar.google.com/citations?user=QOWTwIsAAAAJ" target="_blank" rel="noreferrer">Scholar</a><a href="https://www.linkedin.com/in/wael-el-khateeb-210794218" target="_blank" rel="noreferrer">LinkedIn</a><a href="https://github.com/WaelKhateeb" target="_blank" rel="noreferrer">GitHub</a><a href="privacy.html">Privacy</a></div></div></footer>
-</body></html>
+  </main>
+</body>
+</html>
