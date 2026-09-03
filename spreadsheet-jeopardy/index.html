@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Spreadsheet Classroom Challenge</title>
+<style>
+:root{--bg:#f4f1e8;--card:#fffdf8;--ink:#172033;--muted:#637083;--blue:#15397f;--blue2:#102d65;--gold:#f1c75b;--red:#9e2f3f;--line:#d7d1c5}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+header{background:var(--card);border-bottom:1px solid var(--line);padding:28px clamp(18px,4vw,58px) 20px;display:flex;justify-content:space-between;align-items:end;gap:20px}
+h1,h2,h3,p{margin-top:0}h1{font-size:clamp(30px,5vw,58px);letter-spacing:-.04em;margin-bottom:6px}h2{font-size:clamp(28px,4vw,42px);letter-spacing:-.03em;margin-bottom:7px}
+.eyebrow{font-size:12px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:6px}.muted{color:var(--muted)}
+nav{display:flex;gap:8px;flex-wrap:wrap}.tab,.btn{border-radius:12px;border:1px solid var(--line);padding:11px 15px;font-weight:800;background:transparent;color:var(--ink);cursor:pointer}.tab{border-radius:999px}.tab.active,.primary{background:var(--blue);border-color:var(--blue);color:white}.danger{background:var(--red);border-color:var(--red);color:white}.btn:disabled{opacity:.5;cursor:not-allowed}
+main{padding:28px clamp(18px,4vw,58px) 42px}.view{display:none}.view.active{display:block}.panel{max-width:940px;margin:auto;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:clamp(22px,4vw,40px);box-shadow:0 18px 44px rgba(23,32,51,.1)}
+.lead{color:var(--muted);font-size:17px;line-height:1.6}.target{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:22px 0}.target label{font-weight:800}.target input{width:130px;padding:11px;border:1px solid var(--line);border-radius:10px;font:inherit;font-weight:800}
+.stage{min-height:220px;border:1px solid var(--line);border-radius:18px;background:#f8f5ee;display:grid;place-items:center;align-content:center;text-align:center;padding:28px}.stage.running{background:#eef6f1;border-color:#b8d3c4}.stage.finished{background:#faf3df;border-color:#d7c28e}.stage strong{font-size:clamp(28px,5vw,44px)}.stage p{margin:8px 0 0;color:var(--muted)}
+.controls{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}.results{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:16px}.result{background:white;border:1px solid var(--line);border-radius:12px;padding:14px}.result span{display:block;color:var(--muted);font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.06em}.result b{display:block;margin-top:4px;font-size:20px}.hidden{display:none!important}
+.board-head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:16px}.board-head p{max-width:760px;color:var(--muted);line-height:1.5;margin-bottom:0}.board{display:grid;grid-template-columns:repeat(5,minmax(150px,1fr));gap:8px;overflow-x:auto;padding-bottom:4px}
+.cat{min-height:82px;background:var(--blue2);color:white;border-radius:12px 12px 5px 5px;display:grid;place-items:center;text-align:center;padding:10px;font-weight:900;text-transform:uppercase;letter-spacing:.03em}.clue{min-height:88px;border:1px solid #21477f;border-radius:7px;background:var(--blue);color:var(--gold);font-size:29px;font-weight:900;cursor:pointer;text-shadow:0 2px rgba(0,0,0,.2)}.clue:hover{background:#1e4d91}.clue.used{background:#43516d;color:#a9b1bf;text-decoration:line-through;text-decoration-thickness:4px;opacity:.72}
+.final{margin-top:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px}.final p{margin:4px 0 0;color:var(--muted)}
+dialog{width:min(760px,calc(100vw - 28px));border:0;border-radius:20px;padding:0;background:transparent}dialog::backdrop{background:rgba(8,16,32,.7)}.modal{background:var(--card);padding:clamp(22px,4vw,36px);border-radius:20px}.modal-top{display:flex;justify-content:space-between;gap:15px}.close{border:0;background:transparent;font-size:30px;color:var(--muted);cursor:pointer}.question{font-size:clamp(20px,3vw,29px);line-height:1.45;margin:24px 0}.answer{background:#fff6d8;border:1px solid #d8c487;border-radius:12px;padding:14px}.answer b{display:block;color:#8c6819;text-transform:uppercase;font-size:11px;letter-spacing:.08em;margin-bottom:5px}
+footer{padding:12px clamp(18px,4vw,58px) 28px;color:var(--muted);display:flex;justify-content:space-between;gap:12px}footer a{color:var(--blue);font-weight:800}
+@media(max-width:760px){header,.board-head,.final,footer{flex-direction:column;align-items:stretch}.results{grid-template-columns:repeat(2,1fr)}}@media(max-width:430px){.results{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+<div><p class="eyebrow">Classroom Activity</p><h1>Spreadsheet Classroom Challenge</h1><p class="muted">Blind timing experiment + interactive Spreadsheet Jeopardy</p></div>
+<nav><button class="tab active" data-view="timer">Blind Timer</button><button class="tab" data-view="jeopardy">Jeopardy</button></nav>
+</header>
+
+<main>
+<section id="timer-view" class="view active">
+<div class="panel">
+<p class="eyebrow">Experiment 1</p><h2>Can you feel the target time?</h2>
+<p class="lead">Choose a target. Press <b>Start</b>, then press <b>Stop</b> when you think that amount of time has passed. No running seconds are shown.</p>
+<div class="target"><label for="target">Target time (seconds)</label><input id="target" type="number" min=".1" step=".1" value="10"></div>
+<div id="stage" class="stage"><strong id="status">Ready.</strong><p id="instruction">Set a target, then press Start.</p></div>
+<div class="controls"><button id="start" class="btn primary">Start</button><button id="stop" class="btn danger" disabled>Stop</button><button id="newAttempt" class="btn">New Attempt</button></div>
+<div id="results" class="results hidden">
+<div class="result"><span>Your time</span><b id="elapsed">0.00 s</b></div>
+<div class="result"><span>Target</span><b id="targetResult">10.00 s</b></div>
+<div class="result"><span>Signed error</span><b id="signedError">0.00 s</b></div>
+<div class="result"><span>Absolute error</span><b id="absoluteError">0.00 s</b></div>
+</div>
+</div>
+</section>
+
+<section id="jeopardy-view" class="view">
+<div class="board-head"><div><p class="eyebrow">Experiment 2</p><h2>Spreadsheet Jeopardy</h2><p>Click a value to open the question. The value is crossed out immediately. The solution stays hidden until you reveal it.</p></div><button id="resetBoard" class="btn">Reset Board</button></div>
+<div id="board" class="board"></div>
+<div class="final"><div><b>FINAL JEOPARDY</b><p>Wager before opening the question.</p></div><button id="finalButton" class="btn primary">Open Final Jeopardy</button></div>
+</section>
+</main>
+
+<footer><span>Spreadsheet Classroom Challenge</span><a href="classroom_tools.py" download>Download Python desktop version</a></footer>
+
+<dialog id="dialog">
+<div class="modal">
+<div class="modal-top"><div><p id="dCategory" class="eyebrow"></p><h3 id="dValue"></h3></div><button id="close" class="close" aria-label="Close">×</button></div>
+<p id="dQuestion" class="question"></p>
+<div id="answerBox" class="answer hidden"><b>Solution</b><span id="dAnswer"></span></div>
+<div class="controls"><button id="showAnswer" class="btn primary">Show Solution</button><button id="back" class="btn">Back to Board</button></div>
+</div>
+</dialog>
+
+<script>
+const categories=[
+{name:"Excel Essentials",clues:[
+{value:100,q:"What character must appear first when you enter a formula in Excel?",a:"The equals sign: ="},
+{value:200,q:"What is the address of the cell in column D and row 7?",a:"D7"},
+{value:300,q:"What Excel feature lets you continue a number pattern or copy a formula by dragging?",a:"The fill handle (AutoFill)."},
+{value:400,q:"When a cell displays 37 but the formula bar shows =3*A10+7, what is actually stored in the cell?",a:"The formula =3*A10+7. Excel displays the calculated result, 37."},
+{value:500,q:"Which Excel error usually appears when a formula divides by zero?",a:"#DIV/0!"}]},
+{name:"Formula Factory",clues:[
+{value:100,q:"Write an Excel formula that multiplies the value in A2 by 5.",a:"=5*A2"},
+{value:200,q:"Fixed cost is in H6, variable cost per item is in H7, and quantity is in A6. Write C = F + vn.",a:"=$H$6+$H$7*A6"},
+{value:300,q:"Write the Excel formula for the mean of values in B7 through B36.",a:"=AVERAGE(B7:B36)"},
+{value:400,q:"Write the Excel formula for the sample standard deviation of B7 through B36.",a:"=STDEV.S(B7:B36)"},
+{value:500,q:"Excel has no simple RANGE function for statistical range. Write a formula for range using B7:B36.",a:"=MAX(B7:B36)-MIN(B7:B36)"}]},
+{name:"Reference Rangers",clues:[
+{value:100,q:"Which is a relative reference: A2 or $A$2?",a:"A2"},
+{value:200,q:"Which is an absolute reference: A2 or $A$2?",a:"$A$2"},
+{value:300,q:"Cell B2 contains =3*A2+7. If it is copied down to B5, what formula should appear?",a:"=3*A5+7"},
+{value:400,q:"DAILY DOUBLE: A formula is =$E$1*A2+$E$2. When it is filled down, which references stay fixed?",a:"$E$1 and $E$2 stay fixed. The A2 reference changes row as the formula moves."},
+{value:500,q:"What does the mixed reference $A2 mean?",a:"Column A is locked, but the row is allowed to change."}]},
+{name:"Stat Attack",clues:[
+{value:100,q:"Which Excel function calculates the arithmetic mean?",a:"=AVERAGE(range)"},
+{value:200,q:"Which measure of center is the middle observation after the data are ordered?",a:"The median."},
+{value:300,q:"If the standard deviation of a dataset is 0, what must be true about the observations?",a:"All observations are identical."},
+{value:400,q:"Which function is normally used for the sample standard deviation in this class?",a:"=STDEV.S(range)"},
+{value:500,q:"A dataset contains one very large outlier. Which is usually affected more: the mean or the median?",a:"The mean is affected more. The median is more resistant to an extreme value."}]},
+{name:"Charts & Data",clues:[
+{value:100,q:"Which chart is usually best for plotting numerical x-y pairs?",a:"An XY scatter plot."},
+{value:200,q:"What does a histogram show?",a:"How numerical observations are distributed across intervals (bins), using frequencies or counts."},
+{value:300,q:"Why can a scatter plot be better than a line chart when x-values are irregularly spaced?",a:"A scatter plot uses the actual numerical x-values and their spacing; a standard line chart often treats x-values as categories."},
+{value:400,q:"A histogram is tightly clustered and the standard deviation is small. What does that suggest?",a:"The observations are relatively consistent and have little spread around their center."},
+{value:500,q:"In the 10-second experiment, the mean signed error is +0.8 seconds. What does the positive bias mean?",a:"The class overestimated 10 seconds by 0.8 seconds on average."}]}
+];
+const finalQ={category:"Final Jeopardy",value:"Wager",q:"A dataset has mean 2.54, median 2.48, and most observations between 2.3 and 2.6, but one observation is 3.85. What feature of the data explains the mean being above the median, and which measure of center is more resistant to that feature?",a:"The 3.85 observation is a large right-side outlier. It pulls the mean upward. The median is more resistant to an extreme value."};
+
+document.querySelectorAll(".tab").forEach(function(b){b.addEventListener("click",function(){document.querySelectorAll(".tab").forEach(function(x){x.classList.remove("active")});document.querySelectorAll(".view").forEach(function(x){x.classList.remove("active")});b.classList.add("active");document.getElementById(b.dataset.view+"-view").classList.add("active")})});
+
+let startTime=null,runningTarget=null;
+const target=document.getElementById("target"),stage=document.getElementById("stage"),status=document.getElementById("status"),instruction=document.getElementById("instruction"),start=document.getElementById("start"),stop=document.getElementById("stop"),results=document.getElementById("results");
+function resetTimer(){startTime=null;runningTarget=null;stage.className="stage";status.textContent="Ready.";instruction.textContent="Set a target, then press Start.";start.disabled=false;stop.disabled=true;target.disabled=false;results.classList.add("hidden")}
+start.addEventListener("click",function(){const n=Number(target.value);if(!Number.isFinite(n)||n<=0){target.setCustomValidity("Enter a target greater than 0 seconds.");target.reportValidity();return}target.setCustomValidity("");runningTarget=n;startTime=performance.now();stage.className="stage running";status.textContent="Timing started.";instruction.textContent="Press Stop when you think "+n+" seconds have passed.";start.disabled=true;stop.disabled=false;target.disabled=true;results.classList.add("hidden")});
+stop.addEventListener("click",function(){if(startTime===null)return;const elapsed=(performance.now()-startTime)/1000;const err=elapsed-runningTarget,abs=Math.abs(err);document.getElementById("elapsed").textContent=elapsed.toFixed(2)+" s";document.getElementById("targetResult").textContent=runningTarget.toFixed(2)+" s";document.getElementById("signedError").textContent=(err>=0?"+":"")+err.toFixed(2)+" s";document.getElementById("absoluteError").textContent=abs.toFixed(2)+" s";stage.className="stage finished";status.textContent="You achieved "+elapsed.toFixed(2)+" seconds.";instruction.textContent=err>=0?"You stopped "+abs.toFixed(2)+" seconds late.":"You stopped "+abs.toFixed(2)+" seconds early.";results.classList.remove("hidden");startTime=null;start.disabled=false;stop.disabled=true;target.disabled=false});
+document.getElementById("newAttempt").addEventListener("click",resetTimer);
+
+const board=document.getElementById("board"),key="spreadsheetJeopardyUsedV1";let used=new Set(JSON.parse(localStorage.getItem(key)||"[]"));
+function clueId(c,r){return String(c)+"-"+String(r)}function saveUsed(){localStorage.setItem(key,JSON.stringify(Array.from(used)))}
+function renderBoard(){board.innerHTML="";categories.forEach(function(c){const h=document.createElement("div");h.className="cat";h.textContent=c.name;board.appendChild(h)});for(let r=0;r<5;r++){categories.forEach(function(c,ci){const clue=c.clues[r],id=clueId(ci,r),b=document.createElement("button");b.className="clue"+(used.has(id)?" used":"");b.textContent="$"+clue.value;b.addEventListener("click",function(){used.add(id);saveUsed();b.classList.add("used");openQuestion(c.name,"$"+clue.value,clue.q,clue.a)});board.appendChild(b)})}}
+const dialog=document.getElementById("dialog"),answerBox=document.getElementById("answerBox"),showAnswer=document.getElementById("showAnswer");
+function openQuestion(category,value,q,a){document.getElementById("dCategory").textContent=category;document.getElementById("dValue").textContent=value;document.getElementById("dQuestion").textContent=q;document.getElementById("dAnswer").textContent=a;answerBox.classList.add("hidden");showAnswer.textContent="Show Solution";dialog.showModal()}
+function closeDialog(){dialog.close()}showAnswer.addEventListener("click",function(){const hidden=answerBox.classList.contains("hidden");answerBox.classList.toggle("hidden");showAnswer.textContent=hidden?"Hide Solution":"Show Solution"});document.getElementById("close").addEventListener("click",closeDialog);document.getElementById("back").addEventListener("click",closeDialog);document.getElementById("finalButton").addEventListener("click",function(){openQuestion(finalQ.category,finalQ.value,finalQ.q,finalQ.a)});
+document.getElementById("resetBoard").addEventListener("click",function(){if(confirm("Reset every Jeopardy value so the board can be played again?")){used=new Set();saveUsed();renderBoard()}});
+renderBoard();resetTimer();
+</script>
+</body>
+</html>
