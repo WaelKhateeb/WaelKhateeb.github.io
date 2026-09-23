@@ -1,0 +1,284 @@
+/* Emirates Aviation University edition — aviation red, warm sand, and charcoal. */
+
+:root {
+  --eau-red: #d71921;
+  --eau-red-dark: #97161a;
+  --eau-bronze: #9b744c;
+  --eau-sand: #bc996e;
+  --eau-charcoal: #1d1b1b;
+  --eau-cloud: #f8f5ef;
+  --gold-bright: #d71921;
+  --gold-soft: #bc996e;
+  --gold-line: rgba(188,153,110,.38);
+}
+
+body {
+  background-color: var(--eau-cloud);
+  background-image:
+    linear-gradient(90deg, transparent 0 49.94%, rgba(188,153,110,.07) 49.94% 50.06%, transparent 50.06%),
+    linear-gradient(rgba(188,153,110,.035) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 72px;
+}
+
+.site-header {
+  background: rgba(29, 27, 27, .94);
+  border-bottom-color: rgba(215, 25, 33, .55);
+}
+
+.site-header::before {
+  background: linear-gradient(90deg, #97161a, #d71921 48%, #bc996e 82%, #d71921);
+}
+
+.site-header.scrolled {
+  background: rgba(29, 27, 27, .98);
+  box-shadow: 0 14px 40px -20px rgba(0,0,0,.85);
+}
+
+.brand { gap: 14px; }
+.brand-logo {
+  width: 92px;
+  height: 40px;
+  object-fit: contain;
+  filter: drop-shadow(0 5px 12px rgba(0,0,0,.28));
+}
+.brand:hover .brand-logo { transform: translateY(-1px); }
+.brand-text { padding-left: 13px; border-left: 1px solid rgba(255,255,255,.25); }
+
+.scroll-progress,
+.site-footer::before {
+  background: linear-gradient(90deg, #97161a, #d71921 58%, #bc996e 84%, #876642);
+}
+
+.gold-text {
+  background-image: linear-gradient(100deg, #97161a 0%, #d71921 46%, #bc996e 72%, #876642 100%);
+}
+
+.home-page .hero,
+.page-banner {
+  background:
+    radial-gradient(circle at 86% 13%, rgba(188,153,110,.3), transparent 35%),
+    radial-gradient(circle at 9% 100%, rgba(83,70,61,.08), transparent 38%),
+    linear-gradient(144deg, #fbfaf7 0%, #f5f1ea 56%, #e9dfd2 100%);
+}
+
+.home-page .hero::before,
+.page-banner::before {
+  opacity: .34;
+  background-image:
+    linear-gradient(rgba(155,116,76,.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(155,116,76,.1) 1px, transparent 1px);
+}
+
+.home-page .hero::after {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  right: -5vw;
+  bottom: -24%;
+  width: min(720px, 58vw);
+  aspect-ratio: 1;
+  border: 1px dashed rgba(155,116,76,.24);
+  border-radius: 50%;
+  box-shadow: 0 0 0 72px rgba(215,25,33,.025), 0 0 0 144px rgba(188,153,110,.03);
+  pointer-events: none;
+}
+
+.page-banner::after {
+  content: none;
+}
+
+.home-page .hero .eyebrow,
+.page-banner .eyebrow,
+.section-dark .section-number,
+.contact-path span { color: var(--eau-red-dark); }
+.home-page .hero h1,
+.page-banner h1 { color: #272323; text-shadow: none; }
+.home-page .hero-role { color: #5d4c43; }
+.home-page .hero-intro,
+.page-banner p:last-child,
+.section-dark .section-subtitle { color: #5f5551; }
+.page-banner .shell > p:not(.eyebrow) { color:#5f5551; }
+.home-page .hero-copy { min-width:0; width:100%; }
+.home-page .hero-role,
+.home-page .hero-intro { overflow-wrap:anywhere; }
+
+.home-page .hero .text-action {
+  color:#3e3732;
+  border-color:rgba(155,116,76,.4);
+  background:rgba(255,255,255,.68);
+}
+.home-page .hero .text-action::after { color:var(--eau-red); }
+.home-page .hero .text-action:hover { color:#fff; background:var(--eau-red); border-color:var(--eau-red); }
+.home-page .hero .text-action:hover::after { color:#fff; }
+.hero-social a { color:#4b433d; border-color:rgba(155,116,76,.36); background:rgba(255,255,255,.62); }
+.hero-social a:hover { color:#fff; background:linear-gradient(120deg,var(--eau-red-dark),var(--eau-red)); }
+.hero-social a:hover::before { background:#fff; }
+.hero-email { color:var(--eau-red-dark); border-color:rgba(169,29,35,.28); }
+.hero-email:hover { color:var(--eau-red); border-color:var(--eau-red); }
+#phase-canvas { opacity:.5; }
+
+.home-page .headshot-frame {
+  background:rgba(255,255,255,.72);
+  border-color: rgba(155,116,76,.42);
+  box-shadow: 0 30px 60px -24px rgba(74,57,44,.34), 0 0 0 1px rgba(188,153,110,.2);
+}
+
+.hero-orbs span:nth-child(1) { background: radial-gradient(circle, rgba(188,153,110,.42), transparent 70%); }
+.hero-orbs span:nth-child(2) { background: radial-gradient(circle, rgba(135,102,66,.24), transparent 70%); }
+.hero-orbs span:nth-child(3) { background: radial-gradient(circle, rgba(79,69,62,.14), transparent 70%); }
+
+.keyword-marquee { border-color: rgba(215,25,33,.45); }
+.marquee-track span { color: #e8dccd; }
+.marquee-track span::after { content:'✦'; color: rgba(188,153,110,.8); }
+
+.affiliation-grid { grid-template-columns: repeat(4, 1fr); }
+.affiliation-card:first-child {
+  background: linear-gradient(160deg, #faf7f1 0%, #f2ece3 100%);
+}
+.affiliation-logo-box.eau {
+  width: 128px;
+  height: 74px;
+  margin-top: 8px;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #d71921, #a9151a);
+  box-shadow: 0 14px 28px -16px rgba(151,22,26,.7);
+}
+.affiliation-logo-box.eau img { width: 104px; max-height: 50px; }
+.affiliation-logo-box.utoledo img { max-width: 82px; max-height: 78px; }
+
+.section-dark {
+  color:#2c2525;
+  background:
+    radial-gradient(circle at 82% 0%, rgba(188,153,110,.28), transparent 44%),
+    linear-gradient(158deg, #faf8f3 0%, #f2ece3 62%, #e5d9c9 100%);
+  border-color: rgba(155,116,76,.28);
+}
+.section-dark .section-title { color:#2c2525; }
+
+.site-footer {
+  background:
+    radial-gradient(circle at 82% 0%, rgba(215,25,33,.2), transparent 43%),
+    linear-gradient(158deg, #191717 0%, #292424 62%, #4d1518 100%);
+  border-color: rgba(215,25,33,.32);
+}
+
+.news-card.highlight { background: linear-gradient(160deg,#fff,#f4eee5); }
+.news-card.eau-news { border-color: rgba(215,25,33,.35); }
+.news-source.eau { background: linear-gradient(135deg,#d71921,#97161a); color:#fff; }
+
+.contact-paths {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:18px;
+}
+.contact-path {
+  min-height:150px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:28px;
+  border:1px solid rgba(155,116,76,.36);
+  border-radius:14px;
+  color:#352b2b;
+  text-decoration:none;
+  background:rgba(255,255,255,.7);
+  box-shadow:0 18px 42px -30px rgba(74,57,44,.38);
+  transition:transform .25s var(--ease),border-color .25s,background .25s;
+}
+.contact-path span {
+  font:600 .7rem var(--mono);
+  letter-spacing:.09em;
+  text-transform:uppercase;
+}
+.contact-path strong { font:700 clamp(1.45rem,2.4vw,2.1rem)/1.1 var(--display); }
+.contact-path em { color:#736864; font-size:.86rem; font-style:normal; }
+.contact-path:hover {
+  transform:translateY(-5px);
+  border-color:var(--eau-bronze);
+  background:#fff;
+}
+
+.home-contact .contact-grid { margin-bottom:48px; }
+.home-contact .contact-form,
+.home-contact .contact-aside {
+  padding:clamp(24px,4vw,42px);
+  border:1px solid rgba(155,116,76,.28);
+  border-radius:18px;
+  background:rgba(255,255,255,.76);
+  box-shadow:0 24px 56px -38px rgba(74,57,44,.42);
+}
+.home-contact .contact-form label,
+.home-contact .contact-label { color:var(--eau-red-dark); }
+.home-contact .contact-form input,
+.home-contact .contact-form textarea {
+  color:#2c2525;
+  border-color:rgba(155,116,76,.32);
+  background:#fff;
+}
+.home-contact .contact-form input::placeholder,
+.home-contact .contact-form textarea::placeholder { color:#9a8d88; }
+.home-contact .contact-form input:focus,
+.home-contact .contact-form textarea:focus {
+  border-color:var(--eau-red);
+  background:#fff;
+  box-shadow:0 0 0 3px rgba(215,25,33,.11);
+}
+.home-contact .btn-gold {
+  color:#fff;
+  background:linear-gradient(120deg,var(--eau-red-dark),var(--eau-red));
+  box-shadow:0 14px 30px -14px rgba(169,29,35,.7);
+}
+.home-contact .form-note { color:#756a66; }
+.form-success { margin:0; padding:12px 14px; color:#356146; background:#edf8f0; border:1px solid #afd5bc; border-radius:9px; }
+.contact-email-list { display:grid; gap:8px; margin:4px 0 8px; }
+.contact-aside .contact-email {
+  width:max-content;
+  max-width:100%;
+  color:#342a2a;
+  font-size:clamp(1rem,2vw,1.35rem);
+  overflow-wrap:anywhere;
+}
+.contact-aside .contact-email:hover { color:var(--eau-red); }
+.contact-aside .office-address { border-left-color:var(--eau-bronze); }
+.contact-aside .office-address strong { color:#342a2a; }
+.contact-aside .office-address span { color:#6c615d; }
+.contact-aside .text-action { color:#4b292b; border-color:rgba(169,29,35,.28); background:#fff; }
+.contact-aside .text-action::after { color:var(--eau-red); }
+.contact-aside .text-action:hover { color:#fff; border-color:var(--eau-red); background:var(--eau-red); }
+.contact-aside .text-action:hover::after { color:#fff; }
+.compact-course-list { margin-top:24px; }
+.page-banner .banner-link {
+  color:var(--eau-red-dark);
+  border-color:rgba(169,29,35,.28);
+  background:rgba(255,255,255,.68);
+}
+.page-banner .banner-link:hover {
+  color:#fff;
+  border-color:var(--eau-red);
+  background:var(--eau-red);
+}
+
+@media (max-width: 970px) {
+  .affiliation-grid { grid-template-columns: repeat(2, 1fr); }
+  .contact-paths { grid-template-columns:1fr; }
+  .contact-path { min-height:160px; }
+}
+
+@media (max-width: 620px) {
+  .brand-logo { width: 72px; height: 34px; }
+  .brand-text { padding-left: 10px; }
+  .home-page .hero-copy { order:1; }
+  .home-page .headshot-frame { order:2; margin-top:10px; }
+  .affiliation-grid { grid-template-columns: 1fr; }
+  .section-dark,
+  .page-banner {
+    background:
+      radial-gradient(circle at 85% 5%, rgba(188,153,110,.3), transparent 42%),
+      linear-gradient(150deg,#fbfaf7 0%,#f4efe8 58%,#e8dece 100%);
+  }
+  .site-footer {
+    background:
+      radial-gradient(circle at 85% 5%, rgba(215,25,33,.3), transparent 42%),
+      linear-gradient(150deg,#1b1818 0%,#2e2223 58%,#591519 100%);
+  }
+}

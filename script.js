@@ -53,6 +53,12 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ---------- Footer year ---------- */
   document.querySelectorAll('#year').forEach((y) => { y.textContent = new Date().getFullYear(); });
 
+  /* ---------- Contact-form confirmation ---------- */
+  if (new URLSearchParams(window.location.search).get('message') === 'sent') {
+    const notice = document.querySelector('.form-success');
+    if (notice) notice.hidden = false;
+  }
+
   /* ---------- Scroll progress bar + header state ---------- */
   const bar = document.querySelector('.scroll-progress');
   const header = document.querySelector('.site-header');
@@ -176,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
       orbits.forEach((o) => {
         ctx.beginPath();
         o.pts.forEach(([x, y], i) => { const px = mapX(x), py = mapY(y); i ? ctx.lineTo(px, py) : ctx.moveTo(px, py); });
-        ctx.strokeStyle = 'rgba(187,141,10,0.28)'; ctx.lineWidth = 1.1; ctx.stroke();
+        ctx.strokeStyle = 'rgba(188,153,110,0.28)'; ctx.lineWidth = 1.1; ctx.stroke();
       });
     };
 
@@ -188,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
         orbits.forEach((o) => {
           ctx.beginPath();
           o.pts.forEach(([x, y], i) => { const px = mapX(x), py = mapY(y); i ? ctx.lineTo(px, py) : ctx.moveTo(px, py); });
-          ctx.strokeStyle = 'rgba(187,141,10,0.16)'; ctx.lineWidth = 1; ctx.stroke();
+          ctx.strokeStyle = 'rgba(188,153,110,0.16)'; ctx.lineWidth = 1; ctx.stroke();
         });
         // glowing comet trails
         orbits.forEach((o) => {
@@ -200,18 +206,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const t = 1 - k / trail;
             ctx.beginPath();
             ctx.arc(mapX(x), mapY(y), 0.6 + t * 2.2, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(244,197,66,${0.05 + t * 0.55})`;
+            ctx.fillStyle = `rgba(188,153,110,${0.05 + t * 0.5})`;
             ctx.fill();
           }
           const [hx, hy] = o.pts[headIdx];
           ctx.beginPath(); ctx.arc(mapX(hx), mapY(hy), 3.4, 0, Math.PI * 2);
-          ctx.fillStyle = 'rgba(255,231,150,0.95)'; ctx.shadowColor = 'rgba(244,197,66,0.9)'; ctx.shadowBlur = 14; ctx.fill(); ctx.shadowBlur = 0;
+          ctx.fillStyle = 'rgba(151,22,26,0.92)'; ctx.shadowColor = 'rgba(151,22,26,0.7)'; ctx.shadowBlur = 12; ctx.fill(); ctx.shadowBlur = 0;
           o.head = (o.head + o.speed) % 1;
         });
         // equilibrium point with pulse
         const pulse = 3 + Math.sin(performance.now() / 600) * 1.4;
         ctx.beginPath(); ctx.arc(mapX(C / D), mapY(A / B), pulse, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(244,197,66,0.85)'; ctx.shadowColor = 'rgba(244,197,66,0.8)'; ctx.shadowBlur = 16; ctx.fill(); ctx.shadowBlur = 0;
+        ctx.fillStyle = 'rgba(188,153,110,0.9)'; ctx.shadowColor = 'rgba(188,153,110,0.8)'; ctx.shadowBlur = 16; ctx.fill(); ctx.shadowBlur = 0;
         requestAnimationFrame(render);
       };
       requestAnimationFrame(render);
@@ -233,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let T = 0;                                  // slow global time → the field gently "breathes"
     const angleAt = (x, y) => Math.sin(x * K1 + PH + T) + Math.cos(y * K2 - T * 0.7) + 0.6 * Math.sin((x + y) * K3 + T * 0.5);
     const vel = (x, y) => { const a = angleAt(x, y) * Math.PI; return [Math.cos(a), Math.sin(a)]; };
-    const GOLD = '187,141,10', GOLD_HI = '244,197,66', CYAN = '120,196,214';
+    const GOLD = '112,94,78', GOLD_HI = '188,153,110', CYAN = '151,22,26';
 
     // (legacy ML motifs removed — the background is now the vector-field system below)
 
@@ -283,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (t.length) {
           const head = t[t.length - 1];
           ctx.beginPath(); ctx.arc(head.x, head.y, p.lw + 0.6, 0, TAU);
-          ctx.fillStyle = p.accent ? `rgba(190,228,240,${fade * 0.9})` : `rgba(255,231,150,${fade * 0.9})`;
+          ctx.fillStyle = p.accent ? `rgba(151,22,26,${fade * 0.82})` : `rgba(188,153,110,${fade * 0.88})`;
           ctx.shadowColor = p.accent ? `rgba(${CYAN},0.85)` : `rgba(${GOLD_HI},0.85)`;
           ctx.shadowBlur = 7 * fade; ctx.fill(); ctx.shadowBlur = 0;
         }
