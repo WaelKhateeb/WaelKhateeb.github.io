@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#09111f">
+<meta name="description" content="Interactive Fourier Series Explorer: build square, triangle, and sawtooth waves with rotating harmonics and partial sums.">
+<title>Fourier Series Explorer | Interactive Mathematics</title>
+<style>
+:root{--bg:#09111f;--surface:#101c2d;--surface2:#152338;--line:#2a3a50;--text:#edf4fc;--muted:#a1b1c4;--mint:#5ce1c3;--amber:#ffbc75;--violet:#a6adff;--blue:#70aef7}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 60% -12%,rgba(35,82,118,.24),transparent 52%)}
+button,input{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--mint);outline-offset:4px}
+a{color:inherit} .shell{max-width:1370px;margin:0 auto;padding:26px 32px 56px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-bottom:26px;border-bottom:1px solid rgba(144,172,205,.13)}
+.brand{font-size:14px;font-weight:750;letter-spacing:.05em;display:flex;align-items:center;gap:11px;text-decoration:none}.brand-mark{width:34px;height:34px;border:1px solid #527a90;border-radius:11px;display:grid;place-items:center;color:var(--mint);font-size:21px;font-family:Georgia,serif}
+.home-link{font-size:13px;color:var(--muted);text-decoration:none}.home-link:hover{color:var(--text)}
+.hero{padding:34px 0 29px;display:flex;justify-content:space-between;align-items:flex-end;gap:20px}.eyebrow{display:block;color:var(--mint);font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;margin-bottom:11px}.hero h1{font-size:clamp(32px,4vw,54px);margin:0 0 12px;line-height:1.1;letter-spacing:-.05em;font-weight:800}.hero p{max-width:670px;color:var(--muted);font-size:15px;line-height:1.7;margin:0}.hero-note{border:1px solid #2a4756;background:#102531;padding:11px 14px;border-radius:12px;font-size:12px;color:#b9e7e0;white-space:nowrap}
+.panel{background:linear-gradient(150deg,#111e30,#101b2c);border:1px solid var(--line);border-radius:19px;min-width:0}
+.controls{padding:20px 23px;margin-bottom:18px}.controls-top{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;padding-bottom:21px;border-bottom:1px solid var(--line)}
+.control-kicker,.panel-label{display:block;font-size:11px;text-transform:uppercase;font-weight:800;letter-spacing:.15em;color:var(--muted)}
+.wave-switch{display:flex;background:#0a1423;border:1px solid #29394d;border-radius:12px;padding:4px;gap:4px}
+.wave-btn{background:transparent;color:var(--muted);border:0;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:750;transition:.15s}.wave-btn:hover{color:var(--text)}.wave-btn.active{color:#08231f;background:var(--mint);box-shadow:0 2px 12px #3fc2aa22}
+.settings{padding-top:21px;display:grid;grid-template-columns:minmax(170px,1.2fr) minmax(170px,.75fr) minmax(195px,1fr) auto;gap:25px;align-items:center}
+.field-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:7px}.field-title{font-size:13px;font-weight:750}.field-value{color:var(--mint);font-weight:800;font-size:17px;font-variant-numeric:tabular-nums}.field-sub{display:block;font-size:11px;color:var(--muted)}
+input[type=range]{width:100%;height:5px;border-radius:10px;accent-color:var(--mint);cursor:pointer}
+.presets{display:flex;gap:6px;margin-top:9px}.preset{background:#1b2a3e;border:1px solid #34465a;color:#c9d5e4;padding:4px 10px;border-radius:7px;font-size:11px}.preset:hover,.preset.active{background:#25483f;border-color:#3c947c;color:#bff9eb}
+.toggle-grid{display:grid;gap:7px;grid-template-columns:1fr 1fr}.toggle{display:flex;align-items:center;gap:7px;font-size:12px;color:#cad5e4;white-space:nowrap}.toggle input{accent-color:var(--mint);height:15px;width:15px;cursor:pointer}
+.actions{display:flex;gap:8px;align-items:center}.primary,.secondary{border:1px solid #3a4c61;border-radius:11px;padding:12px 16px;font-size:12px;font-weight:800;white-space:nowrap}.primary{background:var(--mint);border-color:var(--mint);color:#06201e;min-width:85px}.secondary{color:#d6e2f0;background:#17263b}.secondary:hover{background:#20354f}.primary:hover{background:#87f6de}
+.viz{display:grid;grid-template-columns:minmax(270px,.82fr) minmax(400px,1.18fr);gap:18px}
+.viz .panel{padding:21px}.panel-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}.panel-heading h2{font-size:16px;margin:0;letter-spacing:-.02em}.tiny-tag{font-size:11px;color:var(--muted);border:1px solid #394c60;border-radius:7px;padding:4px 8px}
+.canvas-wrap{position:relative;width:100%;min-width:0}.canvas-wrap canvas{display:block;width:100%;height:320px}.epicycle-wrap canvas{height:330px}
+.legend{display:flex;gap:17px;align-items:center;flex-wrap:wrap;margin-top:12px;font-size:12px;color:#b7c6d7}.legend span{display:flex;gap:7px;align-items:center}.swatch{width:19px;height:3px;border-radius:4px;background:var(--mint)}.swatch.target{background:var(--amber)}.swatch.dotted{height:0;border-top:2px dashed var(--violet)}
+.epicycle-summary{font-variant-numeric:tabular-nums;display:flex;justify-content:space-between;gap:10px;margin-top:8px;border-top:1px solid #25364a;padding-top:13px;font-size:12px;color:var(--muted)}.epicycle-summary b{color:#c4fff1;font-size:13px}
+.graph-foot{display:flex;justify-content:space-between;align-items:center;gap:15px;border-top:1px solid #25364a;margin-top:11px;padding-top:13px;color:var(--muted);font-size:12px}
+.graph-foot b{color:var(--text)}
+.details{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(270px,1fr);gap:18px;margin-top:18px}
+.details .panel{padding:22px 24px}.formula{font-family:Georgia,"Times New Roman",serif;font-size:clamp(16px,1.5vw,22px);line-height:1.55;overflow-wrap:anywhere;color:#defcf5;margin-top:14px;letter-spacing:.005em}
+.formula .math-sub{font-size:13px;vertical-align:sub}.explain{font-size:13px;color:var(--muted);line-height:1.75;margin:10px 0 0}
+.metric-group{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px}
+.metric{padding:13px;background:#0c1728;border:1px solid #293b50;border-radius:11px}.metric strong{display:block;font-variant-numeric:tabular-nums;font-size:24px;letter-spacing:-.03em;color:var(--text)}.metric span{color:var(--muted);font-size:11px}
+.coeff{width:100%;height:173px;display:block}.coeff-explain{font-size:12px;color:var(--muted);margin:7px 0 0}
+.bottom{display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-top:19px}.hint{font-size:12px;color:var(--muted);margin:0}.export{color:#dcf4ff;border:1px solid #3f5c72;background:#142638;padding:10px 14px;border-radius:10px;font-weight:750;font-size:12px}
+footer{margin-top:38px;padding-top:20px;border-top:1px solid #213249;color:#7d93ab;font-size:12px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+@media(max-width:1080px){.settings{grid-template-columns:1fr 1fr;gap:24px}.viz{grid-template-columns:1fr 1.1fr}.epicycle-wrap canvas,.canvas-wrap canvas{height:290px}.details{grid-template-columns:1fr 1fr}}
+@media(max-width:730px){.shell{padding:19px 14px 35px}.hero{padding-top:29px;display:block}.hero-note{display:inline-block;margin-top:16px}.controls{padding:17px}.controls-top{align-items:flex-start}.wave-switch{width:100%;display:grid;grid-template-columns:repeat(3,1fr)}.wave-btn{padding:10px 6px;font-size:12px}.settings,.viz,.details{grid-template-columns:1fr}.settings{gap:21px}.actions{justify-content:space-between}.actions button{flex:1}.viz .panel{padding:17px}.epicycle-wrap canvas,.canvas-wrap canvas{height:275px}.metric-group{gap:6px}.metric{padding:10px}.metric strong{font-size:19px}.home-link{font-size:12px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="shell">
+<nav class="topbar" aria-label="Main navigation">
+<a class="brand" href="https://waelkhateeb.github.io/"><span class="brand-mark">∑</span><span>MATHEMATICS LAB</span></a>
+<a class="home-link" href="https://waelkhateeb.github.io/">← Back to homepage</a>
+</nav>
+<header class="hero">
+<div><span class="eyebrow">Interactive mathematical visualization</span><h1>Fourier Series Explorer<span style="color:var(--mint)">.</span></h1>
+<p>See how simple rotating sine waves combine to recreate complex periodic signals. Change the number of harmonics, watch the approximation improve, and explore three classic waveforms.</p></div>
+<div class="hero-note">● Live visualization · No installation required</div>
+</header>
+<main>
+<section class="panel controls" aria-label="Visualization controls">
+<div class="controls-top"><div><span class="control-kicker" style="margin-bottom:8px">01 / Select a function</span><strong style="font-size:17px">Target waveform</strong></div>
+<div class="wave-switch" role="group" aria-label="Choose a waveform">
+<button class="wave-btn active" data-wave="square" type="button" aria-pressed="true">Square wave</button><button class="wave-btn" data-wave="triangle" type="button" aria-pressed="false">Triangle wave</button><button class="wave-btn" data-wave="sawtooth" type="button" aria-pressed="false">Sawtooth wave</button>
+</div></div>
+<div class="settings">
+<div><div class="field-head"><label class="field-title" for="terms">Fourier terms</label><span class="field-value" id="terms-value">7</span></div>
+<input id="terms" type="range" min="1" max="35" value="7" step="1" aria-label="Number of Fourier terms"><div class="presets" role="group" aria-label="Term presets"><button type="button" class="preset" data-n="1">1</button><button type="button" class="preset" data-n="3">3</button><button type="button" class="preset active" data-n="7">7</button><button type="button" class="preset" data-n="15">15</button><button type="button" class="preset" data-n="35">35</button></div></div>
+<div><div class="field-head"><label for="speed" class="field-title">Animation speed</label><span class="field-value" id="speed-value">1.0×</span></div>
+<input id="speed" type="range" min="0.2" max="3" value="1" step="0.1" aria-label="Animation speed"><span class="field-sub">One rotation cycle ≈ 9 seconds at 1×</span></div>
+<div><span class="field-title" style="display:block;margin-bottom:13px">Display options</span><div class="toggle-grid">
+<label class="toggle"><input type="checkbox" id="show-target" checked>Ideal function</label>
+<label class="toggle"><input type="checkbox" id="show-circles" checked>Rotating circles</label>
+<label class="toggle"><input type="checkbox" id="show-grid" checked>Graph grid</label>
+<label class="toggle"><input type="checkbox" id="show-coefficients" checked>Coefficients</label>
+</div></div>
+<div><span class="field-title" style="display:block;margin-bottom:13px">Playback</span><div class="actions"><button class="primary" id="play" type="button" aria-pressed="true">Ⅱ Pause</button><button class="secondary" id="reset" type="button" title="Reset phase to zero">↺ Reset</button><button class="secondary" id="step" type="button" title="Add one Fourier term">+1 term</button></div></div>
+</div></section>
+<div class="viz">
+<section class="panel"><div class="panel-heading"><h2>Rotating harmonics</h2><span class="tiny-tag">Vector addition</span></div>
+<div class="canvas-wrap epicycle-wrap"><canvas id="epicycles" role="img" aria-label="Animated rotating vectors whose vertical coordinates add to the Fourier approximation"></canvas></div>
+<div class="epicycle-summary"><span>Instantaneous sum <b id="sum-value">0.000</b></span><span>Phase <b id="phase-value">0.00 rad</b></span></div>
+</section>
+<section class="panel"><div class="panel-heading"><h2>Series approximation</h2><span class="tiny-tag">f(x) versus Sₙ(x)</span></div>
+<div class="canvas-wrap"><canvas id="waveplot" role="img" aria-label="Graph comparing the ideal periodic waveform with its finite Fourier-series approximation"></canvas></div>
+<div class="legend"><span><i class="swatch"></i>Fourier sum</span><span><i class="swatch target"></i>Ideal waveform</span><span><i class="swatch dotted"></i>Current phase</span></div>
+<div class="graph-foot"><span>From <b>−π</b> to <b>π</b> (one period)</span><span id="plot-note">Increasing N improves convergence</span></div>
+</section>
+</div>
+<div class="details">
+<section class="panel"><span class="panel-label">02 / Under the hood</span><h2 style="font-size:18px;margin:7px 0 0">The Fourier expansion</h2>
+<div class="formula" id="formula" aria-live="polite">S<sub>N</sub>(x) = (4/π) ∑<sub>k=0</sub><sup>N−1</sup> sin((2k+1)x)/(2k+1)</div>
+<p class="explain" id="explain">Only odd harmonics appear. Higher-frequency terms sharpen the edges, while small oscillations near jumps reveal the Gibbs phenomenon.</p>
+<div class="metric-group"><div class="metric"><strong id="metric-n">7</strong><span>Terms included</span></div><div class="metric"><strong id="metric-frequency">13</strong><span>Highest frequency</span></div><div class="metric"><strong id="metric-error">—</strong><span>Relative RMS error</span></div></div>
+</section>
+<section class="panel" id="coeff-panel"><div class="panel-heading"><h2>Fourier coefficients</h2><span class="tiny-tag">Sine amplitudes aₙ</span></div>
+<canvas class="coeff" id="coefficients" role="img" aria-label="Bar chart of included signed Fourier sine coefficients by harmonic frequency"></canvas>
+<p class="coeff-explain">Each bar gives the signed amplitude of a sine harmonic. Longer bars contribute more to the approximation.</p>
+</section>
+</div>
+<div class="bottom"><p class="hint">Teaching tip: compare 1, 3, 7, and 35 terms. Near square-wave jumps, the overshoot becomes narrower but does not vanish.</p><button class="export" type="button" id="export">↓ Save waveform as PNG</button></div>
+</main>
+<footer><span>Fourier Series Explorer · Interactive mathematics</span><span>Created for teaching · Pure HTML, CSS and JavaScript · Works offline</span></footer>
+</div>
+<script>
+(function(){
+"use strict";
+const PI=Math.PI, TAU=2*PI;
+const state={wave:"square",terms:7,speed:1,playing:true,phase:0,showTarget:true,showCircles:true,showGrid:true,showCoefficients:true};
+const $=id=>document.getElementById(id);
+const canvases={epicycles:$("epicycles"),wave:$("waveplot"),coeff:$("coefficients")};
+const ctxs={epicycles:canvases.epicycles.getContext("2d"),wave:canvases.wave.getContext("2d"),coeff:canvases.coeff.getContext("2d")};
+const colors={mint:"#5ce1c3",amber:"#ffbc75",violet:"#a6adff",muted:"#91a5ba",grid:"#26364b"};
+const coeffCache=new Map();
+function coefficients(){
+const key=state.wave+":"+state.terms;
+if(coeffCache.has(key))return coeffCache.get(key);
+const a=[];
+for(let k=0;k<state.terms;k++){
+ let n,v;
+ if(state.wave==="square"){n=2*k+1;v=4/(PI*n)}
+ else if(state.wave==="triangle"){n=2*k+1;v=8/(PI*PI)*((k%2===0)?1:-1)/(n*n)}
+ else{n=k+1;v=2/PI*((n%2===1)?1:-1)/n}
+ a.push({n:n,a:v});
+}
+coeffCache.set(key,a);return a;
+}
+function partial(x,c){let y=0;for(let i=0;i<c.length;i++){y+=c[i].a*Math.sin(c[i].n*x)}return y}
+function target(x){
+ if(state.wave==="square"){const v=Math.sin(x);return Math.abs(v)<1e-9?0:(v>0?1:-1)}
+ if(state.wave==="triangle")return 2/PI*Math.asin(Math.sin(x));
+ const t=((x+PI)%TAU+TAU)%TAU-PI;return t/PI;
+}
+function fit(canvas,ctx){const rect=canvas.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2),w=Math.max(1,rect.width),h=Math.max(1,rect.height),pw=Math.round(w*dpr),ph=Math.round(h*dpr);
+ if(canvas.width!==pw||canvas.height!==ph){canvas.width=pw;canvas.height=ph}
+ ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);return{w,h};
+}
+function line(ctx,x1,y1,x2,y2,color,width,dashes){ctx.save();ctx.strokeStyle=color;ctx.lineWidth=width||1;ctx.setLineDash(dashes||[]);ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();ctx.restore()}
+function label(ctx,txt,x,y,color,align){ctx.save();ctx.fillStyle=color||colors.muted;ctx.font="12px system-ui,sans-serif";ctx.textAlign=align||"center";ctx.fillText(txt,x,y);ctx.restore()}
+function drawEpicycles(c){
+ const ctx=ctxs.epicycles,{w,h}=fit(canvases.epicycles,ctx),ox=w*.49,oy=h*.49;
+ const total=c.reduce((s,o)=>s+Math.abs(o.a),0);
+ const scale=Math.min(w*.43,h*.43)/Math.max(1.48,total*1.08);
+ if(state.showGrid){line(ctx,19,oy,w-19,oy,"#25384b",1,[4,7]);line(ctx,ox,12,ox,h-12,"#25384b",1,[4,7]);label(ctx,"Re",w-18,oy-9,colors.muted,"right");label(ctx,"Im",ox+11,16,colors.muted,"left")}
+ let x=ox,y=oy;
+ for(let i=0;i<c.length;i++){
+ const t=c[i],r=Math.abs(t.a)*scale;
+ if(state.showCircles&&r>0.35){ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.strokeStyle=i===0?"#345c6b":"#344056";ctx.lineWidth=1;ctx.stroke()}
+ const nx=x+t.a*Math.cos(t.n*state.phase)*scale,ny=y-t.a*Math.sin(t.n*state.phase)*scale;
+ const isLast=i===c.length-1;line(ctx,x,y,nx,ny,isLast?colors.mint:i%2===0?"#8294ee":"#678eaf",isLast?2.8:2);
+ if(r>5){ctx.beginPath();ctx.arc(x,y,2.2,0,TAU);ctx.fillStyle="#7895aa";ctx.fill()}
+ x=nx;y=ny;
+ }
+ ctx.save();ctx.fillStyle=colors.mint;ctx.shadowColor=colors.mint;ctx.shadowBlur=14;ctx.beginPath();ctx.arc(x,y,5,0,TAU);ctx.fill();ctx.restore();
+ line(ctx,x,y,ox,y,"#5ce1c388",1,[5,5]);
+ line(ctx,ox-7,y,ox+7,y,colors.mint,2);
+ $("sum-value").textContent=partial(state.phase,c).toFixed(3);
+ $("phase-value").textContent=state.phase.toFixed(2)+" rad";
+}
+function drawWave(c){
+ const ctx=ctxs.wave,{w,h}=fit(canvases.wave,ctx);
+ const p={l:46,r:18,t:22,b:36},cw=w-p.l-p.r,ch=h-p.t-p.b;
+ if(cw<30||ch<30)return;
+ const px=x=>p.l+(x+PI)/TAU*cw,py=y=>p.t+(1.55-y)/3.10*ch;
+ if(state.showGrid){
+ for(const y of [-1,-.5,0,.5,1]){line(ctx,p.l,py(y),w-p.r,py(y),y===0?"#50637a":colors.grid,1,y===0?[]:[3,6]);if(y===-1||y===0||y===1)label(ctx,String(y),p.l-10,py(y)+4,colors.muted,"right")}
+ for(const x of [-PI,-PI/2,0,PI/2,PI])line(ctx,px(x),p.t,px(x),h-p.b,colors.grid,1,[3,6]);
+ }
+ else line(ctx,p.l,py(0),w-p.r,py(0),colors.grid,1);
+ [["−π",-PI],["−π/2",-PI/2],["0",0],["π/2",PI/2],["π",PI]].forEach(a=>label(ctx,a[0],px(a[1]),h-11,colors.muted));
+ const draw=(fn,color,width,dashes,glow)=>{
+  ctx.save();ctx.strokeStyle=color;ctx.lineWidth=width;ctx.lineJoin="round";ctx.setLineDash(dashes||[]);
+  if(glow){ctx.shadowColor=color;ctx.shadowBlur=9}
+  ctx.beginPath();
+  const num=Math.max(420,Math.round(cw*1.5));
+  for(let i=0;i<=num;i++){const x=-PI+TAU*i/num,v=fn(x),xx=px(x),yy=py(v);if(i===0)ctx.moveTo(xx,yy);else ctx.lineTo(xx,yy)}
+  ctx.stroke();ctx.restore();
+ };
+ if(state.showTarget)draw(target,colors.amber,2,[7,6],false);
+ draw(x=>partial(x,c),colors.mint,2.8,[],true);
+ const xp=px(state.phase),yp=py(partial(state.phase,c));
+ line(ctx,xp,p.t,xp,h-p.b,colors.violet,1.6,[5,5]);
+ ctx.beginPath();ctx.arc(xp,yp,5,0,TAU);ctx.fillStyle=colors.mint;ctx.fill();ctx.beginPath();ctx.arc(xp,yp,8,0,TAU);ctx.strokeStyle="#d3fff5";ctx.lineWidth=1;ctx.stroke();
+}
+function drawCoefficients(c){
+ const canvas=canvases.coeff,ctx=ctxs.coeff,{w,h}=fit(canvas,ctx),p={l:26,r:12,t:12,b:33};
+ const maxAbs=Math.max(1.27,...c.map(o=>Math.abs(o.a))),cy=h*.49,half=h*.40,available=w-p.l-p.r;
+ line(ctx,p.l,cy,w-p.r,cy,"#52627b",1);
+ const gap=2.5,bw=Math.max(2,(available/c.length)-gap);
+ c.forEach((o,i)=>{const cx=p.l+(i+.5)*available/c.length,bar=Math.abs(o.a)/maxAbs*half;
+ ctx.fillStyle=o.a>=0?"#64d7bd":"#a6adff";ctx.fillRect(cx-bw/2,o.a>=0?cy-bar:cy,bw,bar);
+ if(c.length<=12||i===0||i===c.length-1||i%Math.ceil(c.length/8)===0){label(ctx,String(o.n),cx,h-12,colors.muted)}
+ });
+ label(ctx,"0",15,cy+4,colors.muted);
+}
+function updateDetails(c){
+ $("terms-value").textContent=String(state.terms);
+ $("speed-value").textContent=state.speed.toFixed(1)+"×";
+ $("metric-n").textContent=String(state.terms);
+ $("metric-frequency").textContent=String(c[c.length-1].n);
+ const sampleCount=768;let err=0,base=0;
+ for(let j=0;j<sampleCount;j++){const x=-PI+TAU*(j+.5)/sampleCount,v=target(x),d=partial(x,c)-v;err+=d*d;base+=v*v}
+ $("metric-error").textContent=(100*Math.sqrt(err/base)).toFixed(1)+"%";
+ const formulas={
+ square:"S<sub>N</sub>(x) = <span class='math-frac'>4/π</span> ∑<sub>k=0</sub><sup>N−1</sup> sin((2k + 1)x)/(2k + 1)",
+ triangle:"S<sub>N</sub>(x) = 8/π² ∑<sub>k=0</sub><sup>N−1</sup> (−1)<sup>k</sup> sin((2k + 1)x)/(2k + 1)²",
+ sawtooth:"S<sub>N</sub>(x) = 2/π ∑<sub>n=1</sub><sup>N</sup> (−1)<sup>n+1</sup> sin(nx)/n"
+ };
+ const explanations={
+ square:"Only odd harmonics appear. Higher frequencies sharpen the edges; near discontinuities, persistent overshoot is called the Gibbs phenomenon.",
+ triangle:"Only odd harmonics appear, with alternating signs. Coefficients decay as 1/n², so the approximation converges much faster than for a square wave.",
+ sawtooth:"Every positive integer frequency appears, with alternating signs. Coefficients decay as 1/n, and the jump displays Gibbs oscillations."
+ };
+ $("formula").innerHTML=formulas[state.wave];
+ $("explain").textContent=explanations[state.wave];
+ $("plot-note").textContent=state.wave==="triangle"?"Smooth convergence between corners":"Look for the Gibbs overshoot near jumps";
+ document.querySelectorAll(".wave-btn").forEach(b=>{const active=b.dataset.wave===state.wave;b.classList.toggle("active",active);b.setAttribute("aria-pressed",String(active))});
+ document.querySelectorAll(".preset").forEach(b=>b.classList.toggle("active",Number(b.dataset.n)===state.terms));
+ $("coeff-panel").hidden=!state.showCoefficients;
+}
+function render(){const c=coefficients();drawEpicycles(c);drawWave(c);if(state.showCoefficients)drawCoefficients(c)}
+function sync(){updateDetails(coefficients());render()}
+$("terms").addEventListener("input",e=>{state.terms=Number(e.target.value);sync()});
+$("speed").addEventListener("input",e=>{state.speed=Number(e.target.value);$("speed-value").textContent=state.speed.toFixed(1)+"×"});
+document.querySelectorAll(".wave-btn").forEach(b=>b.addEventListener("click",()=>{state.wave=b.dataset.wave;state.phase=0;sync()}));
+document.querySelectorAll(".preset").forEach(b=>b.addEventListener("click",()=>{state.terms=Number(b.dataset.n);$("terms").value=String(state.terms);sync()}));
+[["show-target","showTarget"],["show-circles","showCircles"],["show-grid","showGrid"],["show-coefficients","showCoefficients"]].forEach(([id,key])=>$(id).addEventListener("change",e=>{state[key]=e.target.checked;sync()}));
+function updatePlay(){const b=$("play");b.textContent=state.playing?"Ⅱ Pause":"▶ Play";b.setAttribute("aria-pressed",String(state.playing))}
+$("play").addEventListener("click",()=>{state.playing=!state.playing;updatePlay()});
+$("reset").addEventListener("click",()=>{state.phase=0;render()});
+$("step").addEventListener("click",()=>{state.terms=Math.min(35,state.terms+1);$("terms").value=String(state.terms);sync()});
+$("export").addEventListener("click",()=>{
+ const a=document.createElement("a");a.download="fourier-"+state.wave+"-"+state.terms+"-terms.png";a.href=canvases.wave.toDataURL("image/png");a.click();
+});
+document.addEventListener("keydown",e=>{if(e.code==="Space"&&!/INPUT|BUTTON|TEXTAREA|SELECT/.test(document.activeElement.tagName)){e.preventDefault();state.playing=!state.playing;updatePlay()}});
+let last=0;
+function animate(now){if(last===0)last=now;const dt=Math.min(.08,(now-last)/1000);last=now;
+ if(state.playing&&document.visibilityState==="visible"){state.phase+=dt*state.speed*.70;state.phase=((state.phase+PI)%TAU+TAU)%TAU-PI;render()}
+ requestAnimationFrame(animate)}
+if(window.ResizeObserver){const observer=new ResizeObserver(()=>render());Object.values(canvases).forEach(c=>observer.observe(c))}
+if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches){state.playing=false;updatePlay()}
+sync();requestAnimationFrame(animate);
+})();
+</script>
+</body></html>
