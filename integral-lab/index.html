@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1023">
+  <meta name="description" content="An interactive Integral Jeopardy game and Fourier Series visualizer for mathematics classes.">
+  <title>Integral Lab | Jeopardy & Fourier Series</title>
+  <style>:root{color-scheme:dark;--bg:#0b1023;--panel:#121a31;--panel2:#18223d;--text:#f5f7ff;--muted:#9ca9c8;--line:#2b3752;--accent:#79a7ff;--purple:#af9cff;--teal:#65dac6;--gold:#f7c56d;--orange:#ffaf65;--radius:18px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;font-size:14px;line-height:1.5;overflow-x:hidden}button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #8cadff;outline-offset:3px}button:disabled{cursor:default;opacity:.52}.ambient{position:fixed;z-index:-1;pointer-events:none;filter:blur(4px);border-radius:50%}.ambient-one{width:700px;height:600px;top:-380px;left:-230px;background:radial-gradient(circle,#1c3472 0%,transparent 70%);opacity:.65}.ambient-two{width:700px;height:600px;top:20%;right:-420px;background:radial-gradient(circle,#182c59 0%,transparent 70%);opacity:.5}.app-shell{width:min(1370px,calc(100% - 72px));margin:auto}.topbar{min-height:105px;display:flex;align-items:center;gap:40px;border-bottom:1px solid rgba(151,171,212,.15)}.brand{display:inline-flex;align-items:center;gap:12px;text-decoration:none;color:inherit;min-width:248px}.brand-mark{width:43px;height:47px;display:grid;place-items:center;border:1px solid #597dc3;background:linear-gradient(140deg,#293e7a,#172447);color:#bfd2ff;border-radius:13px;font-family:Georgia,serif;font-size:36px;font-weight:bold;line-height:1}.brand-title{display:block;font-size:14px;font-weight:850;letter-spacing:2px}.brand-subtitle{display:block;color:#8595be;font-size:9px;letter-spacing:2.2px;margin-top:3px;font-weight:800}.main-nav{display:flex;align-items:center;gap:5px;margin-left:clamp(0px,7vw,100px);padding:5px;border:1px solid #27334e;border-radius:12px;background:#10182d}.nav-tab{border:0;background:none;color:#a5b2d0;font-weight:750;border-radius:9px;padding:11px 22px;white-space:nowrap;transition:background .2s,color .2s}.nav-tab:hover{color:white}.nav-tab.active{color:#edf2ff;background:#293a64;box-shadow:inset 0 0 0 1px #42598a}.nav-icon{font-size:17px;vertical-align:-1px;margin-right:7px}.header-tag{margin-left:auto;color:#a7b8d6;white-space:nowrap;font-size:10px;letter-spacing:1.45px;font-weight:800}.status-dot,.live-dot{display:inline-block;vertical-align:1px;background:#75ddc6;width:7px;height:7px;border-radius:50%;margin-right:8px;box-shadow:0 0 0 4px rgba(117,221,198,.08)}.view{padding-top:58px}.section-intro{display:flex;align-items:center;justify-content:space-between;gap:25px;margin-bottom:30px}.eyebrow{color:#8fa6d4;font-weight:850;font-size:11px;letter-spacing:3px;margin-bottom:13px}.eyebrow-line{display:inline-block;width:23px;height:2px;background:var(--gold);vertical-align:middle;margin-right:10px}h1,h2,p{margin-top:0}h1{font-size:clamp(39px,4.1vw,61px);line-height:1.1;letter-spacing:-2.4px;font-weight:850;margin-bottom:14px}h1 em{color:var(--gold);font-style:normal}.intro-copy{max-width:670px;color:var(--muted);font-size:15px;line-height:1.68;margin-bottom:0}.hero-counter{text-align:right;padding:9px 22px 5px;border-left:1px solid #34405c;min-width:144px}.hero-counter strong{display:block;font-size:51px;letter-spacing:-2px;line-height:1.1;font-variant-numeric:tabular-nums}.hero-counter span{font-size:10px;letter-spacing:1.65px;color:#a9b6d3;font-weight:800}.game-toolbar{display:flex;gap:18px;align-items:stretch;margin-bottom:20px;justify-content:space-between}.scorecards{display:flex;gap:13px;flex:1}.scorecard{border:1px solid var(--line);border-radius:15px;padding:13px 17px 14px;min-width:182px;max-width:264px;flex:1;background:linear-gradient(135deg,#152346,#141d33)}.amber-team{background:linear-gradient(135deg,#302838,#211e34)}.team-top{display:flex;align-items:center;gap:9px}.team-color{width:8px;height:8px;border-radius:50%;background:#77abff}.amber-team .team-color{background:var(--gold)}.team-name{font-size:12px;font-weight:800;outline:none;color:#d9e4ff;background:none;border:none;width:125px;min-width:0}.score-value{font-size:31px;line-height:1.2;font-variant-numeric:tabular-nums;font-weight:850;letter-spacing:-1px;padding:3px 0 9px}.score-actions{display:flex;gap:8px}.tiny-button{background:#273654;border:1px solid #405371;border-radius:7px;color:#d9e5ff;padding:4px 11px;font-weight:750;font-size:11px}.tiny-button:hover,.secondary-button:hover{background:#314465}.game-controls{display:flex;align-items:center;gap:10px;justify-content:flex-end;flex-wrap:wrap}.control-label{font-size:10px;letter-spacing:1.4px;font-weight:850;color:#9eaccb;display:block}.game-controls .control-label{white-space:nowrap;margin-right:1px}select{background:#17213a;color:#edf2ff;border:1px solid #364461;border-radius:10px;padding:10px 32px 10px 13px}select option{background:#17213a}.secondary-button{padding:10px 14px;border:1px solid #3b4969;border-radius:10px;background:#1a263f;color:#d5e1ff;font-size:12px;font-weight:750;white-space:nowrap}.board-frame{border-radius:18px;background:#111a32;border:1px solid #34435f;box-shadow:0 16px 70px rgba(2,6,22,.25);padding:17px}.board-topline,.board-bottom{display:flex;justify-content:space-between;gap:10px;align-items:center;color:#8e9dbe;font-size:10px;letter-spacing:1.6px;font-weight:800}.board-topline{padding:3px 5px 14px}.board-bottom{padding:15px 6px 2px;font-size:9px}.jeopardy-board{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.board-head{min-height:71px;background:#1a2d60;border:1px solid #3d5ba4;border-radius:10px;display:flex;align-items:center;justify-content:center;text-align:center;padding:10px;color:#e8efff;letter-spacing:1.5px;font-size:clamp(10px,1.06vw,13px);font-weight:850}.board-tile{position:relative;min-height:118px;border:1px solid #4269bb;border-radius:10px;color:#ffd67c;background:linear-gradient(145deg,#123887,#182d66);font-size:clamp(27px,3vw,43px);font-weight:850;letter-spacing:-.6px;text-shadow:0 2px 1px rgba(2,13,39,.5);transition:transform .15s ease,filter .15s ease,background .15s ease}.board-tile:hover{transform:translateY(-2px);background:linear-gradient(145deg,#1f50b6,#214080);filter:brightness(1.1)}.board-tile:active{transform:translateY(0)}.board-tile.played{background:#151f37;border-color:#2d3b5c;color:#7184ae;text-shadow:none;font-size:32px}.board-tile .played-caption{display:block;font-size:9px;letter-spacing:1.5px;color:#8fa1c8;font-weight:800;margin-top:4px}.hint-row{display:flex;align-items:flex-start;gap:10px;color:#8494b6;font-size:12px;margin:16px 0 0;line-height:1.6}.hint-icon{border:1px solid #546785;border-radius:50%;width:18px;height:18px;min-width:18px;line-height:16px;text-align:center;font-size:11px;font-weight:750;color:#a6bae4}.footer{margin-top:65px;padding:22px 0 30px;border-top:1px solid #26314b;color:#7181a3;display:flex;justify-content:space-between;font-weight:750;font-size:10px;letter-spacing:1.25px}.footer-dot{color:var(--gold);font-size:8px;padding:0 5px}
+/* modal */
+.modal-backdrop{position:fixed;inset:0;z-index:200;display:grid;place-items:center;background:rgba(2,5,17,.83);backdrop-filter:blur(8px);padding:18px}.modal-backdrop[hidden],[hidden]{display:none!important}.question-dialog{width:min(790px,100%);max-height:min(92vh,850px);overflow:auto;background:#111b34;border:1px solid #50638c;border-radius:22px;box-shadow:0 36px 100px rgba(0,0,0,.65)}.modal-topline{display:flex;align-items:center;justify-content:space-between;padding:18px 27px;border-bottom:1px solid #2e4161}.modal-category{font-size:11px;letter-spacing:2px;color:#b6caff;font-weight:850}.close-icon{background:#253653;color:#d1def7;border:1px solid #405573;border-radius:9px;width:35px;height:35px;font-size:25px;line-height:1}.modal-main{padding:32px 39px 24px}.question-head{display:flex;justify-content:space-between;align-items:flex-start}.question-eyebrow{color:#93a7ca;font-size:11px;letter-spacing:2px;font-weight:850}.question-head h2{font-size:44px;letter-spacing:-1.4px;color:var(--gold);margin:5px 0}.question-head h2 small{font-size:13px;letter-spacing:2px;color:#b0c4e7;margin-left:3px}.timer-widget{text-align:center}.timer-dial{width:100px;height:100px;border-radius:50%;display:flex;align-items:center;flex-direction:column;justify-content:center;position:relative;background:conic-gradient(var(--gold) 100%,#34405c 0%);isolation:isolate}.timer-dial:before{content:'';position:absolute;inset:7px;background:#172440;border-radius:50%;z-index:-1}.timer-dial strong{font-size:39px;line-height:1.1;font-variant-numeric:tabular-nums}.timer-dial small{font-size:10px;color:#a8badd;font-weight:850;letter-spacing:2px}.timer-widget>span{display:block;margin-top:7px;color:#9faecd;font-weight:800;font-size:9px;letter-spacing:1px}.timer-dial.urgent{background:conic-gradient(#ff797c var(--timer-percent,100%),#34405c 0%)}.question-math{margin:22px 0 21px;padding:32px 12px;background:linear-gradient(140deg,#182a4e,#16213a);border:1px solid #3d527a;border-radius:14px;min-height:120px;display:flex;align-items:center;justify-content:center;overflow-x:auto;font-size:clamp(17px,2.2vw,25px)}.question-math mjx-container[display="true"]{margin:0!important}.timer-buttons{display:flex;gap:9px}.answer-section{margin:25px 0 5px;border-radius:12px;background:rgba(53,127,111,.13);border:1px solid rgba(111,216,182,.38);padding:19px 22px}.answer-kicker{color:#8aefd5;font-size:10px;letter-spacing:1.8px;font-weight:850}.answer-math{overflow-x:auto;font-size:21px}.answer-explanation{color:#b6cbd1;line-height:1.6;margin:2px 0 0;font-size:13px}.modal-actions{display:flex;align-items:center;gap:14px;margin:24px 0 0;flex-wrap:wrap}.primary-button{border:1px solid #e2ad62;background:#f4c471;color:#211b29;border-radius:10px;padding:11px 20px;font-weight:900;white-space:nowrap;box-shadow:0 4px 16px rgba(232,169,74,.12)}.primary-button:hover{background:#ffd895}.reveal-button{font-size:14px;min-width:190px}.award-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.award-actions>span{color:#a6b6d2;font-size:10px;font-weight:900;letter-spacing:1.2px}.award-button{border-radius:9px;padding:10px 13px;border:1px solid #456da8;background:#263f70;color:#d9e9ff;font-weight:850;font-size:12px}.award-b{background:#53422d;border-color:#8d6e39;color:#ffe6b3}.no-score{padding:10px}.modal-footer{border-top:1px solid #2b3b5b;display:flex;justify-content:space-between;gap:18px;align-items:center;padding:17px 27px;color:#92a4c8;font-size:11px}.back-button{background:none;border:0;color:#bfd4fd;font-weight:850;white-space:nowrap}
+/* Fourier */
+.fourier-intro{margin-bottom:24px}.period-badge{padding:14px 22px 14px 28px;border-left:1px solid #35425e;text-align:right}.period-badge span{display:block;color:#a1b0d1;font-size:10px;letter-spacing:1.3px;font-weight:800}.period-badge strong{font-size:33px;color:#b4cafd;font-family:Georgia,serif}.fourier-layout{display:grid;grid-template-columns:minmax(275px,330px) minmax(0,1fr);gap:19px;align-items:start}.fourier-left,.fourier-right{display:flex;flex-direction:column;gap:17px;min-width:0}.panel{background:linear-gradient(160deg,#151f37,#111a2e);border:1px solid #2d3c5a;border-radius:17px;padding:23px;min-width:0}.panel-eyebrow{font-size:10px;color:#85a0d8;font-weight:900;letter-spacing:2px;margin-bottom:15px}.function-panel .control-label{margin-bottom:8px}.function-select{display:block;width:100%;padding:12px 28px 12px 12px;font-size:13px}.formula-shell{display:flex;align-items:center;justify-content:center;border:1px solid #324569;background:#0e1b37;border-radius:10px;margin-top:13px;min-height:89px;padding:12px 8px;text-align:center;overflow:auto;font-size:16px}.formula-shell mjx-container[display="true"]{margin:0!important}.subtle-info{margin-top:12px;color:#9caaca;font-size:12px;line-height:1.65;min-height:39px}.separator{height:1px;background:#2c3b56;margin:25px 0}.term-heading{display:flex;align-items:center;justify-content:space-between;gap:8px}.term-heading label{font-size:10px;letter-spacing:1.15px;color:#a9b7d3;font-weight:900}.term-heading strong{font-size:30px;color:var(--gold);line-height:1;font-variant-numeric:tabular-nums}input[type=range]{margin:18px 0 6px;width:100%;height:6px;accent-color:#f6c674;cursor:pointer}.range-markers{display:flex;justify-content:space-between;color:#7082a4;font-size:9px;font-weight:850;letter-spacing:1px}.anim-row{display:flex;gap:8px;margin-top:18px}.anim-row .primary-button{flex:1;padding:12px 9px}.small-button{padding:10px 11px}.switch-line{display:flex;gap:10px;align-items:center;color:#d5ddf0;font-weight:650;font-size:12px;margin:13px 0;cursor:pointer}.switch-line input{accent-color:#f3c276;width:16px;height:16px;margin:0;flex-shrink:0}.legend-swatch{width:12px;height:12px;border-radius:3px;display:inline-block;flex-shrink:0}.swatch-cos{background:var(--purple)}.swatch-sin{background:var(--teal)}.math-label{font-size:10px;color:#8b99b7;margin-left:auto;white-space:nowrap}.segmented{display:grid;grid-template-columns:1fr 1fr;padding:3px;background:#0e172b;border:1px solid #32415e;border-radius:9px}.segmented button{border:none;border-radius:7px;color:#a3b2d0;background:none;padding:9px 5px;font-size:12px;font-weight:750}.segmented button.selected{background:#30466d;color:#f4f7ff}.insight-panel{background:#182b42;border-color:#2a4c62}.insight-panel .panel-eyebrow{color:#80dec8}.insight-panel p{font-size:13px;line-height:1.75;margin:0;color:#cbdbdf}.graph-panel{padding:24px 24px 16px}.graph-header,.spectrum-heading{display:flex;align-items:center;justify-content:space-between;gap:16px}.graph-header .panel-eyebrow,.spectrum-heading .panel-eyebrow{margin-bottom:5px}.panel h2{font-size:20px;letter-spacing:-.6px;margin:0;font-weight:800}.error-indicator{text-align:right}.error-indicator span{font-size:9px;letter-spacing:1px;font-weight:800;color:#92a4c9;display:block}.error-indicator strong{font-size:23px;font-weight:850;color:#baddff;font-variant-numeric:tabular-nums}.graph-legend,.coeff-legend{display:flex;gap:19px;flex-wrap:wrap;margin-top:17px;color:#b0bedb;font-size:11px}.graph-legend span,.coeff-legend span{display:inline-flex;align-items:center;gap:7px}.graph-legend i,.coeff-legend i{width:17px;height:0;border-top:3px solid;display:inline-block}.legend-actual{border-color:#a0abc0!important;border-top-style:dashed!important}.legend-approx{border-color:#ffb26b!important}.legend-cos{border-color:#b49dff!important}.legend-sin{border-color:#67e0c9!important}.chart-wrap{position:relative;width:100%;height:355px;margin-top:10px}.chart-wrap canvas,.coeff-canvas-wrap canvas{display:block;width:100%;height:100%}.graph-footer{border-top:1px solid #2c3b59;display:flex;justify-content:space-between;gap:10px;padding:13px 4px 0;color:#8596b9;font-weight:750;font-size:9px;letter-spacing:1.1px}.graph-footer strong{color:#e1d3b3}.equation-panel{padding:25px}.equation-panel h2 .and{color:var(--gold)}.math-block{color:#eff5ff;overflow-x:auto;overflow-y:hidden;text-align:center}.general-math{background:#11223f;padding:17px 10px;border:1px solid #324c75;border-radius:12px;font-size:15px;margin-top:17px}.current-math{min-height:75px;display:flex;justify-content:center;align-items:center;font-size:17px;padding:8px 3px}.coefficients-math{font-size:15px;min-height:85px}.math-block mjx-container[display="true"]{margin:10px 0!important;max-width:100%}.formula-divider{display:flex;align-items:center;gap:13px;margin:19px 0 10px;font-size:9px;color:#8098bf;letter-spacing:1.45px;font-weight:900}.formula-divider::after{content:"";height:1px;background:#344361;flex:1}.coefficient-definition{border-top:1px solid #30415f;margin-top:19px;padding-top:16px}.coefficient-definition summary{cursor:pointer;color:#bccbeb;font-weight:750;font-size:12px;list-style:none}.coefficient-definition summary::-webkit-details-marker{display:none}.coefficient-definition summary span{float:right}.definition-math{background:#121e37;margin-top:15px;border-radius:11px;padding:12px;font-size:14px}.spectrum-heading>span{color:#8295b6;font-size:9px;letter-spacing:1.3px;font-weight:850}.coeff-legend{margin-top:15px}.coeff-canvas-wrap{height:198px;width:100%;margin-top:7px}.spectrum-footnote{color:#8291b0;font-size:11px;margin:10px 0 0;line-height:1.6}
+@media(max-width:1150px){.app-shell{width:min(100% - 40px,1100px)}.topbar{gap:18px}.brand{min-width:220px}.main-nav{margin-left:0}.header-tag{display:none}.game-toolbar{flex-wrap:wrap}.game-controls{justify-content:flex-start}.fourier-layout{grid-template-columns:minmax(245px,300px) minmax(0,1fr)}}
+@media(max-width:790px){.app-shell{width:calc(100% - 26px)}.topbar{min-height:84px;gap:8px;flex-wrap:wrap;padding:14px 0}.brand{min-width:0;margin-right:auto}.brand-title{font-size:12px}.brand-subtitle{font-size:8px}.brand-mark{width:37px;height:39px;font-size:28px}.main-nav{margin-left:auto}.nav-tab{padding:9px 11px;font-size:12px}.nav-icon{display:none}.view{padding-top:33px}.section-intro{align-items:flex-start}h1{font-size:38px;letter-spacing:-1.6px}.intro-copy{font-size:13px}.hero-counter{min-width:90px;padding-left:11px}.hero-counter strong{font-size:36px}.hero-counter span{font-size:8px}.scorecard{min-width:0}.board-frame{padding:9px}.jeopardy-board{gap:6px}.board-head{min-height:55px;font-size:9px;letter-spacing:.7px;padding:5px}.board-tile{min-height:83px;font-size:28px}.board-topline,.board-bottom{font-size:8px;letter-spacing:.4px}.fourier-layout{grid-template-columns:1fr}.fourier-left{display:contents}.function-panel{order:0}.insight-panel{order:1}.fourier-right{display:contents}.graph-panel{order:2}.equation-panel{order:3}.spectrum-panel{order:4}.period-badge{min-width:96px;padding:8px 0 8px 10px}.period-badge strong{font-size:27px}.period-badge span{font-size:8px}.chart-wrap{height:330px}.graph-panel{padding:17px}.footer{margin-top:35px}.modal-main{padding:22px 16px 20px}.modal-topline,.modal-footer{padding:15px}.question-math{font-size:19px;padding:18px 8px}.timer-dial{height:76px;width:76px}.timer-dial strong{font-size:27px}.question-head h2{font-size:32px}}
+@media(max-width:470px){.topbar{justify-content:center}.brand{flex:1}.main-nav{width:100%;justify-content:stretch}.nav-tab{flex:1}.section-intro{display:block}.hero-counter{display:none}.game-toolbar{gap:10px}.scorecards{width:100%}.scorecard{padding:11px}.score-value{font-size:26px}.team-name{width:100%;font-size:11px}.game-controls{width:100%}.game-controls .control-label{display:none}.game-controls select{flex:1}.board-tile{min-height:74px;font-size:24px}.board-head{font-size:8px}.board-bottom span:nth-child(2){display:none}.hint-row{font-size:11px}.graph-header{align-items:flex-start}.error-indicator span{font-size:8px;max-width:114px}.error-indicator strong{font-size:20px}.graph-legend{gap:9px;font-size:10px}.chart-wrap{height:285px}.graph-footer{font-size:8px;letter-spacing:0}.panel{padding:18px}.general-math{font-size:12px}.current-math{font-size:13px}.coefficients-math{font-size:13px}.footer{font-size:9px;gap:9px;flex-direction:column}.question-head h2 small{display:block;margin-left:0}.award-actions>span{width:100%}.modal-actions{display:block}.award-actions{margin-top:15px}.timer-buttons{flex-wrap:wrap}.modal-footer{align-items:flex-start;flex-wrap:wrap}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+</style>
+  <script>
+    window.MathJax = {
+      tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[','\\]']], processEscapes: true},
+      chtml: {scale: 1.01, displayAlign: 'center'},
+      startup: {typeset: true}
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+  
+</head>
+<body>
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+  <div class="app-shell">
+    <header class="topbar">
+      <a href="#jeopardy" class="brand" aria-label="Integral Lab home">
+        <span class="brand-mark">∫</span>
+        <span><span class="brand-title">INTEGRAL LAB</span><span class="brand-subtitle">MATH IN MOTION</span></span>
+      </a>
+      <nav class="main-nav" role="tablist" aria-label="Choose learning activity">
+        <button type="button" id="tabJeopardy" role="tab" aria-selected="true" aria-controls="jeopardyView" class="nav-tab active" data-view="jeopardy"><span class="nav-icon">▦</span> Jeopardy</button>
+        <button type="button" id="tabFourier" role="tab" aria-selected="false" aria-controls="fourierView" class="nav-tab" data-view="fourier"><span class="nav-icon">∿</span> Fourier Series</button>
+      </nav>
+      <div class="header-tag"><span class="status-dot"></span> CLASSROOM EDITION</div>
+    </header>
+
+    <main>
+      <section id="jeopardyView" class="view" role="tabpanel" aria-labelledby="tabJeopardy">
+        <div class="section-intro">
+          <div>
+            <div class="eyebrow"><span class="eyebrow-line"></span> PLAY • SOLVE • SCORE</div>
+            <h1>Integral <em>Jeopardy.</em></h1>
+            <p class="intro-copy">Twelve quick integration challenges. Pick a value, solve before the clock runs out, then reveal the answer.</p>
+          </div>
+          <div class="hero-counter" aria-label="Questions completed"><strong id="playedCount">00</strong><span>OF 12 PLAYED</span></div>
+        </div>
+        <div class="game-toolbar">
+          <div class="scorecards">
+            <div class="scorecard blue-team">
+              <div class="team-top"><span class="team-color"></span><input id="teamAName" class="team-name" aria-label="First team name" value="Team A" maxlength="24"></div>
+              <div class="score-value" id="teamAScore" aria-live="polite">0</div>
+              <div class="score-actions"><button type="button" class="tiny-button" data-adjust="A:-100" aria-label="Deduct 100 points from first team">−100</button><button type="button" class="tiny-button" data-adjust="A:100" aria-label="Add 100 points to first team">+100</button></div>
+            </div>
+            <div class="scorecard amber-team">
+              <div class="team-top"><span class="team-color"></span><input id="teamBName" class="team-name" aria-label="Second team name" value="Team B" maxlength="24"></div>
+              <div class="score-value" id="teamBScore" aria-live="polite">0</div>
+              <div class="score-actions"><button type="button" class="tiny-button" data-adjust="B:-100" aria-label="Deduct 100 points from second team">−100</button><button type="button" class="tiny-button" data-adjust="B:100" aria-label="Add 100 points to second team">+100</button></div>
+            </div>
+          </div>
+          <div class="game-controls">
+            <label class="control-label" for="timerDuration">QUESTION TIMER</label>
+            <select id="timerDuration" aria-label="Duration per question">
+              <option value="15">15 seconds</option>
+              <option value="30" selected>30 seconds</option>
+              <option value="45">45 seconds</option>
+              <option value="60">60 seconds</option>
+            </select>
+            <button type="button" class="secondary-button" id="soundToggle" aria-pressed="true" title="Toggle timer sounds">♪ Sound on</button>
+            <button type="button" class="secondary-button reset-button" id="resetGame">↻ Reset game</button>
+          </div>
+        </div>
+        <div class="board-frame">
+          <div class="board-topline"><span><span class="live-dot"></span> JEOPARDY BOARD</span><span>CHOOSE A CATEGORY + POINT VALUE</span></div>
+          <div class="jeopardy-board" id="jeopardyBoard" aria-label="Integration Jeopardy board"></div>
+          <div class="board-bottom"><span>BEGINNER FRIENDLY</span><span>100 / 200 / 300 POINTS</span><span>12 QUESTIONS</span></div>
+        </div>
+        <div class="hint-row"><span class="hint-icon">i</span><span>Click any tile to start its timer. Reveal the worked answer, then award points to a team. Completed tiles can be reopened for review.</span></div>
+      </section>
+
+      <section id="fourierView" class="view" role="tabpanel" aria-labelledby="tabFourier" hidden>
+        <div class="section-intro fourier-intro">
+          <div>
+            <div class="eyebrow"><span class="eyebrow-line"></span> INTERACTIVE MATHEMATICS</div>
+            <h1>Fourier Series <em>Explorer.</em></h1>
+            <p class="intro-copy">See how cosine and sine terms reconstruct a periodic function. Change the function and number of terms to watch convergence.</p>
+          </div>
+          <div class="period-badge"><span>FUNDAMENTAL PERIOD</span><strong>2π</strong></div>
+        </div>
+        <div class="fourier-layout">
+          <div class="fourier-left">
+            <div class="panel function-panel">
+              <div class="panel-eyebrow">01 / CHOOSE A FUNCTION</div>
+              <label for="functionSelect" class="control-label">TARGET FUNCTION</label>
+              <select id="functionSelect" class="function-select">
+                <option value="linear">f(x) = x (sawtooth)</option>
+                <option value="quadratic">f(x) = x²</option>
+                <option value="absolute">f(x) = |x|</option>
+                <option value="square">Square wave</option>
+                <option value="rectified" selected>f(x) = max(0, sin x)</option>
+                <option value="mixed">f(x) = sin x + ½ cos(2x)</option>
+              </select>
+              <div class="function-math formula-shell" id="functionFormula">\[f(x)=\max(0,\sin x)\]</div>
+              <div class="subtle-info" id="functionDescription">A positive half-wave: both sine and cosine terms are needed.</div>
+              <div class="separator"></div>
+              <div class="panel-eyebrow">02 / ADD FOURIER TERMS</div>
+              <div class="term-heading"><label for="termSlider">NUMBER OF HARMONICS</label><strong id="termValue">5</strong></div>
+              <input id="termSlider" type="range" min="1" max="30" value="5" aria-label="Number of Fourier harmonics">
+              <div class="range-markers"><span>1 TERM</span><span>15</span><span>30 TERMS</span></div>
+              <div class="anim-row"><button type="button" class="primary-button" id="animateButton"><span id="playGlyph">▶</span> <span id="playText">Animate terms</span></button><button type="button" class="secondary-button small-button" id="resetTerms">↺ Reset</button></div>
+              <div class="separator"></div>
+              <div class="panel-eyebrow">03 / EXPLORE COMPONENTS</div>
+              <label class="switch-line"><input type="checkbox" id="showCosine"><span class="legend-swatch swatch-cos"></span> Show cosine contribution <span class="math-label">aₙ cos(nx)</span></label>
+              <label class="switch-line"><input type="checkbox" id="showSine"><span class="legend-swatch swatch-sin"></span> Show sine contribution <span class="math-label">bₙ sin(nx)</span></label>
+              <div class="separator"></div>
+              <div class="panel-eyebrow">04 / GRAPH RANGE</div>
+              <div class="segmented" role="group" aria-label="Graph horizontal range"><button type="button" data-range="one">−π to π</button><button type="button" data-range="two" class="selected">−2π to 2π</button></div>
+            </div>
+            <div class="panel insight-panel"><div class="panel-eyebrow">WHAT TO NOTICE</div><p id="insightText">This function is neither even nor odd, so the approximation has a constant term, sine terms, and cosine terms.</p></div>
+          </div>
+          <div class="fourier-right">
+            <div class="panel graph-panel">
+              <div class="graph-header"><div><div class="panel-eyebrow">LIVE APPROXIMATION</div><h2>Reconstructing the wave</h2></div><div class="error-indicator"><span>ROOT MEAN SQUARE ERROR</span><strong id="errorValue">—</strong></div></div>
+              <div class="graph-legend"><span><i class="legend-actual"></i> Original function</span><span><i class="legend-approx"></i> Fourier partial sum</span><span id="cosLegend" hidden><i class="legend-cos"></i> Cosine component</span><span id="sinLegend" hidden><i class="legend-sin"></i> Sine component</span></div>
+              <div class="chart-wrap"><canvas id="fourierCanvas" role="img" aria-label="Graph comparing the original function and its Fourier partial sum, updated with the controls"></canvas></div>
+              <div class="graph-footer"><span>HARMONICS INCLUDED: <strong id="graphN">1–5</strong></span><span>PERIODIC EXTENSION, T = 2π</span></div>
+            </div>
+            <div class="panel equation-panel">
+              <div class="panel-eyebrow">THE MATHEMATICS</div>
+              <h2>Fourier series: sines <span class="and">+</span> cosines</h2>
+              <div class="math-block general-math">\[f(x)\sim \frac{a_0}{2}+\sum_{n=1}^{\infty}\left(a_n\cos(nx)+b_n\sin(nx)\right)\]</div>
+              <div class="formula-divider"><span>YOUR CURRENT APPROXIMATION</span></div>
+              <div class="math-block current-math" id="partialSumMath">\[S_N(x)=\frac{a_0}{2}+\sum_{n=1}^{N}(a_n\cos nx+b_n\sin nx)\]</div>
+              <div class="formula-divider"><span>COEFFICIENTS FOR THIS FUNCTION</span></div>
+              <div class="math-block coefficients-math" id="coefficientsMath"></div>
+              <details class="coefficient-definition"><summary>How are Fourier coefficients calculated? <span>＋</span></summary><div class="math-block definition-math">\[\begin{aligned}a_0&=\frac{1}{\pi}\int_{-\pi}^{\pi}f(x)\,dx,\\a_n&=\frac{1}{\pi}\int_{-\pi}^{\pi}f(x)\cos(nx)\,dx,\\b_n&=\frac{1}{\pi}\int_{-\pi}^{\pi}f(x)\sin(nx)\,dx.\end{aligned}\]</div></details>
+            </div>
+            <div class="panel spectrum-panel">
+              <div class="spectrum-heading"><div><div class="panel-eyebrow">HARMONIC BREAKDOWN</div><h2>Sine & cosine coefficients</h2></div><span>FIRST 12 HARMONICS</span></div>
+              <div class="coeff-legend"><span><i class="legend-cos"></i> Cosine (aₙ)</span><span><i class="legend-sin"></i> Sine (bₙ)</span></div>
+              <div class="coeff-canvas-wrap"><canvas id="coeffCanvas" role="img" aria-label="Bar chart showing Fourier cosine coefficients and sine coefficients for the selected function"></canvas></div>
+              <div class="spectrum-footnote">All harmonics from 1 through N are used in the approximation, even when some coefficients are zero.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="footer"><span>INTEGRAL LAB <span class="footer-dot">●</span> CLASSROOM TOOLS</span><span>Jeopardy • Fourier Series • Local, offline-ready</span></footer>
+  </div>
+
+  <div class="modal-backdrop" id="questionModal" hidden>
+    <div class="question-dialog" role="dialog" aria-modal="true" aria-labelledby="modalCategory">
+      <div class="modal-topline"><span id="modalCategory" class="modal-category">POWERS OF X</span><button type="button" class="close-icon" id="closeQuestion" aria-label="Close question">×</button></div>
+      <div class="modal-main">
+        <div class="question-head"><div><span class="question-eyebrow">SOLVE THE INTEGRAL</span><h2 id="modalPoints">100 <small>POINTS</small></h2></div><div class="timer-widget"><div class="timer-dial" id="timerDial"><strong id="timerCountdown">30</strong><small>SEC</small></div><span id="timerStatus">TIME REMAINING</span></div></div>
+        <div class="question-math" id="modalQuestion">\[\int x^5\,dx\]</div>
+        <div class="timer-buttons"><button type="button" class="secondary-button" id="pauseTimer">Ⅱ Pause timer</button><button type="button" class="secondary-button" id="restartTimer">↻ Restart timer</button></div>
+        <div class="answer-section" id="answerSection" hidden><div class="answer-kicker">✓ CORRECT ANSWER</div><div id="modalAnswer" class="answer-math"></div><p id="modalExplanation" class="answer-explanation"></p></div>
+        <div class="modal-actions"><button type="button" class="primary-button reveal-button" id="revealAnswer">Reveal answer</button><div class="award-actions" id="awardActions" hidden><span>AWARD POINTS</span><button type="button" class="award-button award-a" id="awardA">+ Team A</button><button type="button" class="award-button award-b" id="awardB">+ Team B</button><button type="button" class="secondary-button no-score" id="noScore">No points</button></div></div>
+      </div>
+      <div class="modal-footer"><span id="modalResultMessage" aria-live="polite">Show the solution when everyone is ready.</span><button type="button" class="back-button" id="backBoard">← Back to board</button></div>
+    </div>
+  </div>
+<script>'use strict';
+
+/* ===================== SHARED HELPERS ===================== */
+const $ = (id) => document.getElementById(id);
+let mathTimer = null;
+let mathQueue = Promise.resolve();
+const mathNodes = new Set();
+function setMath(id, latex) {
+  const element = typeof id === 'string' ? $(id) : id;
+  if (!element) return;
+  if (window.MathJax && typeof MathJax.typesetClear === 'function') {
+    try { MathJax.typesetClear([element]); } catch (e) { /* safe to continue */ }
+  }
+  element.textContent = `\\[${latex}\\]`;
+  mathNodes.add(element);
+  clearTimeout(mathTimer);
+  mathTimer = setTimeout(renderMath, 45);
+}
+function renderMath() {
+  if (!mathNodes.size) return;
+  if (!window.MathJax || typeof MathJax.typesetPromise !== 'function') {
+    mathTimer = setTimeout(renderMath, 200);
+    return;
+  }
+  const nodes = [...mathNodes]; mathNodes.clear();
+  mathQueue = mathQueue.then(() => MathJax.typesetPromise(nodes)).catch(err => console.warn('Math rendering warning', err));
+}
+function safeStorageGet() {
+  try { const json = localStorage.getItem('integral-lab-v1'); return json ? JSON.parse(json) : {}; } catch { return {}; }
+}
+function saveGame() {
+  try {localStorage.setItem('integral-lab-v1',JSON.stringify(game));} catch { /* browsing still works */ }
+}
+const defaults = {scores:{A:0,B:0},names:{A:'Team A',B:'Team B'},played:{},awarded:{},duration:30,sound:true};
+const saved = safeStorageGet();
+const game = {
+  scores:{...defaults.scores,...saved.scores},
+  names:{...defaults.names,...saved.names},
+  played:saved.played || {}, awarded:saved.awarded || {},
+  duration:[15,30,45,60].includes(Number(saved.duration)) ? Number(saved.duration) :30,
+  sound:saved.sound !== false
+};
+
+/* ===================== INTEGRATION JEOPARDY ===================== */
+const categories = [
+  {id:'powers',name:'POWERS OF x'},
+  {id:'exponentials',name:'EXPONENTIALS'},
+  {id:'trig',name:'SINE & COSINE'},
+  {id:'mixed',name:'MIXED REVIEW'}
+];
+const problems = [
+  {id:'powers-100',category:'powers',value:100,q:String.raw`\int x^5\,dx`,a:String.raw`\frac{x^6}{6}+C`,tip:'Add 1 to the exponent, then divide by the new exponent.'},
+  {id:'powers-200',category:'powers',value:200,q:String.raw`\int 3x^2\,dx`,a:String.raw`x^3+C`,tip:'Integrate x² to x³/3, then multiply by 3.'},
+  {id:'powers-300',category:'powers',value:300,q:String.raw`\int (4x^3-2x)\,dx`,a:String.raw`x^4-x^2+C`,tip:'Integrate each term separately using the power rule.'},
+  {id:'exponentials-100',category:'exponentials',value:100,q:String.raw`\int e^x\,dx`,a:String.raw`e^x+C`,tip:'The derivative of eˣ is itself.'},
+  {id:'exponentials-200',category:'exponentials',value:200,q:String.raw`\int 4e^x\,dx`,a:String.raw`4e^x+C`,tip:'A constant factor stays outside the integral.'},
+  {id:'exponentials-300',category:'exponentials',value:300,q:String.raw`\int e^{2x}\,dx`,a:String.raw`\frac{1}{2}e^{2x}+C`,tip:'The chain rule introduces a factor of 2, so divide by 2.'},
+  {id:'trig-100',category:'trig',value:100,q:String.raw`\int \sin x\,dx`,a:String.raw`-\cos x+C`,tip:'Check by differentiating −cos x to obtain sin x.'},
+  {id:'trig-200',category:'trig',value:200,q:String.raw`\int \cos x\,dx`,a:String.raw`\sin x+C`,tip:'The derivative of sin x is cos x.'},
+  {id:'trig-300',category:'trig',value:300,q:String.raw`\int (2\sin x-3\cos x)\,dx`,a:String.raw`-2\cos x-3\sin x+C`,tip:'Integrate sine and cosine separately, keeping the constants.'},
+  {id:'mixed-100',category:'mixed',value:100,q:String.raw`\int (x^2+e^x)\,dx`,a:String.raw`\frac{x^3}{3}+e^x+C`,tip:'Use the power rule for x² and the exponential rule for eˣ.'},
+  {id:'mixed-200',category:'mixed',value:200,q:String.raw`\int (x^5+\sin x)\,dx`,a:String.raw`\frac{x^6}{6}-\cos x+C`,tip:'Integrate x⁵ and sin x independently, then add the results.'},
+  {id:'mixed-300',category:'mixed',value:300,q:String.raw`\int (e^x+\cos x-2x)\,dx`,a:String.raw`e^x+\sin x-x^2+C`,tip:'Combine the exponential, trigonometric, and power antiderivatives.'}
+];
+const problemById = Object.fromEntries(problems.map(p=>[p.id,p]));
+let activeQuestion = null, revealed = false, timeRemainingMs=30000, timerHandle=null, tickAt=0, timerRunning=false;
+let lastFocus = null;
+let audioContext=null;
+function playTimeSound() {
+  if (!game.sound) return;
+  try {
+    audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
+    const osc=audioContext.createOscillator(), gain=audioContext.createGain();
+    osc.connect(gain); gain.connect(audioContext.destination);
+    osc.type='sine'; osc.frequency.setValueAtTime(620,audioContext.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(410,audioContext.currentTime+.22);
+    gain.gain.setValueAtTime(.075,audioContext.currentTime);
+    gain.gain.exponentialRampToValueAtTime(.001,audioContext.currentTime+.27);
+    osc.start(); osc.stop(audioContext.currentTime+.28);
+  } catch {/* Audio unsupported or blocked */}
+}
+function populateBoard() {
+  const board=$('jeopardyBoard'); board.innerHTML='';
+  categories.forEach(cat=>{
+    const cell=document.createElement('div');cell.className='board-head';cell.textContent=cat.name;board.appendChild(cell);
+  });
+  for (const points of [100,200,300]) for(const cat of categories) {
+    const p=problemById[`${cat.id}-${points}`];const used=Boolean(game.played[p.id]);
+    const btn=document.createElement('button');btn.type='button';btn.className=`board-tile${used?' played':''}`;
+    btn.dataset.question=p.id;
+    btn.setAttribute('aria-label',`${cat.name}, ${points} points${used?', completed. Open to review.':''}`);
+    btn.innerHTML=used?'<span aria-hidden="true">✓</span><span class="played-caption">PLAYED</span>':String(points);
+    btn.addEventListener('click',()=>openQuestion(p));board.appendChild(btn);
+  }
+  $('playedCount').textContent=String(Object.keys(game.played).filter(x=>game.played[x]).length).padStart(2,'0');
+}
+function updateScoreboard() {
+  $('teamAScore').textContent=game.scores.A.toLocaleString();
+  $('teamBScore').textContent=game.scores.B.toLocaleString();
+  $('teamAName').value=game.names.A;
+  $('teamBName').value=game.names.B;
+  $('awardA').textContent=`+ ${game.names.A}`;
+  $('awardB').textContent=`+ ${game.names.B}`;
+}
+function adjustScore(team,change){game.scores[team]+=change;updateScoreboard();saveGame();}
+function stopTimer(){if(timerHandle){clearInterval(timerHandle);timerHandle=null;}timerRunning=false;}
+function updateTimerView(){
+  const duration=game.duration*1000;
+  const p=Math.max(0,Math.min(1,timeRemainingMs/duration));
+  const secs=Math.ceil(timeRemainingMs/1000);
+  $('timerCountdown').textContent=secs;
+  $('timerDial').style.background=`conic-gradient(${secs<=10?'#ff797c':'#f7c56d'} ${p*100}%, #33415e ${p*100}%)`;
+  $('timerStatus').textContent=secs===0?'TIME IS UP':(timerRunning?'TIME REMAINING':'TIMER PAUSED');
+  $('pauseTimer').textContent=timerRunning?'Ⅱ Pause timer':'▶ Resume timer';
+  $('pauseTimer').disabled=secs===0||revealed;
+}
+function timerTick(){
+  const now=Date.now();timeRemainingMs=Math.max(0,timeRemainingMs-(now-tickAt));tickAt=now;
+  if(timeRemainingMs<=0){stopTimer();playTimeSound();$('modalResultMessage').textContent='Time is up. Reveal the answer when ready.';}
+  updateTimerView();
+}
+function startTimer(){if(timerRunning||timeRemainingMs<=0||revealed)return;stopTimer();timerRunning=true;tickAt=Date.now();timerHandle=setInterval(timerTick,100);updateTimerView();}
+function pauseTimer(){if(timerRunning){timerTick();stopTimer();updateTimerView();}else startTimer();}
+function restartTimer(){stopTimer();timeRemainingMs=game.duration*1000;if(!revealed)startTimer();else updateTimerView();}
+function openQuestion(p){
+  lastFocus=document.activeElement;
+  activeQuestion=p;revealed=Boolean(game.played[p.id]);stopTimer();timeRemainingMs=game.duration*1000;
+  $('modalCategory').textContent=categories.find(c=>c.id===p.category).name;
+  $('modalPoints').innerHTML=`${p.value} <small>POINTS</small>`;
+  setMath('modalQuestion',p.q);setMath('modalAnswer',p.a);
+  $('modalExplanation').textContent=p.tip;
+  $('answerSection').hidden=!revealed;
+  $('revealAnswer').hidden=revealed;
+  $('awardActions').hidden=!revealed;
+  $('awardA').disabled=Boolean(game.awarded[p.id]);
+  $('awardB').disabled=Boolean(game.awarded[p.id]);
+  $('noScore').disabled=Boolean(game.awarded[p.id]);
+  $('modalResultMessage').textContent=game.awarded[p.id]
+    ? (game.awarded[p.id]==='none'?'Question completed without points.':`Points awarded to ${game.names[game.awarded[p.id]]}.`)
+    : (revealed?'Ready to award points.':'Show the solution when everyone is ready.');
+  $('questionModal').hidden=false;document.body.style.overflow='hidden';
+  $('closeQuestion').focus();
+  if(!revealed)startTimer(); else updateTimerView();
+}
+function revealAnswer(){
+  if(!activeQuestion || revealed)return;
+  revealed=true;stopTimer();game.played[activeQuestion.id]=true;
+  $('answerSection').hidden=false;$('revealAnswer').hidden=true;$('awardActions').hidden=false;
+  $('modalResultMessage').textContent='Answer revealed. Award points or select No points.';
+  updateTimerView();populateBoard();saveGame();
+  setMath('modalAnswer',activeQuestion.a);
+}
+function awardCurrent(team){
+  if(!activeQuestion||!revealed||game.awarded[activeQuestion.id])return;
+  if(team!=='none')game.scores[team]+=activeQuestion.value;
+  game.awarded[activeQuestion.id]=team;
+  $('awardA').disabled=true;$('awardB').disabled=true;$('noScore').disabled=true;
+  $('modalResultMessage').textContent=team==='none'?'Question completed without points.':`${activeQuestion.value} points awarded to ${game.names[team]}.`;
+  updateScoreboard();saveGame();
+}
+function closeQuestion(){stopTimer();$('questionModal').hidden=true;document.body.style.overflow='';activeQuestion=null;if(lastFocus&&lastFocus.isConnected)lastFocus.focus();}
+function resetGame(){
+  if(!window.confirm('Reset the Jeopardy board and both team scores?'))return;
+  game.played={};game.awarded={};game.scores={A:0,B:0};populateBoard();updateScoreboard();saveGame();
+}
+
+/* ===================== FOURIER SERIES ===================== */
+const TWO_PI=2*Math.PI;
+const coefficientFor = (a0, a, b)=>({a0,a,b});
+const functions={
+  linear:{name:'Sawtooth',formula:String.raw`f(x)=x,\quad -\pi<x<\pi`,description:'Odd function: only sine terms appear. Notice the jump at ±π.',
+    insight:'An odd function has zero cosine coefficients. Increasing N sharpens the sawtooth, but overshoot remains near the jump.',
+    f:x=>x, c:coefficientFor(0,()=>0,n=>2*(n%2===1?1:-1)/n),
+    sum:N=>String.raw`S_{${N}}(x)=2\sum_{n=1}^{${N}}\frac{(-1)^{n+1}}{n}\sin(nx)`,
+    coeff:String.raw`a_0=0,\quad a_n=0,\quad b_n=\frac{2(-1)^{n+1}}{n}`},
+  quadratic:{name:'Parabola',formula:String.raw`f(x)=x^2,\quad -\pi\le x\le\pi`,description:'Even function: the approximation consists of cosine terms and a constant.',
+    insight:'For an even function, all sine coefficients vanish. The cosine coefficients decay as 1/n², giving relatively fast convergence.',
+    f:x=>x*x,c:coefficientFor(2*Math.PI*Math.PI/3,n=>4*(n%2===0?1:-1)/(n*n),()=>0),
+    sum:N=>String.raw`S_{${N}}(x)=\frac{\pi^2}{3}+4\sum_{n=1}^{${N}}\frac{(-1)^n}{n^2}\cos(nx)`,
+    coeff:String.raw`a_0=\frac{2\pi^2}{3},\quad a_n=\frac{4(-1)^n}{n^2},\quad b_n=0`},
+  absolute:{name:'Absolute value',formula:String.raw`f(x)=\lvert x\rvert,\quad -\pi\le x\le\pi`,description:'Even function: only odd-indexed cosine harmonics are nonzero.',
+    insight:'The V-shaped function is even, so it uses cosines and a constant term. The corners become sharper as more terms are added.',
+    f:x=>Math.abs(x),c:coefficientFor(Math.PI,n=>n%2===1?-4/(Math.PI*n*n):0,()=>0),
+    sum:N=>String.raw`S_{${N}}(x)=\frac{\pi}{2}-\frac{4}{\pi}\sum_{k=0}^{${Math.floor((N-1)/2)}}\frac{\cos((2k+1)x)}{(2k+1)^2}`,
+    coeff:String.raw`a_0=\pi,\quad a_n=\frac{2\big((-1)^n-1\big)}{\pi n^2},\quad b_n=0`},
+  square:{name:'Square wave',formula:String.raw`f(x)=\begin{cases}-1,&-\pi<x<0,\\1,&0<x<\pi,\end{cases}`,description:'Odd, discontinuous function: only odd sine harmonics are present.',
+    insight:'At each jump, the Fourier sum approaches the midpoint value 0. Oscillatory overshoot near the jumps is the Gibbs phenomenon.',
+    f:x=>x>0?1:x<0?-1:0,c:coefficientFor(0,()=>0,n=>n%2===1?4/(Math.PI*n):0),
+    sum:N=>String.raw`S_{${N}}(x)=\frac{4}{\pi}\sum_{k=0}^{${Math.floor((N-1)/2)}}\frac{\sin((2k+1)x)}{2k+1}`,
+    coeff:String.raw`a_0=0,\quad a_n=0,\quad b_n=\begin{cases}\dfrac{4}{\pi n},&n\text{ odd},\\0,&n\text{ even}.\end{cases}`},
+  rectified:{name:'Rectified sine',formula:String.raw`f(x)=\max(0,\sin x)`,description:'A positive half-wave: sine and cosine terms are both needed.',
+    insight:'This function is neither even nor odd. The Fourier series combines a constant, a sine term, and even-indexed cosine terms. Toggle each contribution to see how they add together.',
+    f:x=>Math.max(0,Math.sin(x)),c:coefficientFor(2/Math.PI,n=>n%2===0?-2/(Math.PI*(n*n-1)):0,n=>n===1?.5:0),
+    sum:N=>N===1?String.raw`S_1(x)=\frac{1}{\pi}+\frac{1}{2}\sin x`:String.raw`S_{${N}}(x)=\frac{1}{\pi}+\frac{1}{2}\sin x-\frac{2}{\pi}\sum_{k=1}^{${Math.floor(N/2)}}\frac{\cos(2kx)}{4k^2-1}`,
+    coeff:String.raw`\begin{aligned}a_0&=\frac{2}{\pi},\\ a_n&=\begin{cases}-\dfrac{2}{\pi(n^2-1)},&n\text{ even},\\0,&n\text{ odd},\end{cases}\\ b_n&=\begin{cases}\dfrac12,&n=1,\\0,&n\ne1.\end{cases}\end{aligned}`},
+  mixed:{name:'Mixed harmonics',formula:String.raw`f(x)=\sin x+\frac12\cos(2x)`,description:'Exactly one sine and one cosine harmonic: reconstruction is exact at N = 2.',
+    insight:'This function contains aₙ and bₙ terms. One harmonic reconstructs the sine only; two harmonics reconstruct the entire function exactly.',
+    f:x=>Math.sin(x)+.5*Math.cos(2*x),c:coefficientFor(0,n=>n===2?.5:0,n=>n===1?1:0),
+    sum:N=>N===1?String.raw`S_1(x)=\sin x`:String.raw`S_{${N}}(x)=\sin x+\frac12\cos(2x)`,
+    coeff:String.raw`a_0=0,\quad a_n=\begin{cases}\frac12,&n=2,\\0,&n\ne2,\end{cases}\quad b_n=\begin{cases}1,&n=1,\\0,&n\ne1.\end{cases}`}
+};
+const fourier={key:'rectified',N:5,periods:2,cos:false,sin:false,playing:false,animation:null};
+function wrapped(x){return ((x+Math.PI)%TWO_PI+TWO_PI)%TWO_PI-Math.PI;}
+function source(x){return functions[fourier.key].f(wrapped(x));}
+function values(x){
+  const c=functions[fourier.key].c;
+  let cos=c.a0/2, sin=0;
+  for(let n=1;n<=fourier.N;n++){
+    const a=c.a(n),b=c.b(n);
+    if(a)cos+=a*Math.cos(n*x);
+    if(b)sin+=b*Math.sin(n*x);
+  }
+  return {cos,sin,full:cos+sin};
+}
+function rmse(){let e=0;const count=1001;for(let k=0;k<count;k++){const x=-Math.PI+(k+.5)/count*TWO_PI;const d=source(x)-values(x).full;e+=d*d;}return Math.sqrt(e/count);}
+function renderFourierText(){
+  const f=functions[fourier.key];
+  $('functionDescription').textContent=f.description;
+  $('insightText').textContent=f.insight;
+  $('termValue').textContent=String(fourier.N);
+  $('termSlider').value=String(fourier.N);
+  $('graphN').textContent=`1–${fourier.N}`;
+  $('errorValue').textContent=rmse().toFixed(3);
+  setMath('functionFormula',f.formula);
+  setMath('partialSumMath',f.sum(fourier.N));
+  setMath('coefficientsMath',f.coeff);
+  $('cosLegend').hidden=!fourier.cos;
+  $('sinLegend').hidden=!fourier.sin;
+}
+function getCanvasContext(canvas){
+  const box=canvas.getBoundingClientRect();
+  if(box.width<1||box.height<1)return null;
+  const dpr=Math.min(window.devicePixelRatio||1,2.5);
+  canvas.width=Math.max(1,Math.round(box.width*dpr));
+  canvas.height=Math.max(1,Math.round(box.height*dpr));
+  const ctx=canvas.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx,w:box.width,h:box.height};
+}
+function drawFourierGraph(){
+  const obj=getCanvasContext($('fourierCanvas'));if(!obj)return;
+  const {ctx,w,h}=obj;
+  const pad={l:w<480?41:55,r:16,t:21,b:39};
+  const plotW=w-pad.l-pad.r,plotH=h-pad.t-pad.b;
+  const xMin=-Math.PI*fourier.periods,xMax=Math.PI*fourier.periods;
+  const arr=[];
+  for(let i=0;i<=600;i++){
+    const x=xMin+(xMax-xMin)*i/600;
+    const v=values(x);
+    arr.push(source(x),v.full);
+    if(fourier.cos)arr.push(v.cos);
+    if(fourier.sin)arr.push(v.sin);
+  }
+  let yLo=Math.min(0,...arr),yHi=Math.max(0,...arr);
+  const delta=Math.max(yHi-yLo,.6),padd=delta*.16;yLo-=padd;yHi+=padd;
+  const xPx=x=>pad.l+(x-xMin)/(xMax-xMin)*plotW;
+  const yPx=y=>pad.t+(yHi-y)/(yHi-yLo)*plotH;
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle='#0e182c';ctx.fillRect(pad.l,pad.t,plotW,plotH);
+  const xticks=[];
+  if(fourier.periods===2)xticks.push([-2*Math.PI,'−2π'],[-Math.PI,'−π'],[0,'0'],[Math.PI,'π'],[2*Math.PI,'2π']);
+  else xticks.push([-Math.PI,'−π'],[-Math.PI/2,'−π/2'],[0,'0'],[Math.PI/2,'π/2'],[Math.PI,'π']);
+  ctx.font='11px ui-sans-serif,Arial';ctx.textBaseline='top';ctx.textAlign='center';
+  xticks.forEach(([x,label])=>{
+    const px=xPx(x);ctx.strokeStyle=(x===0?'#657896':'#283650');ctx.lineWidth=x===0?1.3:1;
+    ctx.beginPath();ctx.moveTo(px,pad.t);ctx.lineTo(px,pad.t+plotH);ctx.stroke();
+    ctx.fillStyle='#9faed1';ctx.fillText(label,px,h-28);
+  });
+  const yStep=niceStep((yHi-yLo)/5);
+  const yStart=Math.ceil(yLo/yStep)*yStep;
+  ctx.textAlign='right';ctx.textBaseline='middle';
+  for(let y=yStart;y<=yHi+.00001;y+=yStep){
+    const py=yPx(y);ctx.beginPath();ctx.strokeStyle=Math.abs(y)<1e-8?'#647795':'#283650';ctx.lineWidth=Math.abs(y)<1e-8?1.4:1;
+    ctx.moveTo(pad.l,py);ctx.lineTo(pad.l+plotW,py);ctx.stroke();
+    ctx.fillStyle='#8e9ebf';ctx.fillText(formatTick(y),pad.l-9,py);
+  }
+  const drawLine=(fn,color,width,dash=[],hasJumps=false)=>{
+    ctx.beginPath();ctx.lineWidth=width;ctx.lineJoin='round';ctx.lineCap='round';ctx.strokeStyle=color;ctx.setLineDash(dash);
+    const count=Math.max(900,Math.round(w*2.1));let previous=null;
+    for(let i=0;i<=count;i++){
+      const x=xMin+(xMax-xMin)*i/count;
+      const y=fn(x);const px=xPx(x),py=yPx(y);
+      if(i===0||(hasJumps&&previous!==null&&Math.abs(y-previous)>(yHi-yLo)*.29))ctx.moveTo(px,py);
+      else ctx.lineTo(px,py);
+      previous=y;
+    }
+    ctx.stroke();ctx.setLineDash([]);
+  };
+  drawLine(source,'#8e9ab4',2.5,[6,6],fourier.key==='linear'||fourier.key==='square');
+  if(fourier.cos)drawLine(x=>values(x).cos,'#b49dff',1.9,[3,5]);
+  if(fourier.sin)drawLine(x=>values(x).sin,'#66e0c8',1.9,[3,5]);
+  drawLine(x=>values(x).full,'#ffb26b',3.15);
+  ctx.fillStyle='#9caed3';ctx.font='11px ui-sans-serif,Arial';ctx.textAlign='right';ctx.textBaseline='top';
+  ctx.fillText('x',w-10,h-29);
+}
+function niceStep(value){const exp=Math.floor(Math.log10(value));const scaled=value/10**exp;const step=scaled<1.5?1:scaled<3?2:scaled<7?5:10;return step*10**exp;}
+function formatTick(v){if(Math.abs(v)<.000001)return '0';return Math.abs(v)>=10?String(Math.round(v)):Number(v.toFixed(1)).toString();}
+function drawCoefficientGraph(){
+  const obj=getCanvasContext($('coeffCanvas'));if(!obj)return;
+  const {ctx,w,h}=obj;const c=functions[fourier.key].c;
+  const pl=w<480?24:38,pr=9,pt=19,pb=27;
+  const chartW=w-pl-pr, chartH=h-pt-pb;
+  ctx.clearRect(0,0,w,h);
+  const coeffs=[];for(let n=1;n<=12;n++)coeffs.push(c.a(n),c.b(n));
+  const bound=Math.max(.12,...coeffs.map(Math.abs));
+  const zeroY=pt+chartH/2;
+  for(const yfrac of [.1,.5,.9]){
+    const y=pt+yfrac*chartH;ctx.strokeStyle=yfrac===.5?'#687b9e':'#2b3953';ctx.lineWidth=yfrac===.5?1.3:1;ctx.beginPath();ctx.moveTo(pl,y);ctx.lineTo(w-pr,y);ctx.stroke();
+  }
+  ctx.fillStyle='#899cbb';ctx.font='10px ui-sans-serif,Arial';ctx.textAlign='right';ctx.textBaseline='middle';
+  ctx.fillText(`+${formatTick(bound)}`,pl-7,pt+7);
+  ctx.fillText('0',pl-7,zeroY);ctx.fillText(`−${formatTick(bound)}`,pl-7,pt+chartH-5);
+  const groupW=chartW/12;const barW=Math.max(3,Math.min(10,groupW*.26));
+  for(let n=1;n<=12;n++){
+    const center=pl+(n-.5)*groupW, a=c.a(n),b=c.b(n);
+    const inactive=n>fourier.N;
+    const draw=(v,centerX,color)=>{
+      if(Math.abs(v)<1e-10)return;
+      const length=Math.abs(v)/bound*(chartH*.42);
+      ctx.globalAlpha=inactive?.2:1;
+      ctx.fillStyle=color;
+      ctx.fillRect(centerX-barW/2,v>=0?zeroY-length:zeroY,barW,length);
+      ctx.globalAlpha=1;
+    };
+    draw(a,center-barW*.62,'#b49dff');draw(b,center+barW*.62,'#66e0c8');
+    ctx.textAlign='center';ctx.textBaseline='top';ctx.fillStyle=inactive?'#5b6b8b':'#b0bee0';ctx.font='10px ui-sans-serif,Arial';ctx.fillText(String(n),center,h-19);
+  }
+}
+function redrawFourier(){drawFourierGraph();drawCoefficientGraph();}
+function updateFourier(){renderFourierText();redrawFourier();}
+function setN(value){fourier.N=Math.max(1,Math.min(30,Number(value)));updateFourier();}
+function stopAnimation(){if(fourier.animation)clearInterval(fourier.animation);fourier.animation=null;fourier.playing=false;$('playGlyph').textContent='▶';$('playText').textContent='Animate terms';}
+function toggleAnimation(){
+  if(fourier.playing){stopAnimation();return;}
+  fourier.playing=true;$('playGlyph').textContent='Ⅱ';$('playText').textContent='Pause animation';
+  if(fourier.N>=30)setN(1);
+  fourier.animation=setInterval(()=>{if(fourier.N>=30){stopAnimation();return;}setN(fourier.N+1);},800);
+}
+
+/* ===================== NAVIGATION AND INITIALIZATION ===================== */
+function switchView(view){
+  if(view!=='jeopardy'&&view!=='fourier')view='jeopardy';
+  const fourierVisible=view==='fourier';
+  $('jeopardyView').hidden=fourierVisible;$('fourierView').hidden=!fourierVisible;
+  $('tabJeopardy').classList.toggle('active',!fourierVisible);
+  $('tabFourier').classList.toggle('active',fourierVisible);
+  $('tabJeopardy').setAttribute('aria-selected',String(!fourierVisible));
+  $('tabFourier').setAttribute('aria-selected',String(fourierVisible));
+  if(!fourierVisible)stopAnimation();
+  else requestAnimationFrame(()=>{updateFourier();});
+  if(location.hash!==`#${view}`)history.replaceState(null,'',`#${view}`);
+}
+function init(){
+  populateBoard();updateScoreboard();
+  $('timerDuration').value=String(game.duration);
+  $('soundToggle').textContent=game.sound?'♪ Sound on':'♪ Sound off';
+  $('soundToggle').setAttribute('aria-pressed',String(game.sound));
+  document.querySelectorAll('[data-adjust]').forEach(button=>button.addEventListener('click',()=>{
+    const [team,value]=button.dataset.adjust.split(':');adjustScore(team,Number(value));
+  }));
+  ['A','B'].forEach(team=>$(`team${team}Name`).addEventListener('input',e=>{
+    game.names[team]=e.target.value.trim()||`Team ${team}`;
+    $(`award${team}`).textContent=`+ ${game.names[team]}`;saveGame();
+  }));
+  $('timerDuration').addEventListener('change',e=>{game.duration=Number(e.target.value);saveGame();});
+  $('soundToggle').addEventListener('click',()=>{
+    game.sound=!game.sound;$('soundToggle').textContent=game.sound?'♪ Sound on':'♪ Sound off';
+    $('soundToggle').setAttribute('aria-pressed',String(game.sound));saveGame();
+  });
+  $('resetGame').addEventListener('click',resetGame);
+  $('closeQuestion').addEventListener('click',closeQuestion);
+  $('backBoard').addEventListener('click',closeQuestion);
+  $('pauseTimer').addEventListener('click',pauseTimer);
+  $('restartTimer').addEventListener('click',restartTimer);
+  $('revealAnswer').addEventListener('click',revealAnswer);
+  $('awardA').addEventListener('click',()=>awardCurrent('A'));
+  $('awardB').addEventListener('click',()=>awardCurrent('B'));
+  $('noScore').addEventListener('click',()=>awardCurrent('none'));
+  $('questionModal').addEventListener('click',e=>{if(e.target===$('questionModal'))closeQuestion();});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('questionModal').hidden)closeQuestion();});
+  document.querySelectorAll('.nav-tab').forEach(button=>button.addEventListener('click',()=>switchView(button.dataset.view)));
+  $('functionSelect').value=fourier.key;
+  $('functionSelect').addEventListener('change',e=>{stopAnimation();fourier.key=e.target.value;updateFourier();});
+  $('termSlider').addEventListener('input',e=>{stopAnimation();setN(e.target.value);});
+  $('animateButton').addEventListener('click',toggleAnimation);
+  $('resetTerms').addEventListener('click',()=>{stopAnimation();setN(1);});
+  $('showCosine').addEventListener('change',e=>{fourier.cos=e.target.checked;updateFourier();});
+  $('showSine').addEventListener('change',e=>{fourier.sin=e.target.checked;updateFourier();});
+  document.querySelectorAll('[data-range]').forEach(button=>button.addEventListener('click',()=>{
+    fourier.periods=button.dataset.range==='one'?1:2;
+    document.querySelectorAll('[data-range]').forEach(b=>b.classList.toggle('selected',b===button));redrawFourier();
+  }));
+  if('ResizeObserver' in window) {
+    const obs=new ResizeObserver(()=>{if(!$('fourierView').hidden)redrawFourier();});
+    obs.observe($('fourierCanvas'));obs.observe($('coeffCanvas'));
+  } else window.addEventListener('resize',()=>{if(!$('fourierView').hidden)redrawFourier();});
+  window.addEventListener('hashchange',()=>switchView(location.hash==='#fourier'?'fourier':'jeopardy'));
+  switchView(location.hash==='#fourier'?'fourier':'jeopardy');
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+</script>
+</body>
+</html>
