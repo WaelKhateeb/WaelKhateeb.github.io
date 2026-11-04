@@ -3,93 +3,74 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f5f7fb">
-  <meta name="description" content="ProofLab — a browser-only Tiptap mathematics writing-process and assessment demo.">
-  <title>ProofLab · Writing Process Studio</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css">
-  <link rel="stylesheet" href="./styles.css?v=1">
+  <meta name="theme-color" content="#f5f6f8">
+  <meta name="description" content="A simple Tiptap writing workspace with live activity tracking and session replay.">
+  <title>ProofLab · Writing workspace</title>
+  <link rel="stylesheet" href="./styles.css?v=2">
 </head>
 <body>
-  <div class="app">
-    <header class="topbar">
-      <div class="brand"><a class="brand-icon" href="https://waelkhateeb.github.io/" title="Back to academic website">∑</a><div><div class="brand-name">ProofLab<span class="brand-dot">.</span></div><div class="brand-sub">WRITING PROCESS STUDIO</div></div></div>
-      <div class="header-right"><span class="env-pill"><span class="dot"></span> Interactive prototype</span><a class="home-link" href="https://waelkhateeb.github.io/">Academic homepage <span aria-hidden="true">↗</span></a></div>
-    </header>
-    <div class="page-width">
-      <section class="hero">
-        <div class="hero-copy">
-          <div class="eyebrow"><span class="eyebrow-rule"></span> ASSESSMENT REIMAGINED <span class="version">V 1.0 DEMO</span></div>
-          <h1>See the thinking<br><em>behind the answer.</em></h1>
-          <p>Write a mathematics solution in a real Tiptap editor. Explore how revisions, pauses, and pasted content become an inspectable record of the process.</p>
-          <div class="hero-notes"><span><span class="mini-check">✓</span> Real Tiptap editor</span><span><span class="mini-check">✓</span> Session replay</span><span><span class="mini-check">✓</span> Private to this browser</span></div>
+  <header class="topbar">
+    <a class="brand" href="https://waelkhateeb.github.io/" aria-label="ProofLab — back to homepage"><span class="brand-mark" aria-hidden="true">p.</span><span>ProofLab<span class="brand-description">Writing process demo</span></span></a>
+    <div class="header-actions"><button type="button" id="exportBtn" class="button quiet" disabled>Export session</button><button type="button" id="resetBtn" class="button quiet" disabled>New session</button></div>
+  </header>
+  <main class="workspace">
+    <div class="page-heading"><div><p class="eyebrow">ENGLISH · WRITING PRACTICE</p><h1>Writing workspace</h1></div><div class="view-switch" role="group" aria-label="Workspace view"><button id="writeTab" type="button" aria-pressed="true" class="active">Write</button><button id="replayTab" type="button" aria-pressed="false">Replay</button></div></div>
+    <div class="layout">
+      <section id="writeView" class="panel writing-panel" aria-labelledby="questionTitle">
+        <div class="question"><div class="question-meta"><span class="eyebrow">YOUR QUESTION</span><span>100–150 words</span></div><h2 id="questionTitle">Should university students be required to attend every class?</h2><p>Give your opinion and support it with two reasons or examples.</p></div>
+        <div class="editor-heading"><h3>Your answer</h3><span id="editorStatus" role="status">Loading editor…</span></div>
+        <div class="toolbar" role="toolbar" aria-label="Answer formatting">
+          <button type="button" data-command="bold" title="Bold (Ctrl+B)" aria-label="Bold" aria-pressed="false" disabled><strong>B</strong></button>
+          <button type="button" data-command="italic" title="Italic (Ctrl+I)" aria-label="Italic" aria-pressed="false" disabled><em>I</em></button>
+          <span class="tool-divider"></span>
+          <button type="button" data-command="bulletList" title="Bulleted list" aria-label="Bulleted list" aria-pressed="false" disabled>☷</button>
+          <button type="button" data-command="orderedList" title="Numbered list" aria-label="Numbered list" aria-pressed="false" disabled>1.</button>
+          <span class="tool-divider"></span>
+          <button id="equationBtn" type="button" class="equation-button" title="Insert an equation" disabled><span aria-hidden="true">∑</span> Equation</button>
+          <span class="toolbar-space"></span>
+          <button type="button" data-command="undo" title="Undo (Ctrl+Z)" aria-label="Undo" disabled>↶</button>
+          <button type="button" data-command="redo" title="Redo (Ctrl+Shift+Z)" aria-label="Redo" disabled>↷</button>
         </div>
-        <div class="hero-art" aria-hidden="true"><div class="art-orbit orbit-1"></div><div class="art-orbit orbit-2"></div><div class="art-paper"><div class="art-label">PROCESS / 001</div><div class="art-formula">ℒ{y′} + 2ℒ{y} = 6/s</div><div class="art-line long"></div><div class="art-line medium"></div><div class="art-line short"></div><div class="art-pulse"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div><div class="art-floating">↗ &nbsp; Evidence over guesses</div></div>
+        <div id="editor" class="editor-mount" aria-busy="true"></div>
+        <noscript><p class="load-error">Enable JavaScript to use the editor and activity tracking.</p></noscript>
+        <div class="editor-footer"><span><strong id="wordCount">0</strong> words <span class="footer-dot">·</span> <span id="characterCount">0</span> characters</span><span id="wordGuide">Suggested: 100–150 words</span></div>
+        <div class="answer-actions"><span id="submitMessage" role="status">Saved in this tab as you write.</span><button id="finishBtn" class="button primary" type="button" disabled>Finish attempt <span aria-hidden="true">↗</span></button></div>
       </section>
-      <div class="workspace-heading"><div><div class="section-overline">THE SANDBOX</div><h2>Try the assessment</h2></div><div class="view-switch" role="group" aria-label="Select workspace view"><button class="switch-btn active" id="studentTab" type="button" aria-pressed="true"><span class="switch-icon">✎</span> Student workspace</button><button class="switch-btn" id="instructorTab" type="button" aria-pressed="false"><span class="switch-icon">▥</span> Instructor insights</button></div></div>
-      <section class="privacy-notice"><span class="privacy-icon">◈</span><div><strong>Sandbox mode — no server or AI detector.</strong> Events are tracked in this browser session. Export data if you wish to keep it. A writing pattern is not proof of AI use.</div><span class="notice-end">LOCAL SESSION ONLY</span></section>
-      <section id="studentView" class="view">
-        <div class="student-layout">
-          <aside class="panel question-panel">
-            <div class="panel-header"><span class="panel-kicker">01 / ASSIGNMENT</span><span class="small-tag">MA102 · PRACTICE</span></div>
-            <div class="question-number">QUESTION 01 <span>•</span> 20 MIN SUGGESTED</div>
-            <h3>Laplace transforms</h3>
-            <div class="question-body"><p>Solve the initial value problem using the Laplace transform method:</p><div class="math-surface"><div class="display-math" data-latex="y'(t)+2y(t)=6"></div><div class="display-math" data-latex="y(0)=1"></div></div><p>Show your main steps, obtain <span class="inline-math" data-latex="y(t)"></span>, and compute <span class="inline-math" data-latex="y(1)"></span> to three decimal places.</p></div>
-            <div class="question-divider"></div>
-            <div class="expectations"><h4>What to demonstrate</h4><div class="expectation"><span class="step-symbol">1</span> Apply the Laplace transform</div><div class="expectation"><span class="step-symbol">2</span> Isolate the transformed function</div><div class="expectation"><span class="step-symbol">3</span> Apply the inverse transform</div><div class="expectation"><span class="step-symbol">4</span> Evaluate the numerical checkpoint</div></div>
-            <div class="question-hint"><span>◎</span><div><strong>Experiment freely.</strong><br>Try typing, correcting an equation, pasting a passage, and then inspecting the replay.</div></div>
-          </aside>
-          <section class="panel editor-panel">
-            <div class="panel-header"><span class="panel-kicker">02 / YOUR WORKSPACE</span><span class="save-state"><span class="status-led"></span><span id="editorStatus">Editor loading...</span></span></div>
-            <div class="editor-title"><h3>Your solution</h3><div class="session-clock"><span>◷</span> <span id="elapsed">00:00</span></div></div>
-            <div class="toolbar" aria-label="Text formatting">
-              <button type="button" class="tool-btn bold-btn" data-command="bold" title="Bold" aria-label="Bold"><strong>B</strong></button>
-              <button type="button" class="tool-btn italic-btn" data-command="italic" title="Italic" aria-label="Italic"><em>I</em></button>
-              <span class="tool-divider"></span>
-              <button type="button" class="tool-btn" data-command="bullet" title="Bulleted list" aria-label="Bulleted list">☷</button>
-              <button type="button" class="tool-btn ordered" data-command="ordered" title="Numbered list" aria-label="Numbered list">1.</button>
-              <span class="tool-divider"></span>
-              <button type="button" class="tool-btn eq-btn" id="equationBtn" title="Insert LaTeX equation"><span class="sigma">∑</span><span class="eq-label"> Equation</span></button>
-              <span class="toolbar-spacer"></span>
-              <button type="button" class="tool-btn" data-command="undo" title="Undo" aria-label="Undo">↶</button>
-              <button type="button" class="tool-btn" data-command="redo" title="Redo" aria-label="Redo">↷</button>
-            </div>
-            <div id="editor" class="editor-mount"><p class="editor-placeholder">Loading editor…</p></div>
-            <div class="editor-bottom"><span><span id="wordCount">0</span> words</span><span>Powered by <strong>Tiptap</strong></span></div>
-            <div class="checkpoint"><div class="checkpoint-top"><div><div class="panel-kicker">NUMERICAL CHECKPOINT</div><h4>What is <span class="inline-math" data-latex="y(1)"></span>?</h4></div><span class="checkpoint-weight">AUTO-CHECK</span></div><div class="check-row"><label class="sr-only" for="numericAnswer">Numerical answer for y(1)</label><input id="numericAnswer" inputmode="decimal" type="text" placeholder="Enter your answer, e.g. 2.729"><button id="checkAnswer" type="button" class="btn secondary">Check answer <span>↗</span></button></div><div class="check-feedback" id="checkFeedback" aria-live="polite">Enter a value to test the numerical checkpoint. The full mathematical derivation is not automatically graded.</div></div>
-            <div class="editor-actions"><button id="submitBtn" type="button" class="btn primary">Submit practice attempt <span>↗</span></button><button id="exportBtn" type="button" class="btn ghost">↓ Export event log</button></div><div id="submitMessage" class="submit-message" aria-live="polite"></div>
-          </section>
-          <aside class="live-rail"><div class="rail-title"><div><div class="panel-kicker">03 / PROCESS MONITOR</div><h3>Live activity</h3></div><span class="live-indicator"><span class="dot"></span> LIVE</span></div>
-            <div class="stat-grid"><div class="stat-card"><span class="stat-icon">⌨</span><div id="statTyped" class="stat-value">0</div><div class="stat-label">Typed characters</div></div><div class="stat-card"><span class="stat-icon">⧉</span><div id="statPastes" class="stat-value">0</div><div class="stat-label">Paste events</div></div><div class="stat-card"><span class="stat-icon">↺</span><div id="statRevisions" class="stat-value">0</div><div class="stat-label">Edit transactions</div></div><div class="stat-card"><span class="stat-icon">◷</span><div id="statPauses" class="stat-value">0</div><div class="stat-label">Pauses ≥ 5 sec</div></div></div>
-            <div class="activity-card"><div class="activity-head"><h4>Activity stream</h4><span id="eventTotal">0 events</span></div><div id="activityList" class="activity-list"><div class="empty-state"><span>◎</span><p>Activity will appear here as you write.</p></div></div></div>
-            <div class="live-tip"><span>ⓘ</span><p>These are <strong>observations</strong>, not an AI-detection score. A student can type prepared text manually or paste work they wrote themselves.</p></div>
-          </aside>
-        </div>
+      <section id="replayView" class="panel replay-panel" aria-labelledby="replayTitle" hidden>
+        <div class="replay-heading"><div><p class="eyebrow">SESSION HISTORY</p><h2 id="replayTitle">Watch your answer develop</h2></div><span id="revisionCount" class="muted">0 revisions</span></div>
+        <div class="replay-position"><span id="replayLabel">Initial state</span><time id="replayTime">00:00</time></div>
+        <div id="replayBody" class="replay-body"><p class="empty">Start writing to build a replay.</p></div>
+        <div class="replay-controls"><button id="playReplay" type="button" class="button primary" aria-label="Play replay" disabled>Play</button><label for="replaySlider" class="sr-only">Writing history position</label><input type="range" id="replaySlider" min="0" max="0" value="0" step="1" disabled><span id="replayStep">0 / 0</span></div>
+        <p class="replay-note">Includes typing, deletions, formatting, equations, and undo/redo.</p>
       </section>
-      <section id="instructorView" class="view hidden">
-        <div class="instructor-overview">
-          <div><div class="panel-kicker">INSTRUCTOR / SESSION ANALYSIS</div><h3>Writing process report</h3><p>Explore evidence from the same student session without reducing it to a misleading “AI percentage.”</p></div>
-          <div class="report-actions"><span id="submissionBadge" class="review-badge">DRAFT IN PROGRESS</span><button id="reportExportBtn" type="button" class="btn secondary">↓ Export JSON</button></div>
+      <aside class="panel activity-panel" aria-labelledby="activityTitle">
+        <div class="activity-heading"><h2 id="activityTitle">Live activity</h2><span class="status-indicator" id="trackingIndicator"><span></span><span id="trackingStatus">Connecting</span></span></div>
+        <div class="session-line"><span id="activityStatus">Ready when you are</span><time id="elapsed">00:00</time></div>
+        <div class="stats">
+          <div class="stat"><strong id="statTyped">0</strong><span>Typed characters</span><small><span id="statSpaces">0</span> spaces included</small></div>
+          <div class="stat"><strong id="statBackspaces">0</strong><span>Backspace presses</span><small><span id="statDeleted">0</span> characters deleted*</small></div>
+          <div class="stat"><strong id="statPastes">0</strong><span>Paste events</span><small><span id="statPasted">0</span> characters pasted</small></div>
+          <div class="stat"><strong id="statPauses">0</strong><span>Pauses ≥ 5 sec</span><small>While the editor is focused</small></div>
         </div>
-        <div class="report-metrics"><div class="report-metric"><span>ELAPSED TIME</span><strong id="reportTime">00:00</strong><small>Since first visit</small></div><div class="report-metric"><span>EDIT TRANSACTIONS</span><strong id="reportEdits">0</strong><small>Document changes</small></div><div class="report-metric"><span>PASTED CHARACTERS</span><strong id="reportPasteChars">0</strong><small>Inserted via paste events</small></div><div class="report-metric"><span>FOCUS CHANGES</span><strong id="reportFocus">0</strong><small>Editor focus / blur</small></div></div>
-        <div class="report-layout">
-          <div class="report-main">
-            <section class="panel replay-panel"><div class="report-panel-head"><div><div class="panel-kicker">EVIDENCE / 01</div><h3>Document evolution</h3></div><span class="small-tag">REPLAY</span></div><div class="replay-screen"><div class="replay-head"><span><span class="replay-light"></span> Version <b id="replayVersion">0</b> of <b id="replayTotal">0</b></span><span id="replayTimestamp">Initial state</span></div><div class="replay-body" id="replayBody"><span class="replay-empty">The writing history will appear here.</span></div></div><div class="replay-controls"><button type="button" id="playReplay" class="play-btn" aria-label="Play replay">▶</button><label for="replaySlider" class="sr-only">Writing history position</label><input type="range" id="replaySlider" min="0" max="0" step="1" value="0"><span id="replayStepLabel">0 / 0</span></div><p class="panel-footnote">Replay shows content snapshots captured at each document-changing transaction. Undo, formatting, and mathematical insertions can also appear as revisions.</p></section>
-            <section class="panel timeline-panel"><div class="report-panel-head"><div><div class="panel-kicker">EVIDENCE / 02</div><h3>Event timeline</h3></div><span id="timelineCount" class="small-tag">0 EVENTS</span></div><div id="timelineList" class="timeline-list"><div class="empty-state"><span>⌁</span><p>Start typing in the student workspace to build the timeline.</p></div></div></section>
-          </div>
-          <aside class="report-aside">
-            <section class="panel summary-panel"><div class="panel-kicker">INTERPRETATION</div><h3>What can we infer?</h3><div class="insight-row"><span class="insight-icon blue">◎</span><div><strong id="insightSummary">No writing yet</strong><p id="insightDescription">Return to the student workspace and write a solution to generate evidence.</p></div></div><div class="interpretation-warning"><strong>Not proof of AI use.</strong> Pasting, long pauses, and polished writing each have legitimate explanations. Investigate context before drawing conclusions.</div></section>
-            <section class="panel rubric-panel"><div class="panel-kicker">MANUAL GRADING DEMO</div><h3>Instructor rubric</h3><p>Select criteria demonstrated by the student's work. This is a manual scoring interface, not an AI grader.</p><label class="rubric-item"><input type="checkbox" class="rubric-check" data-points="25"><span>Correct Laplace transform</span><b>25</b></label><label class="rubric-item"><input type="checkbox" class="rubric-check" data-points="25"><span>Correct solution for Y(s)</span><b>25</b></label><label class="rubric-item"><input type="checkbox" class="rubric-check" data-points="25"><span>Correct inverse transform</span><b>25</b></label><label class="rubric-item"><input type="checkbox" class="rubric-check" data-points="25"><span>Correct evaluation of y(1)</span><b>25</b></label><div class="rubric-score"><div><span>Assigned score</span><strong><span id="rubricScore">0</span><small> / 100</small></strong></div><div class="score-track"><div id="rubricTrack"></div></div></div></section>
-            <section class="side-explain"><span class="small-kicker">ABOUT THIS PROTOTYPE</span><p>No actual student identities, model-based AI judgments, or remote storage. Browser-local telemetry is a prototype for responsible, instructor-reviewed evidence gathering.</p><button type="button" class="reset-link" id="resetBtn">↺ Reset demo session</button></section>
-          </aside>
-        </div>
-      </section>
-      <footer class="footer"><div><strong>ProofLab.</strong> <span>Experimental learning technology</span></div><span>Designed as a demonstration of process-aware assessment · <a href="https://waelkhateeb.github.io/">Wael El Khateeb</a></span></footer>
+        <div class="stream-heading"><h3>Recent activity</h3><span id="eventTotal">0 events</span></div>
+        <ol id="activityList" class="activity-list"><li class="empty">Type, make a correction, or paste a sentence to see it here.</li></ol>
+        <details class="tracking-details"><summary>Tracking details</summary><p>*Deleted characters include Backspace, Delete, cut, and selected-text replacements. Undo and redo are listed separately.</p><p><span id="statEdits">0</span> document changes · <span id="statFocus">0</span> focus changes</p><p>Typing, spaces, and pasted text are counted from document changes. Counts are cumulative; undo does not subtract them.</p></details>
+      </aside>
     </div>
-  </div>
-  <dialog id="equationDialog" class="equation-dialog"><form method="dialog" id="equationForm"><div class="dialog-head"><div><div class="panel-kicker">MATHEMATICS EDITOR</div><h3>Insert an equation</h3></div><button id="closeEquation" type="button" class="dialog-close" aria-label="Close">×</button></div><p>Enter a LaTeX expression. The preview updates as you type.</p><label for="latexInput" class="field-label">LATEX</label><textarea id="latexInput" rows="3" spellcheck="false" placeholder="e.g. y(t)=3-2e^{-2t}"></textarea><div id="latexPreview" class="latex-preview">Your equation preview</div><div id="latexError" class="latex-error" role="alert"></div><div class="dialog-actions"><button class="btn ghost" value="cancel" type="button" id="cancelEquation">Cancel</button><button type="submit" class="btn primary" id="insertEquation">Insert equation ↗</button></div></form></dialog>
-  <script type="module" src="./app.js?v=1"></script>
+    <footer class="page-footer"><span>Writing activity is stored in this browser tab. Export a copy to keep it.</span><span>Activity patterns alone do not establish AI use.</span></footer>
+  </main>
+  <dialog id="equationDialog" class="equation-dialog" aria-labelledby="equationTitle">
+    <form id="equationForm">
+      <div class="dialog-heading"><h2 id="equationTitle">Insert an equation</h2><button type="button" id="closeEquation" class="close-button" aria-label="Close equation editor">×</button></div>
+      <label for="latexInput">LaTeX expression</label><textarea id="latexInput" rows="3" spellcheck="false" placeholder="e.g. x^2 + y^2 = r^2"></textarea>
+      <div class="equation-examples" aria-label="Equation examples"><button type="button" data-example="\frac{a}{b}">Fraction</button><button type="button" data-example="x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}">Quadratic formula</button><button type="button" data-example="\int_0^1 x^2\,dx=\frac{1}{3}">Integral</button></div>
+      <label class="checkbox-label"><input id="displayEquation" type="checkbox"> Place on its own line</label>
+      <div id="latexPreview" class="equation-preview" aria-label="Equation preview"></div><p id="latexError" class="latex-error" role="status"></p>
+      <p class="equation-hint">Double-click an equation in your answer to edit it.</p>
+      <div class="dialog-actions"><button type="button" id="cancelEquation" class="button quiet">Cancel</button><button type="submit" id="insertEquation" class="button primary" disabled>Insert equation</button></div>
+    </form>
+  </dialog>
+  <dialog id="resetDialog" class="reset-dialog" aria-labelledby="resetTitle"><h2 id="resetTitle">Start a new session?</h2><p>This clears the answer and tracking history in this tab. Export your session first if you want to keep it.</p><form method="dialog" class="dialog-actions"><button value="cancel" class="button quiet">Keep writing</button><button value="reset" class="button primary">Start new session</button></form></dialog>
+  <script type="module" src="./app.js?v=2" onerror="document.getElementById('editorStatus').textContent='Editor could not load. Please refresh.';document.getElementById('trackingStatus').textContent='Offline';document.getElementById('trackingIndicator').classList.add('offline')"></script>
 </body>
 </html>
