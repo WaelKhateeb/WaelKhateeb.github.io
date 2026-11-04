@@ -89,14 +89,14 @@ function renderAssessment() {
   $('aiScore').textContent = result.score === null ? '—' : result.score;
   $('aiScoreLabel').textContent = result.label;
   $('aiScoreExplanation').textContent = result.explanation;
-  $('aiScoreCard').dataset.level = result.score === null ? 'pending' : result.score >= 70 ? 'high' : result.score >= 35 ? 'medium' : 'low';
+  $('aiScoreCard').dataset.level = result.score === null ? 'pending' : result.score <= 30 ? 'high' : result.score <= 65 ? 'medium' : 'low';
   $('aiScoreMeter').value = result.score || 0;
-  $('aiScoreMeter').setAttribute('aria-valuetext', result.score === null ? result.label : `${result.score} out of 100. ${result.label}. Not an AI probability.`);
+  $('aiScoreMeter').setAttribute('aria-valuetext', result.score === null ? result.label : `${result.score} percent human-like activity. ${result.label}. Not an authorship probability.`);
   $('scoreBreakdown').replaceChildren();
   for (const item of result.breakdown) {
     const row = document.createElement('div'); row.className = 'score-rule';
     const name = document.createElement('strong'); name.textContent = item.label;
-    const points = document.createElement('span'); points.textContent = result.score === null ? `— / ${item.maximum}` : `${item.points} / ${item.maximum}`;
+    const points = document.createElement('span'); points.textContent = result.score === null ? `— / ${item.maximum}` : `−${item.points} / ${item.maximum}`;
     const detail = document.createElement('p'); detail.textContent = item.observation;
     row.append(name, points, detail); $('scoreBreakdown').append(row);
   }
@@ -308,7 +308,7 @@ function openEquation(target = null) {
 
 function exportSession() {
   saveSession();
-  const data = { format: 'ProofLab 2.1', prompt: PROMPT, instruction: 'Give your opinion and support it with two reasons or examples. Suggested length: 100–150 words.', disclaimer: 'Experimental process review; no verified inference of AI authorship.', ...session, assessment: assessSession(session, plainText()), exportedAt: new Date().toISOString(), answer: { text: editor.getText(), html: editor.getHTML() } };
+  const data = { format: 'ProofLab 2.2', prompt: PROMPT, instruction: 'Give your opinion and support it with two reasons or examples. Suggested length: 100–150 words.', disclaimer: 'Experimental process review; no verified inference of AI authorship.', ...session, assessment: assessSession(session, plainText()), exportedAt: new Date().toISOString(), answer: { text: editor.getText(), html: editor.getHTML() } };
   const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }));
   const link = document.createElement('a'); link.href = url; link.download = `prooflab-${new Date().toISOString().slice(0, 10)}.json`; link.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);

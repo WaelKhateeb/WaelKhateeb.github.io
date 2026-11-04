@@ -13,49 +13,58 @@ test('blank and short answers receive no numeric score', () => {
   assert.equal(assessSession(s, '').score, null);
   assert.equal(assessSession(s, 'A short answer.').status, 'insufficient');
 });
-test('typed answer with no imports has zero process-review points, not a human verdict', () => {
+test('typed answer with no imports reaches the 100% human-like end without an authorship verdict', () => {
   const result = assessSession(typedSession(), answer);
-  assert.equal(result.score, 0); assert.equal(result.aiAuthorship, 'Undetermined'); assert.equal(result.aiProbability, null);
+  assert.equal(result.score, 100); assert.equal(result.aiAuthorship, 'Undetermined'); assert.equal(result.aiProbability, null);
 });
-test('bulk paste produces a high review score without an AI verdict', () => {
+test('bulk paste reaches the 0% AI-like end without an AI verdict', () => {
   const result = assessSession(pastedSession(), answer);
-  assert.equal(result.score, 100); assert.equal(result.type, 'uncalibrated-heuristic');
+  assert.equal(result.score, 0); assert.equal(result.type, 'uncalibrated-heuristic');
   assert.equal(result.aiAuthorship, 'Undetermined'); assert.equal(result.aiProbability, null);
-  assert.match(result.limitations, /Human-written pasted text can score high/);
+  assert.match(result.limitations, /Human-written pasted text can score low/);
 });
 test('drag/drop is included in the import evidence', () => {
   const session = newSession(); session.events = [{ type: 'drop', inserted: answer }];
-  assert.equal(assessSession(session, answer).score, 100);
+  assert.equal(assessSession(session, answer).score, 0);
 });
 test('revising imported text lowers the revision component and keeps score bounded', () => {
   const session = pastedSession(); session.events.push({ type: 'delete', deleted: answer.slice(0, 150) });
   const result = assessSession(session, answer);
   assert.equal(result.breakdown.find(item => item.key === 'limitedRevision').points, 0);
-  assert.equal(result.score, 85);
+  assert.equal(result.score, 15);
   for (const rule of result.breakdown) assert.ok(rule.points >= 0 && rule.points <= rule.maximum);
 });
 test('edits before a paste do not count as post-import revisions', () => {
   const session = pastedSession(); session.events.unshift({ type: 'delete', deleted: answer });
-  assert.equal(assessSession(session, answer).score, 100);
+  assert.equal(assessSession(session, answer).score, 0);
 });
 test('undo and redo do not manufacture revision evidence', () => {
   const session = pastedSession(); session.events.push({ type: 'undo', deleted: answer }, { type: 'redo', inserted: answer });
-  assert.equal(assessSession(session, answer).score, 100);
+  assert.equal(assessSession(session, answer).score, 0);
 });
 test('unknown-source content withholds the score', () => {
   const session = newSession(); session.events.push({ type: 'edit', inserted: answer });
   const result = assessSession(session, answer);
   assert.equal(result.score, null); assert.equal(result.status, 'incomplete');
 });
-test('a restored answer without any activity does not receive a false zero', () => {
+test('a restored answer without any activity does not receive a false endpoint score', () => {
   assert.equal(assessSession(newSession(), answer).status, 'incomplete');
 });
 test('focus changes and pauses alone cannot raise suspicion', () => {
   const session = typedSession(); session.metrics.pauses = 50; session.metrics.focus = 100;
   session.events.push({ type: 'hidden' }, { type: 'pause' }, { type: 'blur' });
-  assert.equal(assessSession(session, answer).score, 0);
+  assert.equal(assessSession(session, answer).score, 100);
 });
 test('the result explicitly describes cumulative session evidence, including later deletions', () => {
   const result = assessSession(pastedSession(), answer);
   assert.equal(result.scope, 'cumulative-session'); assert.match(result.limitations, /Text removed later/);
+});
+
+test('exported scale explicitly describes the inverted percentage orientation', () => {
+  const result = assessSession(typedSession(), answer);
+  assert.equal(result.score + result.reviewPoints, 100);
+  assert.equal(result.scale.unit, '%');
+  assert.equal(result.scale.direction, 'higher-human-like');
+  assert.equal(result.scale.lowLabel, 'AI-like');
+  assert.equal(result.scale.highLabel, 'Human-like');
 });

@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#f5f6f8">
   <meta name="description" content="A simple Tiptap writing workspace with live activity tracking and session replay.">
   <title>ProofLab · Writing workspace</title>
-  <link rel="stylesheet" href="./styles.css?v=3">
+  <link rel="stylesheet" href="./styles.css?v=4">
 </head>
 <body>
   <header class="topbar">
@@ -53,13 +53,14 @@
           <div class="stat"><strong id="statPauses">0</strong><span>Pauses ≥ 5 sec</span><small>While the editor is focused</small></div>
         </div>
         <section id="aiScoreCard" class="score-card" data-level="pending" aria-labelledby="aiScoreTitle">
-          <div class="score-heading"><h3 id="aiScoreTitle">AI-use review score</h3><span>Experimental</span></div>
-          <div class="score-result"><div><strong id="aiScore">—</strong><span> / 100</span></div><span id="aiScoreLabel">Write at least 50 words</span></div>
-          <progress id="aiScoreMeter" max="100" value="0" aria-label="Experimental review score"></progress>
+          <div class="score-heading"><h3 id="aiScoreTitle">Human-writing score</h3><span>Experimental</span></div>
+          <div class="score-result"><div><strong id="aiScore">—</strong><span>%</span></div><span id="aiScoreLabel">Write at least 50 words</span></div>
+          <progress id="aiScoreMeter" max="100" value="0" aria-label="Experimental human-like activity score"></progress>
+          <div class="score-scale"><span>0% AI-like</span><span>100% Human-like</span></div>
           <p id="aiScoreExplanation">The demo needs a longer answer before showing a score.</p>
           <p class="score-verdict">AI authorship: <strong>undetermined</strong></p>
           <p class="score-caution">Activity score, not an AI probability.</p>
-          <details class="score-method"><summary>How is this calculated?</summary><div id="scoreBreakdown"></div><p>These are unvalidated demo rules based on cumulative session activity, including text removed later. They do not use a trained AI-text classifier.</p><p><strong>This is not an AI probability.</strong> Pasting your own writing can score high; retyping AI text can score low. Use the replay and discuss the work with the writer before drawing conclusions.</p></details>
+          <details class="score-method"><summary>How is this calculated?</summary><p>Starts at 100%. The rules below deduct points toward the AI-like end of the scale.</p><div id="scoreBreakdown"></div><p>These are unvalidated demo rules based on cumulative session activity, including text removed later. They do not use a trained AI-text classifier.</p><p><strong>This is not an authorship probability.</strong> Pasting your own writing can score low; retyping AI text can score high. Use the replay and discuss the work with the writer before drawing conclusions.</p></details>
         </section>
         <div class="stream-heading"><h3>Recent activity</h3><span id="eventTotal">0 events</span></div>
         <ol id="activityList" class="activity-list"><li class="empty">Type, make a correction, or paste a sentence to see it here.</li></ol>
@@ -80,6 +81,6 @@
     </form>
   </dialog>
   <dialog id="resetDialog" class="reset-dialog" aria-labelledby="resetTitle"><h2 id="resetTitle">Start a new session?</h2><p>This clears the answer and tracking history in this tab. Export your session first if you want to keep it.</p><form method="dialog" class="dialog-actions"><button value="cancel" class="button quiet">Keep writing</button><button value="reset" class="button primary">Start new session</button></form></dialog>
-  <script type="module" src="./app.js?v=3" onerror="document.getElementById('editorStatus').textContent='Editor could not load. Please refresh.';document.getElementById('trackingStatus').textContent='Offline';document.getElementById('trackingIndicator').classList.add('offline')"></script>
+  <script type="module" src="./app.js?v=4" onerror="document.getElementById('editorStatus').textContent='Editor could not load. Please refresh.';document.getElementById('trackingStatus').textContent='Offline';document.getElementById('trackingIndicator').classList.add('offline')"></script>
 </body>
 </html>

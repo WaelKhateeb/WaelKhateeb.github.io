@@ -1,7 +1,7 @@
 import { characters } from './tracking.js';
 
 export const ASSESSMENT_RULES = Object.freeze({
-  version: 'process-review-v1', minimumWords: 50, largeImportCharacters: 120,
+  version: 'process-human-v2', minimumWords: 50, largeImportCharacters: 120,
   weights: { importedShare: 60, largestBlock: 25, limitedRevision: 15 },
 });
 const clamp = value => Math.max(0, Math.min(1, value));
@@ -39,22 +39,23 @@ export function assessSession(session, currentText) {
     { key: 'largestBlock', label: 'Large inserted block', maximum: weights.largestBlock, points: round(blockPoints), observation: `Largest pasted or dropped block: ${largest} characters. Blocks below ${largeImportCharacters} add no points.` },
     { key: 'limitedRevision', label: 'Limited revision after import', maximum: weights.limitedRevision, points: round(revisionPoints), observation: lastImportIndex < 0 ? 'No pasted or dropped text recorded.' : `${revisedAfterImport} characters removed or replaced after the latest import. Applies only when imported text is at least half of all input.` },
   ];
-  let status = 'ready', label, score = null;
+  let status = 'ready', label, score = null, reviewPoints = null;
   if (words < minimumWords) { status = 'insufficient'; label = `Write at least ${minimumWords} words`; }
   else if (!total || unobserved / total > 0.1 || (imported > 0 && !imports.length)) { status = 'incomplete'; label = 'Incomplete activity record'; }
   else {
-    score = Math.round(importPoints + blockPoints + revisionPoints);
-    label = score >= 70 ? 'More review suggested' : score >= 35 ? 'Some review signals' : 'Few review signals';
+    reviewPoints = Math.round(importPoints + blockPoints + revisionPoints);
+    score = 100 - reviewPoints;
+    label = reviewPoints >= 70 ? 'More AI-like activity' : reviewPoints >= 35 ? 'Mixed activity signals' : 'More human-like activity';
   }
   return {
     method: ASSESSMENT_RULES.version, type: 'uncalibrated-heuristic', scope: 'cumulative-session',
-    status, label, score, scale: { min: 0, max: 100 }, minimumWords, words,
+    status, label, score, reviewPoints, scale: { min: 0, max: 100, unit: '%', direction: 'higher-human-like', lowLabel: 'AI-like', highLabel: 'Human-like' }, minimumWords, words,
     aiAuthorship: 'Undetermined', aiProbability: null,
     observations: { typed, imported, importedShare: round(importedShare * 100), largestImportedBlock: largest, revisedAfterLastImport: revisedAfterImport, unobserved },
     breakdown,
     explanation: status === 'insufficient' ? 'The demo needs a longer answer before showing a score.'
       : status === 'incomplete' ? 'Some input has no recorded typing or import source. Start a new session for a complete record.'
       : `${Math.round(importedShare * 100)}% pasted/dropped · largest block ${largest} characters`,
-    limitations: 'A review signal, not an AI probability or an academic-integrity verdict. Human-written pasted text can score high; manually retyped AI text can score low. Rules and thresholds are unvalidated demo choices. Text removed later still contributes to session totals.',
+    limitations: 'An experimental human-like activity score, not an authorship probability or an academic-integrity verdict. Human-written pasted text can score low; manually retyped AI text can score high. Rules and thresholds are unvalidated demo choices. Text removed later still contributes to session totals.',
   };
 }
