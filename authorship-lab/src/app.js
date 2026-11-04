@@ -3,6 +3,7 @@ import StarterKit from '@tiptap/starter-kit';
 import { isHistoryTransaction } from '@tiptap/pm/history';
 import katex from 'katex';
 import { characters, spaces, textDifference, transactionChanges, newSession } from './tracking.js';
+import { assessSession } from './assessment.js';
 
 const $ = id => document.getElementById(id);
 const STORAGE_KEY = 'prooflab-session-v2';
@@ -65,6 +66,7 @@ function addEvent(type, detail, extra = {}) {
   // Group the live display, but preserve every transaction in replay snapshots.
   if (type === 'typing' && previous?.type === type && at - previous.at < 1400) {
     previous.at = at; previous.text += extra.text || ''; previous.characters += extra.characters || 0;
+    previous.deleted = (previous.deleted || '') + (extra.deleted || '');
     previous.detail = `${previous.characters} characters typed`;
   } else session.events.push({ at, type, detail, ...extra });
   scheduleRender(); scheduleSave();
@@ -80,6 +82,24 @@ function renderStats() {
   for (const [id, key] of Object.entries({ statTyped: 'typed', statSpaces: 'spaces', statBackspaces: 'backspaces', statDeleted: 'deleted', statPastes: 'pastes', statPasted: 'pasted', statPauses: 'pauses', statEdits: 'edits', statFocus: 'focus' })) $(id).textContent = m[key].toLocaleString();
   $('eventTotal').textContent = `${session.events.length} events`;
   $('revisionCount').textContent = `${session.snapshots.length - 1} revisions`;
+}
+function renderAssessment() {
+  if (!editor) return;
+  const result = assessSession(session, plainText());
+  $('aiScore').textContent = result.score === null ? '—' : result.score;
+  $('aiScoreLabel').textContent = result.label;
+  $('aiScoreExplanation').textContent = result.explanation;
+  $('aiScoreCard').dataset.level = result.score === null ? 'pending' : result.score >= 70 ? 'high' : result.score >= 35 ? 'medium' : 'low';
+  $('aiScoreMeter').value = result.score || 0;
+  $('aiScoreMeter').setAttribute('aria-valuetext', result.score === null ? result.label : `${result.score} out of 100. ${result.label}. Not an AI probability.`);
+  $('scoreBreakdown').replaceChildren();
+  for (const item of result.breakdown) {
+    const row = document.createElement('div'); row.className = 'score-rule';
+    const name = document.createElement('strong'); name.textContent = item.label;
+    const points = document.createElement('span'); points.textContent = result.score === null ? `— / ${item.maximum}` : `${item.points} / ${item.maximum}`;
+    const detail = document.createElement('p'); detail.textContent = item.observation;
+    row.append(name, points, detail); $('scoreBreakdown').append(row);
+  }
 }
 function renderActivity() {
   const list = $('activityList'); list.replaceChildren();
@@ -115,6 +135,7 @@ function updateDocumentUI() {
   $('finishBtn').textContent = session.finishedAt ? 'Finished ✓' : 'Finish attempt ↗';
   $('finishBtn').disabled = Boolean(session.finishedAt);
   updateToolbar();
+  renderAssessment();
 }
 
 function beginEdit() {
@@ -137,7 +158,7 @@ function onDocumentChange({ transaction, appendedTransactions = [] }) {
   const pasted = transactions.some(tr => tr.getMeta('paste') || tr.getMeta('uiEvent') === 'paste');
   const dropped = transactions.some(tr => tr.getMeta('uiEvent') === 'drop');
   let kind = history ? (['undo', 'redo'].includes(action?.type) ? action.type : 'history') : pasted ? 'paste' : dropped ? 'drop' : action?.type;
-  if (!kind) kind = changes.inserted ? 'typing' : changes.deleted ? 'delete' : 'format';
+  if (!kind) kind = changes.inserted ? 'edit' : changes.deleted ? 'delete' : 'format';
   let detail = '';
   if (composing !== null) {
     // Intermediate IME replacements are recorded as revisions, counted once at compositionend.
@@ -287,7 +308,7 @@ function openEquation(target = null) {
 
 function exportSession() {
   saveSession();
-  const data = { format: 'ProofLab 2.0', prompt: PROMPT, instruction: 'Give your opinion and support it with two reasons or examples. Suggested length: 100–150 words.', disclaimer: 'Descriptive writing activity; no inference of AI authorship.', ...session, exportedAt: new Date().toISOString(), answer: { text: editor.getText(), html: editor.getHTML() } };
+  const data = { format: 'ProofLab 2.1', prompt: PROMPT, instruction: 'Give your opinion and support it with two reasons or examples. Suggested length: 100–150 words.', disclaimer: 'Experimental process review; no verified inference of AI authorship.', ...session, assessment: assessSession(session, plainText()), exportedAt: new Date().toISOString(), answer: { text: editor.getText(), html: editor.getHTML() } };
   const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }));
   const link = document.createElement('a'); link.href = url; link.download = `prooflab-${new Date().toISOString().slice(0, 10)}.json`; link.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
@@ -311,6 +332,7 @@ function boot() {
             const change = textDifference(before, plainText()); composing = null;
             session.metrics.typed += characters(change.inserted); session.metrics.spaces += spaces(change.inserted); session.metrics.deleted += characters(change.deleted);
             if (change.inserted || change.deleted) addEvent('typing', `${characters(change.inserted)} characters composed`, { text: change.inserted, characters: characters(change.inserted), deleted: change.deleted });
+            renderAssessment();
           }, 0);
           return false;
         },
