@@ -87,7 +87,7 @@ function advance(){
  const dx=1/(N-1);
  if(model==='heat'){let dt=.4*dx*dx/opts.alpha,r=opts.alpha*dt/(dx*dx);for(let i=1;i<N-1;i++)next[i]=u[i]+r*(u[i-1]-2*u[i]+u[i+1]);t+=dt;}
  if(model==='wave'){let dt=.6*dx/opts.c,r=Math.pow(opts.c*dt/dx,2);for(let i=1;i<N-1;i++)next[i]=2*u[i]-prev[i]+r*(u[i-1]-2*u[i]+u[i+1]);prev=u;t+=dt;}
- if(model==='transport'){let dt=Math.min(.45*dx/opts.v,.4*dx*dx/opts.D),a=opts.v*dt/dx,d=opts.D*dt/(dx*dx);for(let i=1;i<N-1;i++)next[i]=u[i]-a*(u[i]-u[i-1])+d*(u[i+1]-2*u[i]+u[i-1]);next[N-1]=next[N-2];t+=dt;}
+ if(model==='transport'){let dt=.8/(opts.v/dx+2*opts.D/(dx*dx)),a=opts.v*dt/dx,d=opts.D*dt/(dx*dx);for(let i=1;i<N-1;i++)next[i]=u[i]-a*(u[i]-u[i-1])+d*(u[i+1]-2*u[i]+u[i-1]);next[N-1]=next[N-2];t+=dt;}
  }
  u=next;
 }
