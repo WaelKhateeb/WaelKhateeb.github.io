@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="only light"><meta name="theme-color" content="#1d1b1b">
+<meta name="description" content="Interactive partial differential equations laboratory: heat conduction, vibrations, pollution transport and 2D diffusion.">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<title>PDE Simulation Lab | Wael El Khateeb</title>
+<link rel="stylesheet" href="styles.css?v=eau-4"><link rel="stylesheet" href="pages-enhance.css?v=eau-4"><link rel="stylesheet" href="eau-theme.css?v=eau-4">
+<style>
+:root{--lab-red:#bc202b;--lab-border:#e3dcd4;--lab-text:#2c2928;--lab-muted:#68625f}
+body{background:#faf8f5;color:var(--lab-text)}.lab-wrap{max-width:1130px;margin:0 auto;padding:36px 24px 75px}
+.lab-intro{margin-bottom:26px}.lab-kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:#a3272c}
+.lab-intro h1{font-size:clamp(2.1rem,4.3vw,3.5rem);line-height:1.12;margin:8px 0 12px}
+.lab-intro p{max-width:750px;line-height:1.7;color:var(--lab-muted);margin:0}
+.lab-tabs{display:flex;gap:9px;flex-wrap:wrap;margin:22px 0}
+.lab-tabs button,.lab-btn{font:inherit;border:1px solid #dbd3cb;background:#fff;color:#312d2b;border-radius:12px;padding:12px 15px;cursor:pointer;font-weight:650}
+.lab-tabs button[aria-selected=true]{background:#302927;color:#fff;border-color:#302927}
+.lab-tabs button:focus-visible,.lab-btn:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #b9212b;outline-offset:2px}
+.lab-grid{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(270px,1fr);gap:18px}
+.lab-panel{background:#fff;border:1px solid var(--lab-border);border-radius:17px;padding:22px;box-shadow:0 5px 22px rgba(30,25,20,.035)}
+.lab-panel h2{font-size:1.5rem;margin:0 0 5px}.lab-overview{color:var(--lab-muted);line-height:1.55;min-height:47px}
+.lab-equation{overflow-x:auto;background:#f6f3ef;border:1px solid #e7ded7;border-radius:10px;padding:15px;font-family:Georgia,'Times New Roman',serif;font-size:1.16rem;white-space:nowrap;color:#332b2b}
+.lab-key{margin:10px 0 19px;color:#605954;font-size:.91rem;line-height:1.6}
+.lab-plot{display:block;width:100%;height:auto;aspect-ratio:1.9/1;border:1px solid #e9e2db;border-radius:12px;background:#fcfaf8}
+.lab-caption{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:11px 0;color:var(--lab-muted);font-size:.9rem}
+.lab-run{display:flex;flex-wrap:wrap;gap:9px;margin-top:17px}.lab-btn.primary{background:#a71f2a;border-color:#a71f2a;color:white}
+.lab-controls h3,.lab-bottom h3{margin:0 0 14px;font-size:1.18rem}
+.lab-field{display:block;margin-bottom:20px}.lab-field-head{display:flex;justify-content:space-between;gap:12px;font-size:.94rem;font-weight:650}
+.lab-field output{font-variant-numeric:tabular-nums;color:#9e2029}
+.lab-field input[type=range]{width:100%;accent-color:#aa2530;cursor:pointer;margin-top:11px}
+.lab-field select{margin-top:8px;width:100%;padding:10px 12px;border:1px solid #d8d0c9;border-radius:8px;background:#fff;color:#292525}
+.lab-hint{color:var(--lab-muted);font-size:.88rem;line-height:1.6}
+.lab-bottom{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
+.lab-bottom p,.lab-bottom li{line-height:1.7;color:#59524d}.lab-bottom p{margin:0 0 9px}.lab-bottom ol{margin:0;padding-left:21px}
+.lab-state{font-weight:700;color:#8b2830}.lab-note{font-size:.86rem;color:#655d58;margin-top:20px}
+@media(max-width:780px){.lab-grid,.lab-bottom{grid-template-columns:1fr}.lab-wrap{padding:25px 15px 55px}.lab-panel{padding:17px}.lab-plot{aspect-ratio:1.45/1}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style><script src="script.js" defer></script></head>
+<body><a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header"><div class="shell nav-shell"><a class="brand" href="index.html"><img class="brand-logo" src="https://www.eau.ac.ae/media/5s4ntrxm/eau.svg" alt="Emirates Aviation University" width="97" height="42"><span class="brand-text">Wael El Khateeb</span></a><button class="menu-button" aria-expanded="false" aria-controls="primary-nav"><span></span><span></span><span></span><span class="sr-only">Open menu</span></button><nav id="primary-nav" class="primary-nav" aria-label="Primary navigation"><a href="index.html">Home</a><a href="research.html">Research</a><a href="teaching.html" aria-current="page">Teaching</a><a href="presentations.html">Presentations</a><a href="service.html">Service</a><a href="index.html#contact">Contact</a></nav></div></header>
+<main id="main" class="lab-wrap"><div class="lab-intro"><div class="lab-kicker">Interactive mathematics · Engineering and physics</div><h1>Partial differential equations lab</h1><p>Explore how quantities change in both space and time. Select a physical scenario, adjust its parameters and watch a numerical solution evolve. Each model is simplified for classroom learning.</p></div>
+<div class="lab-tabs" role="tablist" aria-label="Choose a physical model">
+<button role="tab" aria-selected="true" data-model="heat">Heat in a rod</button>
+<button role="tab" aria-selected="false" data-model="wave">Vibrating string</button>
+<button role="tab" aria-selected="false" data-model="transport">River pollution</button>
+<button role="tab" aria-selected="false" data-model="plate">Heat in a plate</button></div>
+<div class="lab-grid"><section class="lab-panel" aria-label="Simulation"><h2 id="model-title"></h2><p id="model-about" class="lab-overview"></p><div id="model-equation" class="lab-equation"></div><div id="model-key" class="lab-key"></div>
+<canvas id="lab-canvas" class="lab-plot" width="900" height="475" role="img" aria-label="Live numerical PDE solution plot">Your browser does not support canvas.</canvas>
+<div class="lab-caption"><span id="axis-label"></span><span>Simulation time: <strong id="time-readout">0.00</strong></span><span id="run-status" class="lab-state">Paused</span></div>
+<div class="lab-run"><button class="lab-btn primary" id="play-btn" type="button">▶ Play</button><button class="lab-btn" id="step-btn" type="button">Step forward</button><button class="lab-btn" id="reset-btn" type="button">Reset</button></div></section>
+<aside class="lab-panel lab-controls"><h3>Experiment controls</h3><div id="scenario-controls"></div>
+<label class="lab-field"><span class="lab-field-head"><span>Animation speed</span><output id="speed-value">1×</output></span><input id="speed-input" type="range" min="1" max="5" value="1" step="1"></label>
+<p class="lab-hint">Changing a physical parameter restarts the experiment so the comparison begins from the same initial state. These are dimensionless teaching models, not engineering-grade predictions.</p></aside></div>
+<div class="lab-bottom"><section class="lab-panel"><h3>What to notice</h3><p id="observation"></p><h3 style="margin-top:20px">Engineering connection</h3><p id="engineering"></p></section><section class="lab-panel"><h3>Try this in class</h3><ol id="challenges"></ol></section></div><p class="lab-note">Numerical methods: explicit finite differences for diffusion, centered-in-space time stepping for waves, and upwind advection with diffusion for transport. Boundary values are specified in each scenario. Grid and time steps are selected to satisfy the respective numerical stability conditions.</p></main>
+<footer class="site-footer"><div class="shell footer-shell"><p>© <span id="year"></span> Wael El Khateeb · Emirates Aviation University</p><div class="footer-links"><a href="teaching.html">Teaching</a><a href="index.html">Home</a></div></div></footer>
+<script>
+(function(){
+'use strict';
+const N=161, M=71, canvas=document.getElementById('lab-canvas'),ctx=canvas.getContext('2d');
+const $=id=>document.getElementById(id);
+const models={
+heat:{name:'Heat conduction in a metal rod',about:'A hot region in a one-dimensional rod spreads into cooler parts of the metal.',eq:'∂u/∂t = α ∂²u/∂x²',key:'u(x,t): temperature · α: thermal diffusivity · Ends fixed at zero temperature.',axis:'Position along rod (x) · temperature (u)',observation:'A narrow hot spot becomes wider and lower. Increasing thermal diffusivity makes temperature differences disappear faster.',engineering:'Thermal design, electronics cooling, heat treatment and insulation.',challenges:['Increase diffusivity. How does the peak temperature change after the same simulation time?','Switch between a single hot spot and two hot spots. What happens when the peaks meet?','Explain why the endpoints stay cold.'],params:[['alpha','Thermal diffusivity α',0.12,0.02,0.42,0.02],['initial','Initial temperature',0,['One hot spot','Two hot spots','Warm center band']]]},
+wave:{name:'Vibration of a stretched string',about:'A displaced string vibrates as disturbances travel along it and reflect from fixed ends.',eq:'∂²u/∂t² = c² ∂²u/∂x²',key:'u(x,t): transverse displacement · c: wave speed · Both ends fixed.',axis:'Position along string (x) · displacement (u)',observation:'The pulse travels, reflects at the fixed ends and changes sign when reflected. Increasing wave speed changes how quickly it travels.',engineering:'Structural vibrations, acoustic waves, musical strings and vibration control.',challenges:['Change wave speed. How long does a pulse take to reach the end?','Compare a single pluck with a smooth oscillating mode.','Why is displacement always zero at both ends?'],params:[['c','Wave speed c',1,0.4,2.4,0.2],['initial','Starting shape',0,['Single pluck','Sine mode','Localized pulse']]]},
+transport:{name:'Pollutant transported in a river',about:'Water carries a concentration pulse downstream while mixing spreads it out.',eq:'∂C/∂t + v ∂C/∂x = D ∂²C/∂x²',key:'C(x,t): pollutant concentration · v: flow velocity · D: mixing coefficient · Left boundary clean, right boundary outflow.',axis:'Distance downstream (x) · concentration (C)',observation:'Higher velocity moves the pollution peak downstream faster; higher mixing spreads it out and reduces its height.',engineering:'River contamination, chemical transport, ventilation and environmental engineering.',challenges:['Increase river velocity while holding mixing fixed. What changes?','Increase mixing while holding velocity fixed. What changes?','Identify which term represents transport and which represents diffusion.'],params:[['v','Flow velocity v',0.5,0.1,1.4,0.1],['D','Mixing coefficient D',0.025,0.005,0.09,0.005]]},
+plate:{name:'Heat spreading across a metal plate',about:'A top-down heat map shows temperature spreading across a two-dimensional plate.',eq:'∂u/∂t = α (∂²u/∂x² + ∂²u/∂y²)',key:'u(x,y,t): temperature · α: diffusivity · Edges held at zero temperature. Red = hot; blue = cold.',axis:'Two-dimensional plate (x, y) · color represents temperature',observation:'Heat spreads in both horizontal and vertical directions. Eventually the entire plate approaches the cold boundary temperature.',engineering:'Electronic circuit boards, thermal management, material processing and building heat flow.',challenges:['Increase diffusivity. Does the hot spot spread faster?','Compare one heater and two heaters. Where do their warm regions overlap?','How is the 2D heat equation different from the rod equation?'],params:[['alpha','Thermal diffusivity α',0.14,0.03,0.45,0.03],['initial','Heater arrangement',0,['Central heater','Two heaters','Offset heater']]]}
+};
+let model='heat', opts={},u=null,prev=null,t=0,playing=false,last=0,carry=0,raf=0;
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+function gaussian(x,mu,w){return Math.exp(-Math.pow((x-mu)/w,2));}
+function init(){
+ t=0;carry=0;u=new Float64Array(model==='plate'?M*M:N);prev=null;
+ if(model==='plate'){for(let j=1;j<M-1;j++)for(let i=1;i<M-1;i++){let x=i/(M-1),y=j/(M-1),a=opts.initial;
+ u[j*M+i]=a===1?0.9*gaussian(x,.32,.10)*gaussian(y,.5,.10)+0.9*gaussian(x,.68,.10)*gaussian(y,.5,.10):gaussian(x,a===2?.28:.5,.11)*gaussian(y,a===2?.68:.5,.11);}}
+ else{for(let i=1;i<N-1;i++){let x=i/(N-1);
+ if(model==='heat')u[i]=opts.initial===1?gaussian(x,.3,.065)+gaussian(x,.7,.065):opts.initial===2?(x>.32&&x<.68?1:0):gaussian(x,.5,.09);
+ if(model==='wave')u[i]=opts.initial===1?Math.sin(Math.PI*x):opts.initial===2?gaussian(x,.3,.055):x<.4?x/.4:(1-x)/.6;
+ if(model==='transport')u[i]=gaussian(x,.17,.06);}}
+ if(model==='wave'){let dx=1/(N-1),dt=0.6*dx/opts.c;prev=new Float64Array(N);for(let i=1;i<N-1;i++)prev[i]=u[i]+0.5*Math.pow(opts.c*dt/dx,2)*(u[i-1]-2*u[i]+u[i+1]);}
+ draw();updateTime();
+}
+function advance(){
+ let next=new Float64Array(u.length);
+ if(model==='plate'){
+ const h=1/(M-1),dt=.19*h*h/opts.alpha,r=opts.alpha*dt/(h*h);
+ for(let j=1;j<M-1;j++)for(let i=1;i<M-1;i++){let k=j*M+i;next[k]=u[k]+r*(u[k-1]+u[k+1]+u[k-M]+u[k+M]-4*u[k]);}
+ t+=dt;
+ }else{
+ const dx=1/(N-1);
+ if(model==='heat'){let dt=.4*dx*dx/opts.alpha,r=opts.alpha*dt/(dx*dx);for(let i=1;i<N-1;i++)next[i]=u[i]+r*(u[i-1]-2*u[i]+u[i+1]);t+=dt;}
+ if(model==='wave'){let dt=.6*dx/opts.c,r=Math.pow(opts.c*dt/dx,2);for(let i=1;i<N-1;i++)next[i]=2*u[i]-prev[i]+r*(u[i-1]-2*u[i]+u[i+1]);prev=u;t+=dt;}
+ if(model==='transport'){let dt=Math.min(.45*dx/opts.v,.4*dx*dx/opts.D),a=opts.v*dt/dx,d=opts.D*dt/(dx*dx);for(let i=1;i<N-1;i++)next[i]=u[i]-a*(u[i]-u[i-1])+d*(u[i+1]-2*u[i]+u[i-1]);next[N-1]=next[N-2];t+=dt;}
+ }
+ u=next;
+}
+function updateTime(){$('time-readout').textContent=t.toFixed(3);}
+function grid(w,h,left,top,right,bottom){ctx.strokeStyle='#e7e2de';ctx.lineWidth=1;for(let i=0;i<=4;i++){let x=left+(w-left-right)*i/4,y=top+(h-top-bottom)*i/4;ctx.beginPath();ctx.moveTo(x,top);ctx.lineTo(x,h-bottom);ctx.stroke();ctx.beginPath();ctx.moveTo(left,y);ctx.lineTo(w-right,y);ctx.stroke();}ctx.strokeStyle='#aaa19a';ctx.strokeRect(left,top,w-left-right,h-top-bottom);}
+function draw(){
+ if(!u)return;let w=canvas.width,h=canvas.height;ctx.clearRect(0,0,w,h);ctx.fillStyle='#fcfaf8';ctx.fillRect(0,0,w,h);
+ if(model==='plate'){let size=Math.min(w-110,h-66),px=(w-size)/2,py=(h-size)/2,cell=size/M;for(let j=0;j<M;j++)for(let i=0;i<M;i++){let value=clamp(u[j*M+i],0,1),r=Math.round(27+218*value),g=Math.round(67+69*Math.sin(Math.PI*value)),b=Math.round(160*(1-value)+26*value);ctx.fillStyle='rgb('+r+','+g+','+b+')';ctx.fillRect(px+i*cell,py+j*cell,Math.ceil(cell+.5),Math.ceil(cell+.5));}ctx.strokeStyle='#999';ctx.strokeRect(px,py,size,size);ctx.fillStyle='#514b46';ctx.font='18px Arial';ctx.fillText('x →',px+size/2,py+size+30);ctx.fillText('y ↓',px-45,py+size/2);return;}
+ let L=60,T=34,R=24,B=49;grid(w,h,L,T,R,B);
+ const min=model==='wave'?-1.25:0,max=model==='wave'?1.25:1.25;
+ ctx.font='17px Arial';ctx.fillStyle='#766d66';ctx.textAlign='right';ctx.fillText(max.toFixed(1),L-10,T+6);ctx.fillText(min.toFixed(1),L-10,h-B);ctx.textAlign='center';ctx.fillText('0',L,h-15);ctx.fillText('1',w-R,h-15);
+ if(model==='wave'){let zy=T+(max/(max-min))*(h-T-B);ctx.beginPath();ctx.moveTo(L,zy);ctx.lineTo(w-R,zy);ctx.strokeStyle='#a39b94';ctx.setLineDash([7,6]);ctx.stroke();ctx.setLineDash([]);}
+ ctx.beginPath();for(let i=0;i<N;i++){let x=L+i/(N-1)*(w-L-R),y=T+(max-u[i])/(max-min)*(h-T-B);if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}
+ ctx.strokeStyle=model==='wave'?'#226d93':'#b02532';ctx.lineWidth=4;ctx.lineJoin='round';ctx.stroke();
+ if(model==='heat'||model==='transport'){ctx.lineTo(w-R,h-B);ctx.lineTo(L,h-B);ctx.closePath();ctx.fillStyle='rgba(177,42,52,.10)';ctx.fill();}
+}
+function stop(){playing=false;cancelAnimationFrame(raf);$('play-btn').textContent='▶ Play';$('run-status').textContent='Paused';}
+function frame(stamp){if(!playing)return;if(!last)last=stamp;let elapsed=Math.min((stamp-last)/1000,.06);last=stamp;carry+=elapsed*Number($('speed-input').value);let n=0,goal=model==='plate'?.0006:model==='wave'?.013:model==='transport'?.004:.0018;
+ while(carry>goal && n<1000){advance();carry-=goal;n++;}draw();updateTime();raf=requestAnimationFrame(frame);}
+function controls(){
+ const cfg=models[model];$('model-title').textContent=cfg.name;$('model-about').textContent=cfg.about;$('model-equation').textContent=cfg.eq;$('model-key').textContent=cfg.key;$('axis-label').textContent=cfg.axis;$('observation').textContent=cfg.observation;$('engineering').textContent=cfg.engineering;
+ $('challenges').replaceChildren(...cfg.challenges.map(s=>{let li=document.createElement('li');li.textContent=s;return li;}));
+ const area=$('scenario-controls');area.replaceChildren();opts={};
+ cfg.params.forEach(([key,label,value,min,max,step])=>{
+ opts[key]=value;let wrap=document.createElement('label');wrap.className='lab-field';
+ let heading=document.createElement('span');heading.className='lab-field-head';let name=document.createElement('span');name.textContent=label;let out=document.createElement('output');out.textContent=typeof value==='number'&&typeof min==='number'?value.toString():'';heading.append(name,out);wrap.append(heading);
+ if(Array.isArray(min)){let select=document.createElement('select');min.forEach((s,i)=>{let option=document.createElement('option');option.value=i;option.textContent=s;select.append(option);});select.value=value;select.addEventListener('change',()=>{opts[key]=Number(select.value);stop();init();});wrap.append(select);}
+ else{let inp=document.createElement('input');inp.type='range';inp.min=min;inp.max=max;inp.step=step;inp.value=value;inp.addEventListener('input',()=>{opts[key]=Number(inp.value);out.textContent=Number(inp.value).toString();stop();init();});wrap.append(inp);}
+ area.append(wrap);
+ });
+ document.querySelectorAll('[data-model]').forEach(el=>el.setAttribute('aria-selected',el.dataset.model===model?'true':'false'));
+ stop();init();
+}
+document.querySelectorAll('[data-model]').forEach(el=>el.addEventListener('click',()=>{model=el.dataset.model;controls();}));
+$('play-btn').addEventListener('click',()=>{if(playing){stop();return;}playing=true;last=0;$('run-status').textContent='Running';$('play-btn').textContent='❚❚ Pause';raf=requestAnimationFrame(frame);});
+$('step-btn').addEventListener('click',()=>{stop();for(let i=0;i<(model==='wave'?4:60);i++)advance();draw();updateTime();});
+$('reset-btn').addEventListener('click',()=>{stop();init();});
+$('speed-input').addEventListener('input',e=>{$('speed-value').textContent=e.target.value+'×';});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();});
+controls();
+})();
+</script></body></html>
