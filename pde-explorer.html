@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
+<meta name="theme-color" content="#172132">
+<meta name="description" content="Explore partial differential equations through interactive 3D visualizations of heat, waves, pollutant transport, and flow around an airfoil.">
+<meta name="author" content="Wael El Khateeb">
+<link rel="canonical" href="https://waelkhateeb.github.io/pde-explorer.html">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css?v=eau-4">
+<link rel="stylesheet" href="pages-enhance.css?v=eau-4">
+<link rel="stylesheet" href="eau-theme.css?v=eau-4">
+<title>PDE Explorer | Wael El Khateeb</title>
+<script defer src="script.js"></script>
+<script defer src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'global'},options:{skipHtmlTags:['script','noscript','style','textarea','pre','code']}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+:root{--px-ink:#172132;--px-muted:#5d6775;--px-red:#b52331;--px-blue:#55b9ee;--px-border:#e1e3e7;--px-paper:#fff;--px-bg:#f5f5f4}
+body{background:var(--px-bg);color:var(--px-ink)}
+.px-wrap{max-width:1320px;padding:28px 24px 90px;margin:auto}
+.px-hero{position:relative;overflow:hidden;background:radial-gradient(ellipse at 82% 18%,#315179 0%,transparent 46%),linear-gradient(127deg,#101927,#1b2c43);border-radius:24px;color:#fff;padding:39px 44px 42px;box-shadow:0 18px 45px rgba(12,24,40,.15)}
+.px-hero:after{content:'';position:absolute;right:-110px;top:-140px;width:450px;height:450px;border:1px solid #ffffff22;border-radius:50%;box-shadow:0 0 0 55px #ffffff08,0 0 0 110px #ffffff06;pointer-events:none}
+.px-kicker{letter-spacing:.17em;font-size:.75rem;color:#b8dcf6;text-transform:uppercase;font-weight:800}
+.px-hero h1{font-size:clamp(2.4rem,5.4vw,4.5rem);letter-spacing:-.045em;line-height:1.05;margin:13px 0;max-width:900px;color:#fff}
+.px-hero h1 span{color:#f8a5a7}
+.px-hero p{color:#d8e4f3;line-height:1.7;max-width:740px;font-size:1.04rem;margin:0 0 20px}
+.px-hero-stats{display:flex;gap:8px;flex-wrap:wrap;position:relative;z-index:1}
+.px-hero-stats span{font-size:.8rem;padding:8px 11px;background:#ffffff12;border:1px solid #ffffff2a;border-radius:999px;color:#e5eff9}
+.px-step{display:flex;align-items:center;gap:12px;margin:24px 2px 14px;color:#354152}
+.px-step strong{font-size:.85rem;letter-spacing:.12em;text-transform:uppercase}
+.px-step span{height:1px;flex:1;background:#dcdfe5}
+.px-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:17px}
+.px-tab{min-height:95px;display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:5px;padding:16px 18px;border:1px solid #dfe2e7;background:#fff;border-radius:15px;cursor:pointer;font:inherit;transition:background .2s,transform .2s,border-color .2s}
+.px-tab:hover{transform:translateY(-2px);border-color:#9eacbd}
+.px-tab[aria-selected=true]{border-color:#20334a;background:#17283e;color:#fff;box-shadow:0 9px 24px #13243a22}
+.px-tab small{color:#bd424b;font-size:.71rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+.px-tab[aria-selected=true] small{color:#f6a2a5}
+.px-tab strong{font-size:1rem;letter-spacing:-.01em}
+.px-tab span{font-size:.81rem;line-height:1.35;color:#667386}
+.px-tab[aria-selected=true] span{color:#cad7e7}
+.px-layout{display:grid;grid-template-columns:minmax(0,1.86fr) minmax(310px,.96fr);gap:16px}
+.px-stage,.px-side,.px-storycard{background:#fff;border:1px solid var(--px-border);border-radius:17px;box-shadow:0 6px 24px #24324608}
+.px-stage{padding:20px}
+.px-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:13px}
+.px-head h2{font-size:clamp(1.35rem,2.3vw,1.8rem);line-height:1.22;margin:3px 0 5px}
+.px-head p{margin:0;color:var(--px-muted);line-height:1.55;font-size:.89rem;max-width:630px}
+.px-method{background:#eef5fa;color:#25547a;border-radius:8px;padding:7px 10px;white-space:nowrap;font-size:.75rem;font-weight:750}
+.px-plot-wrap{background:#101c2c;position:relative;border-radius:13px;overflow:hidden;border:1px solid #263f59}
+.px-plot{width:100%;height:510px}
+.px-plot-fallback{position:absolute;inset:0;display:none;align-items:center;justify-content:center;color:#fff;padding:25px;text-align:center;background:#101c2c}
+.px-status{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center;margin:13px 0 12px;font-size:.88rem;color:#5b6878}
+.px-status strong{color:#182e48;font-variant-numeric:tabular-nums}
+.px-player{display:flex;align-items:center;flex-wrap:wrap;gap:10px}
+.px-button{border:1px solid #cad3dc;background:#fff;color:#24374b;border-radius:10px;cursor:pointer;font:inherit;font-weight:750;padding:11px 14px;min-height:42px}
+.px-button.primary{background:#b52331;color:#fff;border-color:#b52331;min-width:110px}
+.px-button:hover{filter:brightness(.96)}.px-button:focus-visible,.px-tab:focus-visible,.px-select:focus-visible,input:focus-visible{outline:3px solid #c43340;outline-offset:2px}
+.px-scrub{flex:1;min-width:160px;display:flex;align-items:center;gap:10px}
+.px-scrub input{width:100%}
+.px-side{padding:22px;display:flex;flex-direction:column;gap:18px}
+.px-side h3{font-size:1.05rem;margin:0 0 8px}
+.px-side p{line-height:1.6;font-size:.91rem;color:var(--px-muted);margin:0}
+.px-math{padding:15px 10px;background:#f4f6f8;border:1px solid #e3e7eb;border-radius:11px;text-align:center;overflow-x:auto}
+.px-math .MathJax{max-width:100%}
+.px-desc{font-size:.84rem!important;margin-top:9px!important}
+.px-controls{border-top:1px solid #e7e9ec;padding-top:18px}
+.px-field{display:block;margin-top:16px}
+.px-field>span{display:flex;justify-content:space-between;gap:10px;color:#293649;font-weight:670;font-size:.91rem}
+.px-field output{font-weight:800;color:#b52331;white-space:nowrap;font-variant-numeric:tabular-nums}
+.px-field input[type=range]{width:100%;margin:9px 0 0;accent-color:#b52331;cursor:pointer}
+.px-note{font-size:.8rem!important;color:#6b7481!important}
+.px-footgrid{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:16px;margin-top:16px}
+.px-storycard{padding:21px;min-height:170px}
+.px-storycard .eyebrow{color:#b52331;font-size:.73rem;text-transform:uppercase;letter-spacing:.11em;font-weight:850}
+.px-storycard h3{font-size:1.05rem;margin:9px 0 8px}
+.px-storycard p,.px-storycard li{font-size:.91rem;line-height:1.63;color:#536072;margin:0}
+.px-storycard ol{margin:0;padding-left:21px}.px-storycard li+li{margin-top:7px}
+.px-disclaimer{font-size:.83rem;color:#687482;margin:17px 2px 0;line-height:1.6}
+.px-warn{color:#9b1f30!important}
+@media(max-width:980px){.px-layout{grid-template-columns:1fr}.px-tabs{grid-template-columns:repeat(2,1fr)}.px-footgrid{grid-template-columns:1fr 1fr}.px-storycard:first-child{grid-column:1/-1}}
+@media(max-width:600px){.px-wrap{padding:14px 11px 55px}.px-hero{padding:28px 22px;border-radius:16px}.px-tabs{gap:8px}.px-tab{padding:13px;min-height:110px}.px-stage,.px-side{padding:14px}.px-plot{height:390px}.px-footgrid{grid-template-columns:1fr}.px-storycard:first-child{grid-column:auto}.px-head{display:block}.px-method{display:inline-block;margin-top:8px}}
+@media(prefers-reduced-motion:reduce){.px-tab{transition:none}.px-tab:hover{transform:none}}
+</style>
+</head>
+<body>
+<div class="scroll-progress" aria-hidden="true"></div>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header"><div class="shell nav-shell"><a class="brand" href="index.html" aria-label="Wael El Khateeb home"><img class="brand-logo" src="https://www.eau.ac.ae/media/5s4ntrxm/eau.svg" alt="Emirates Aviation University" width="97" height="42"><span class="brand-text">Wael El Khateeb</span></a><button class="menu-button" aria-expanded="false" aria-controls="primary-nav"><span></span><span></span><span></span><span class="sr-only">Open menu</span></button><nav id="primary-nav" class="primary-nav" aria-label="Primary navigation"><a href="index.html">Home</a><a href="research.html">Research</a><a href="teaching.html" aria-current="page">Teaching</a><a href="presentations.html">Presentations</a><a href="service.html">Service</a><a href="index.html#contact">Contact</a></nav></div></header>
+<main id="main" class="px-wrap">
+<section class="px-hero"><div class="px-kicker">Emirates Aviation University · Interactive teaching lab</div><h1>See the <span>equation</span> come alive.</h1><p>Why does heat spread, why do bridges vibrate, and how does air move around a wing? Explore four physical stories through rotatable 3D mathematical surfaces. Change the conditions, play the simulation, and connect each effect to a partial differential equation.</p><div class="px-hero-stats"><span>4 applied models</span><span>Interactive 3D</span><span>LaTeX equations</span><span>Designed for students</span></div></section>
+<div class="px-step"><strong>Choose a physical story</strong><span></span><strong>01 → 04</strong></div>
+<div class="px-tabs" role="tablist" aria-label="PDE scenarios">
+<button type="button" class="px-tab" role="tab" aria-selected="true" data-model="heat"><small>01 · Thermal engineering</small><strong>A hot metal plate</strong><span>Watch heat spread in two dimensions</span></button>
+<button type="button" class="px-tab" role="tab" aria-selected="false" data-model="wave"><small>02 · Vibrations</small><strong>A vibrating membrane</strong><span>See how shape and speed determine motion</span></button>
+<button type="button" class="px-tab" role="tab" aria-selected="false" data-model="transport"><small>03 · Environment</small><strong>A pollution plume</strong><span>Follow concentration moving downstream</span></button>
+<button type="button" class="px-tab" role="tab" aria-selected="false" data-model="wing"><small>04 · Aerodynamics</small><strong>Air around a wing</strong><span>Trace flow around a simplified airfoil</span></button>
+</div>
+<div class="px-layout">
+<section class="px-stage" aria-label="Interactive visualization"><div class="px-head"><div><h2 id="px-title">Heat in a plate</h2><p id="px-subtitle"></p></div><span class="px-method" id="px-method">Exact solution</span></div>
+<div class="px-plot-wrap"><div id="px-plot" class="px-plot" role="img" aria-label="Rotatable three dimensional scientific visualization"></div><div id="px-fallback" class="px-plot-fallback" role="alert">The 3D library could not load. Please check your connection or browser WebGL support.</div></div>
+<div class="px-status"><span id="px-viewhint">Drag to rotate · Scroll to zoom</span><span id="px-timecaption">Time <strong id="px-time">0.00</strong></span></div>
+<div class="px-player"><button class="px-button primary" type="button" id="px-play">▶ Play</button><button class="px-button" type="button" id="px-reset">↺ Reset</button><button class="px-button" type="button" id="px-camera">Reset view</button><label class="px-scrub"><span class="sr-only">Time scrubber</span><input id="px-scrubber" type="range" min="0" max="2.5" step="0.01" value="0" aria-label="Simulation time"></label></div>
+</section>
+<aside class="px-side">
+<div><h3>The mathematical model</h3><div class="px-math" id="px-math"></div><p id="px-symbols" class="px-desc"></p></div>
+<div class="px-controls"><h3>Experiment controls</h3><p>Move a slider and observe how the physical model responds.</p><div id="px-fields"></div></div>
+<div><h3>What this model assumes</h3><p id="px-assumptions"></p></div>
+</aside>
+</div>
+<div class="px-footgrid">
+<div class="px-storycard"><div class="eyebrow">The story</div><h3 id="px-storytitle"></h3><p id="px-story"></p></div>
+<div class="px-storycard"><div class="eyebrow">What to look for</div><h3>Observe the change</h3><p id="px-observe"></p></div>
+<div class="px-storycard"><div class="eyebrow">Student challenge</div><h3>Try it yourself</h3><ol id="px-challenges"></ol></div>
+</div>
+<p class="px-disclaimer">For teaching: heat and transport use exact Gaussian solutions on an idealized unbounded plane; the vibrating membrane uses a damped standing-wave mode on a square; the wing uses steady, incompressible, inviscid potential flow around a Joukowski airfoil, not a turbulence/viscous CFD solver. Plotted surface height represents the scalar solution for the first three models. On the wing, the 3D shape and streamlines represent a spanwise extension of a two-dimensional flow model.</p>
+</main>
+<footer class="site-footer"><div class="shell footer-shell"><p>© <span id="year"></span> Wael El Khateeb · Assistant Professor at Emirates Aviation University</p><div class="footer-links"><a href="teaching.html">Teaching</a><a href="index.html">Home</a></div></div></footer>
+<script>
+(function(){
+'use strict';
+const $=id=>document.getElementById(id);
+const lin=(a,b,n)=>Array.from({length:n},(_,i)=>a+(b-a)*i/(n-1));
+const config={responsive:true,displaylogo:false,scrollZoom:true};
+const modelData={
+heat:{title:'A hot metal plate',subtitle:'A local hot spot cools as its heat spreads outward. The height of the 3D surface is temperature.',method:'Exact Gaussian solution',eq:String.raw`\\[\\frac{\\partial u}{\\partial t}=\\alpha\\left(\\frac{\\partial^2u}{\\partial x^2}+\\frac{\\partial^2u}{\\partial y^2}\\right)\\]`,symbols:'\\(u\\): temperature; \\(\\alpha\\): thermal diffusivity.',assumptions:'Uniform material, no internal heat source, effectively infinite thin plate. A Gaussian initial temperature distribution.',storytitle:'The thermal engineer’s question',story:'A device develops a hot spot. Will the temperature stay concentrated, or spread across the material? The PDE shows how temperature gradients drive the change.',observe:'Increasing diffusivity spreads heat faster. The peak falls while the total excess heat of the idealized infinite-plane solution is conserved.',challenges:['Hold time fixed. Double diffusivity and compare the peak.','Make the initial hot spot narrower. What happens to its shape?'],max:2.5,params:[['alpha','Thermal diffusivity α',0.12,0.02,0.35,0.01],['sigma','Initial spot width σ',0.22,0.12,0.40,0.01]]},
+wave:{title:'A vibrating membrane',subtitle:'A stretched surface oscillates up and down like a drum. Height indicates physical displacement.',method:'Damped standing mode',eq:String.raw`\\[u_{tt}+2\\beta u_t=c^2(u_{xx}+u_{yy})\\]`,symbols:'\\(u\\): displacement; \\(c\\): wave speed; \\(\\beta\\): damping rate.',assumptions:'Square membrane with fixed edges and a single standing-wave mode. Damping is linear and uniform.',storytitle:'Why structures vibrate',story:'From aircraft panels to percussion instruments, elastic surfaces store and release energy. Wave speed determines the natural frequency; damping removes energy.',observe:'The wave oscillates above and below its resting surface, and higher damping reduces its amplitude with time.',challenges:['Increase wave speed. Count oscillations during the same time interval.','Set damping to zero. How does the peak change?'],max:5,params:[['c','Wave speed c',1.25,0.6,2.5,0.05],['beta','Damping β',0.15,0,0.45,0.01]]},
+transport:{title:'A pollutant plume in moving water',subtitle:'A concentrated spill moves with a uniform current while molecular or turbulent mixing widens it.',method:'Exact Gaussian solution',eq:String.raw`\\[C_t+vC_x=D(C_{xx}+C_{yy})\\]`,symbols:'\\(C\\): concentration; \\(v\\): current velocity; \\(D\\): mixing coefficient.',assumptions:'Uniform velocity and isotropic diffusion, without chemical reactions, sources, shorelines, or obstacles.',storytitle:'Where will the pollutant go?',story:'Imagine a short release into a moving channel. The mean flow carries it downstream, but diffusion determines how quickly the concentration disperses.',observe:'Increasing velocity moves the center faster. Increasing diffusion lowers the peak and spreads the same total pollutant over more area.',challenges:['Fix diffusion and increase flow speed. What changes?','Hold flow speed fixed and increase diffusion. What happens to the peak?'],max:3,params:[['v','Current speed v',0.8,0.2,1.6,0.05],['D','Diffusion coefficient D',0.09,0.015,0.25,0.005]]},
+wing:{title:'Air flowing around an airfoil',subtitle:'A wing-shaped body redirects incoming air. Lines trace idealized steady flow, with moving particles to reveal direction.',method:'Joukowski potential flow',eq:String.raw`\\[\\nabla^2\\phi=0,\\qquad \\mathbf{v}=\\nabla\\phi\\]`,symbols:'\\(\\phi\\): velocity potential; \\(\\mathbf v\\): fluid velocity. The Kutta condition selects circulation for a sharp trailing edge.',assumptions:'Two-dimensional, steady, incompressible and inviscid irrotational flow outside a Joukowski airfoil; no separation, turbulence, viscosity or stall. The 3D wing is an extrusion for visualization.',storytitle:'How does air bend around a wing?',story:'An aircraft wing changes the motion of the surrounding air. Explore how angle of attack and airspeed alter an idealized potential-flow pattern. The flow field is steady; the moving dots are tracers, not a changing PDE solution.',observe:'Streamlines bend around the airfoil surface. Increasing angle of attack changes the chosen circulation. This approximation cannot predict separation or stall.',challenges:['Change angle of attack. Which side do the streamlines crowd toward?','Increase free-stream speed. Does the steady streamline shape change?'],max:12,params:[['alpha','Angle of attack',5,-8,14,1],['speed','Free-stream speed',1,0.5,1.7,0.1]]}
+};
+let current='heat',values={},time=0,playing=false,raf=0,last=0,prevRender=0,plotReady=false,wingCache=null;
+const palettes={heat:[[0,'#152b65'],[.18,'#2674af'],[.38,'#47d2bf'],[.62,'#f1df5a'],[.82,'#ff8a35'],[1,'#ec3a38']],wave:[[0,'#286dce'],[.5,'#f3f6f8'],[1,'#e34e5b']],transport:[[0,'#151d49'],[.22,'#453c9c'],[.48,'#129dba'],[.72,'#a7d867'],[1,'#f8c957']]};
+function plotLayout(ztitle,range,cam){return{margin:{l:2,r:2,t:2,b:2},paper_bgcolor:'#101c2c',plot_bgcolor:'#101c2c',font:{family:'Arial, sans-serif',color:'#cddded',size:11},scene:{bgcolor:'#101c2c',xaxis:{title:'x',backgroundcolor:'#17273b',gridcolor:'#34506c',zerolinecolor:'#34506c'},yaxis:{title:'y',backgroundcolor:'#17273b',gridcolor:'#34506c',zerolinecolor:'#34506c'},zaxis:{title:ztitle,range,backgroundcolor:'#17273b',gridcolor:'#34506c',zerolinecolor:'#34506c'},aspectmode:'manual',aspectratio:{x:1.4,y:1.2,z:.65},camera:cam||{eye:{x:1.48,y:1.55,z:.95}}},showlegend:false,hovermode:'closest',uirevision:'pde-explorer-3d'};}
+function renderSurface(){
+let x=[],y=[],z=[],range=[0,1],color=palettes.heat,zt='Temperature',hover='Temperature: %{z:.3f}<extra></extra>';
+if(current==='heat'){
+x=lin(-1.2,1.2,55);y=x;const s=values.sigma**2+2*values.alpha*time,A=values.sigma**2/s;
+z=y.map(yy=>x.map(xx=>A*Math.exp(-(xx*xx+yy*yy)/(2*s))));range=[0,1];zt='Temperature';color=palettes.heat;
+}else if(current==='wave'){
+x=lin(0,1,55);y=x;const omega=Math.PI*values.c*Math.SQRT2,b=values.beta,wd=Math.sqrt(Math.max(1e-8,omega*omega-b*b)),amp=Math.exp(-b*time)*(Math.cos(wd*time)+b/wd*Math.sin(wd*time));
+z=y.map(yy=>x.map(xx=>amp*Math.sin(Math.PI*xx)*Math.sin(Math.PI*yy)));range=[-1,1];zt='Displacement';color=palettes.wave;
+}else{
+x=lin(-3,3,60);y=lin(-1.7,1.7,40);const sx=.24**2+2*values.D*time,sy=.17**2+2*values.D*time,xc=-1.9+values.v*time,A=.24*.17/Math.sqrt(sx*sy);
+z=y.map(yy=>x.map(xx=>A*Math.exp(-((xx-xc)**2/(2*sx)+yy**2/(2*sy)))));range=[0,1];zt='Concentration';color=palettes.transport;hover='Concentration: %{z:.3f}<extra></extra>';
+}
+const tr={type:'surface',x,y,z,colorscale:color,cmin:range[0],cmax:range[1],showscale:true,colorbar:{thickness:12,len:.66,tickfont:{color:'#d6e4f2'}},hovertemplate:'x: %{x:.2f}<br>y: %{y:.2f}<br>'+hover,contours:{z:{show:true,usecolormap:true,project:{z:true}}}};
+drawPlot([tr],plotLayout(zt,range));
+}
+function complexWing(){
+// Conformal map of a displaced circle through zeta=a onto a Joukowski airfoil.
+const a=1,z0x=-.12,z0y=.075,R=Math.hypot(a-z0x,z0y),aoa=values.alpha*Math.PI/180,U=values.speed;
+const thetaTE=Math.atan2(-z0y,a-z0x),gamma=4*Math.PI*R*U*Math.sin(thetaTE-aoa),scale=1.9;
+function map(x,y){let r2=x*x+y*y;return[(x+a*a*x/r2+2)/4,(y-a*a*y/r2)/4*scale];}
+function vel(x,y){const dx=x-z0x,dy=y-z0y,r2=dx*dx+dy*dy,r4=r2*r2,A=dx*dx-dy*dy,B=2*dx*dy,c=Math.cos(aoa),s=Math.sin(aoa);
+const dre=U*c-U*R*R*(c*A+s*B)/r4-gamma*dy/(2*Math.PI*r2),dim=-U*s-U*R*R*(s*A-c*B)/r4-gamma*dx/(2*Math.PI*r2);
+return[dre,-dim];}
+function rk4(x,y,h){let k1=vel(x,y),k2=vel(x+h*k1[0]/2,y+h*k1[1]/2),k3=vel(x+h*k2[0]/2,y+h*k2[1]/2),k4=vel(x+h*k3[0],y+h*k3[1]);return[x+h*(k1[0]+2*k2[0]+2*k3[0]+k4[0])/6,y+h*(k1[1]+2*k2[1]+2*k3[1]+k4[1])/6];}
+const pts=lin(0,2*Math.PI,170),span=lin(-.6,.6,13),wingx=[],wingy=[],wingz=[];
+for(const b of span){let rowx=[],rowy=[],rowz=[];for(const th of pts){let p=map(z0x+R*Math.cos(th),z0y+R*Math.sin(th));rowx.push(p[0]);rowy.push(b);rowz.push(p[1]);}wingx.push(rowx);wingy.push(rowy);wingz.push(rowz);}
+const tr=[{type:'surface',x:wingx,y:wingy,z:wingz,showscale:false,colorscale:[[0,'#97b1d0'],[1,'#dee8f3']],surfacecolor:wingz.map(r=>r.map(v=>v)),lighting:{ambient:.65,diffuse:.7,specular:.7,roughness:.25},hoverinfo:'skip',opacity:1}];
+let paths=[];
+const seeds=[-1.78,-1.46,-1.18,-.94,-.71,-.48,-.27,.26,.48,.72,.95,1.2,1.48,1.75];
+for(const ys of seeds){let x=-3.45,y=ys,ps=[];for(let i=0;i<220;i++){
+if(Math.hypot(x-z0x,y-z0y)<R*1.002)break;
+const p=map(x,y);if(p[0]>1.7)break;
+if(p[0]>-.55&&p[0]<1.65&&Number.isFinite(p[0])&&Number.isFinite(p[1]))ps.push(p);
+const point=rk4(x,y,.035/U);x=point[0];y=point[1];
+if(!Number.isFinite(x)||!Number.isFinite(y))break;
+}
+if(ps.length>12)paths.push(ps);}
+for(const b of [-.34,.34])for(const ps of paths){
+tr.push({type:'scatter3d',mode:'lines',x:ps.map(p=>p[0]),y:ps.map(()=>b),z:ps.map(p=>p[1]),line:{color:b<0?'#6ed4fa':'#fbbf83',width:3},opacity:.8,hoverinfo:'skip',showlegend:false});
+}
+const markers={type:'scatter3d',mode:'markers',x:[],y:[],z:[],marker:{size:4.5,color:'#ffffff',opacity:.98,line:{color:'#56dbf4',width:.8}},hoverinfo:'skip'};
+tr.push(markers);
+return{tr,paths,markerIndex:tr.length-1};
+}
+function particleCoords(){if(!wingCache)return{x:[],y:[],z:[]};let x=[],y=[],z=[];for(let i=0;i<wingCache.paths.length;i++){let path=wingCache.paths[i],idx=Math.floor(((time*values.speed*23+i*9)%path.length+path.length)%path.length),p=path[idx];x.push(p[0]);y.push(i%2===0?-.34:.34);z.push(p[1]);}return{x,y,z};}
+function wingLayout(){const layout=plotLayout('Wing / flow',[-.5,.5],{eye:{x:1.5,y:1.45,z:.7}});layout.scene.aspectratio={x:1.8,y:1.35,z:.63};layout.scene.xaxis.title='Chord x';layout.scene.yaxis.title='Span';layout.scene.zaxis.title='Vertical z (exaggerated)';return layout;}
+function renderWing(force){if(force||!wingCache){wingCache=complexWing();const p=particleCoords();Object.assign(wingCache.tr[wingCache.markerIndex],p);drawPlot(wingCache.tr,wingLayout());}else if(plotReady){let p=particleCoords();window.Plotly.restyle('px-plot',{x:[p.x],y:[p.y],z:[p.z]},[wingCache.markerIndex]);}}
+function drawPlot(traces,layout){if(typeof window.Plotly==='undefined'){$('px-fallback').style.display='flex';return;}$('px-fallback').style.display='none';const fun=plotReady?window.Plotly.react:window.Plotly.newPlot;plotReady=true;fun('px-plot',traces,layout,config).catch(()=>{$('px-fallback').style.display='flex';});}
+function render(force=false){if(current==='wing')renderWing(force);else renderSurface();$('px-time').textContent=time.toFixed(2);$('px-scrubber').value=time;}
+function stop(){playing=false;cancelAnimationFrame(raf);$('px-play').textContent='▶ Play';}
+function tick(stamp){if(!playing)return;if(!last)last=stamp;const dt=Math.min(.065,(stamp-last)/1000);last=stamp;time+=dt*(current==='wing'?1.2:current==='wave'?.8:.55);if(time>modelData[current].max)time=0;
+if(stamp-prevRender>85){render();prevRender=stamp;}raf=requestAnimationFrame(tick);}
+function choose(model){stop();current=model;time=0;plotReady=false;wingCache=null;const m=modelData[current];
+document.querySelectorAll('.px-tab').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.model===model)));
+$('px-title').textContent=m.title;$('px-subtitle').textContent=m.subtitle;$('px-method').textContent=m.method;$('px-math').innerHTML=m.eq;$('px-symbols').innerHTML=m.symbols;$('px-assumptions').textContent=m.assumptions;$('px-storytitle').textContent=m.storytitle;$('px-story').textContent=m.story;$('px-observe').textContent=m.observe;
+$('px-challenges').replaceChildren(...m.challenges.map(s=>{let li=document.createElement('li');li.textContent=s;return li;}));
+$('px-timecaption').firstChild.textContent=current==='wing'?'Tracer phase ':'Time ';
+$('px-viewhint').textContent='Drag to rotate · Scroll to zoom';$('px-scrubber').max=m.max;$('px-scrubber').step='.01';
+values={};$('px-fields').replaceChildren();for(const [key,label,def,min,max,step] of m.params){
+values[key]=def;const lab=document.createElement('label');lab.className='px-field';const head=document.createElement('span');const title=document.createElement('span');title.textContent=label;const out=document.createElement('output');out.textContent=Number(def).toFixed(step<.01?3:step<1?2:0)+(key==='alpha'&&model==='wing'?'°':'');head.append(title,out);const inp=document.createElement('input');inp.type='range';inp.min=min;inp.max=max;inp.step=step;inp.value=def;inp.setAttribute('aria-label',label);inp.addEventListener('input',()=>{values[key]=Number(inp.value);out.textContent=Number(inp.value).toFixed(step<.01?3:step<1?2:0)+(key==='alpha'&&model==='wing'?'°':'');if(current==='wing')wingCache=null;render(true);});lab.append(head,inp);$('px-fields').append(lab);
+}
+if(typeof window.MathJax!=='undefined'&&window.MathJax.typesetPromise)window.MathJax.typesetPromise([$('px-math'),$('px-symbols')]).catch(()=>{});
+render(true);
+}
+document.querySelectorAll('.px-tab').forEach(b=>b.addEventListener('click',()=>choose(b.dataset.model)));
+$('px-play').addEventListener('click',()=>{if(playing){stop();return;}playing=true;last=0;prevRender=0;$('px-play').textContent='❚❚ Pause';raf=requestAnimationFrame(tick);});
+$('px-reset').addEventListener('click',()=>{stop();time=0;render();});
+$('px-camera').addEventListener('click',()=>{if(typeof window.Plotly==='undefined'||!plotReady)return;const cam=current==='wing'?{eye:{x:1.5,y:1.45,z:.7}}:{eye:{x:1.48,y:1.55,z:.95}};window.Plotly.relayout('px-plot',{'scene.camera':cam});});
+$('px-scrubber').addEventListener('input',e=>{stop();time=Number(e.target.value);render();});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();});
+function boot(){if(typeof window.Plotly==='undefined'){$('px-fallback').style.display='flex';return;}choose('heat');}window.addEventListener('load',boot);
+})();
+</script>
+</body></html>
