@@ -30,19 +30,9 @@ jobs:
         with:
           path: '.'
           name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
-      - name: Wait for Pages artifact metadata
-        env:
-          GH_TOKEN: ${{ github.token }}
-          ARTIFACT_NAME: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
-        run: |
-          for attempt in {1..12}; do
-            if gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/artifacts" --jq '.artifacts[].name' | grep -Fxq "$ARTIFACT_NAME"; then
-              exit 0
-            fi
-            sleep 5
-          done
-          echo "Pages artifact metadata not available: $ARTIFACT_NAME" >&2
-          exit 1
+      # Pages uses a separate artifact lookup from the public REST API.
+      - name: Allow Pages artifact to propagate
+        run: sleep 30
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
